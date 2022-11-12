@@ -1,9 +1,8 @@
 require 'new_api'
 require 'pp'
 
-def poke_host(host)
-  puts "Poking #{host}..."
-  api = new_api(host)
+def poke_host(api)
+  puts "Poking #{api.api_client.config.host}..."
   begin
     # lists available validators
     result = api.get_validators
@@ -16,7 +15,4 @@ def poke_host(host)
   end
 end
 
-poke_host("v09:8080")
-poke_host("v09x:8080")
-poke_host("v010:8080")
-poke_host("v010x:8080")
+all_apis.each { |api| poke_host(api) }
