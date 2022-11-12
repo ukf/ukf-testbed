@@ -1,0 +1,4 @@
+.dockerignore
+Dockerfile*
+.gitkeep*
+build-images

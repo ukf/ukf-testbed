@@ -1,0 +1,6 @@
+#!/bin/bash
+
+docker buildx build \
+    --tag ukf/testbed-driver:latest \
+    --output type=docker \
+    .

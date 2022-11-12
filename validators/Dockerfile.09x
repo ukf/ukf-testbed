@@ -1,0 +1,10 @@
+FROM ianayoung/md-validator:0.9 AS build
+
+WORKDIR /application
+
+#
+# Customise by modifying /application/BOOT-INF/...
+#
+ADD overlays/all   BOOT-INF/
+ADD overlays/xalan BOOT-INF/
+ADD overlays/09    BOOT-INF/

@@ -1,0 +1,7 @@
+.dockerignore
+Dockerfile*
+.gitkeep*
+.gitignore
+build-image
+vendor
+.bundle

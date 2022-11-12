@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#
+# Build all the container images.
+#
+
+cd validators
+./build-images
+cd ..
+
+cd driver
+./build-image
+cd ..
