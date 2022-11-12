@@ -26,6 +26,15 @@ Remember that it may take a while for the validator containers to fully initiali
 and you may not be able to execute commands against them immediately on starting `./drive`.
 On my desktop machine, 20 seconds or so is required.
 
+If you want a less interactive experience, you can just invoke commands
+within the `driver` container directly, for example:
+
+```bash
+docker compose exec driver rake test_validate
+```
+
+Output from the command will appear in your terminal.
+
 ## Development Mode
 
 The validator fleet has one distinguished member representing the current
