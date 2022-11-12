@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Prune stopped containers.
+docker container prune --force
+
+# Prune dangling images.
+docker image prune --force
