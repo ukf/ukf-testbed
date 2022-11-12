@@ -8,7 +8,7 @@ RUN bundle config set --local without 'devel'
 RUN bundle install
 
 COPY lib lib
-COPY Rakefile *.rb ./
+COPY Rakefile *.rb *.xml ./
 
 # This container doesn't do anything on startup; instead,
 # you're expected to "exec" into it to perform operations.

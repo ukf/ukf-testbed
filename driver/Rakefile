@@ -1,3 +1,25 @@
+task :cop do
+    system 'bundle exec rubocop'
+end
+
+def run_test(test_name)
+    puts "Running test #{test_name}."
+    system "bundle exec ruby -I lib tests/test_#{test_name}.rb"
+    puts "Done #{test_name}.\n"
+end
+
 task :poke do
-    system "bundle exec ruby -I lib poke_hosts.rb"
+    run_test 'poke_hosts'
+end
+
+task :test_validate do
+    run_test 'validate'
+end
+
+task :test_validate_bad do
+    run_test 'validate_bad'
+end
+
+task default: %i[poke test_validate test_validate_bad] do
+    puts 'All tests done.'
 end

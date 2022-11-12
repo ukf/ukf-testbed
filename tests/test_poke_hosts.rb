@@ -2,7 +2,7 @@ require 'new_api'
 require 'pp'
 
 def poke_host(api)
-  puts "Poking #{api.api_client.config.host}..."
+  puts "\nPoking #{api.api_client.config.host}..."
   begin
     # lists available validators
     result = api.get_validators

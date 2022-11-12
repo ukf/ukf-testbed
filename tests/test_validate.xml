@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol"
+    xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
+    xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute"
+    xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
+    xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+    xmlns:remd="http://refeds.org/metadata"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
+    xmlns:ukfedlabel="http://ukfederation.org.uk/2006/11/label"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd
+        urn:oasis:names:tc:SAML:metadata:algsupport sstc-saml-metadata-algsupport-v1.0.xsd
+        urn:oasis:names:tc:SAML:metadata:attribute sstc-metadata-attr.xsd
+        urn:oasis:names:tc:SAML:metadata:rpi saml-metadata-rpi-v1.0.xsd
+        urn:oasis:names:tc:SAML:metadata:ui sstc-saml-metadata-ui-v1.0.xsd
+        urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol sstc-saml-idp-discovery.xsd
+        urn:oasis:names:tc:SAML:profiles:SSO:request-init sstc-request-initiation.xsd
+        urn:oasis:names:tc:SAML:2.0:assertion saml-schema-assertion-2.0.xsd
+        urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd
+        http://ukfederation.org.uk/2006/11/label uk-fed-label.xsd
+        http://refeds.org/metadata refeds-metadata.xsd
+        http://www.w3.org/2001/04/xmlenc# xenc-schema.xsd
+        http://www.w3.org/2009/xmlenc11# xenc-schema-11.xsd
+        http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"
+    ID="uk000006" entityID="https://idp2.iay.org.uk/idp/shibboleth">
+    <!--
+        This is an "Ian A. Young" IdP for Ian A. Young.
+    -->
+    <Extensions>
+        <ukfedlabel:UKFederationMember orgID="ukforg4590"/>
+        <shibmd:Scope regexp="false">iay.org.uk</shibmd:Scope>
+        <ukfedlabel:Software date="2016-11-17" fullVersion="3.3.0" name="Shibboleth" version="3"/>
+        <ukfedlabel:ExportOptIn date="2009-09-11"/>
+        <mdrpi:RegistrationInfo registrationAuthority="http://ukfederation.org.uk"
+            registrationInstant="2007-03-30T16:36:00Z">
+            <mdrpi:RegistrationPolicy xml:lang="en"
+                >http://ukfederation.org.uk/doc/mdrps-20130902</mdrpi:RegistrationPolicy>
+        </mdrpi:RegistrationInfo>
+        <mdattr:EntityAttributes xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+            <saml:Attribute Name="http://macedir.org/entity-category-support"
+                NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+                <saml:AttributeValue>http://refeds.org/category/research-and-scholarship</saml:AttributeValue>
+            </saml:Attribute>
+        </mdattr:EntityAttributes>
+    </Extensions>
+    <IDPSSODescriptor
+        protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0 urn:oasis:names:tc:SAML:2.0:protocol">
+        <Extensions>
+            <mdui:UIInfo>
+                <mdui:DisplayName xml:lang="en">Ian A. Young</mdui:DisplayName>
+                <mdui:Description xml:lang="en">This is the identity provider for the iay.org.uk domain.</mdui:Description>
+                <mdui:Logo height="80" width="80">https://idp2.iay.org.uk/images/heads_80x80.jpg</mdui:Logo>
+                <mdui:Logo height="43" width="100">https://idp2.iay.org.uk/images/heads_100x43.jpg</mdui:Logo>
+                <mdui:Logo height="104" width="240">https://idp2.iay.org.uk/images/heads_240x104.jpg</mdui:Logo>
+            </mdui:UIInfo>
+            <mdui:DiscoHints>
+                <mdui:IPHint>217.155.173.104/29</mdui:IPHint>
+                <mdui:DomainHint>iay.org.uk</mdui:DomainHint>
+                <mdui:GeolocationHint>geo:55.9328,-3.17905</mdui:GeolocationHint>
+            </mdui:DiscoHints>
+        </Extensions>
+        <KeyDescriptor>
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>
+                        MIIDSTCCAjGgAwIBAgIhAMSPOSGN+3UUTXSKV+2EBOuF3x/pwPX/TD9GfyEkzLp+
+                        MA0GCSqGSIb3DQEBBQUAMFgxGDAWBgNVBAMMD2lkcDIuaWF5Lm9yZy51azETMBEG
+                        CgmSJomT8ixkARkWA2lheTETMBEGCgmSJomT8ixkARkWA29yZzESMBAGCgmSJomT
+                        8ixkARkWAnVrMB4XDTA4MDIyNTEwMzAxNFoXDTI4MDIyNTEwMzAxNFowWDEYMBYG
+                        A1UEAwwPaWRwMi5pYXkub3JnLnVrMRMwEQYKCZImiZPyLGQBGRYDaWF5MRMwEQYK
+                        CZImiZPyLGQBGRYDb3JnMRIwEAYKCZImiZPyLGQBGRYCdWswggEiMA0GCSqGSIb3
+                        DQEBAQUAA4IBDwAwggEKAoIBAQCb6ts48g10XHTnpy+23huzR184aahkrG0AoeUl
+                        FVlomPjoFDk6czq0S3Qyd+ceF7tMRu3XzS7cMmtVH53O9d+wCs8aPQcPXxHQ5gLk
+                        L7Gu6eJ+3N3jXhpt7/DDPhnzFPNW3EVMueHJ/0IzyspTvq2LPbNWXJ86NKJ+gesZ
+                        QftskwXScOjpoJEIP0EA890QYd4WdYtQPqVV+LPKtnYBoGOnuRhSAM1D/EhCbeb0
+                        lCmRGcdGbDFBchiPO4VLGl85sLa0EhjxMIPAOKXcj8bBlO9Ww9kkG06kQp6eLHwm
+                        Jmt7VNKveCGhyF2QH/CvmdUaPv3gcp1UjrlqFN9LBVSaTIL/AgMBAAEwDQYJKoZI
+                        hvcNAQEFBQADggEBAG+jDBAtlKoHaEBB+l6PpW5zuiDjyHG4zZZYqX77mZ9xP/xe
+                        Kn0yJ18ZLjS3b9WztGLYyC4SJHSF2okq1K02bqsCv9YeP+UWpw2uRR8jt96lLWxZ
+                        jTjoko2v8jBtzDk8LZsqw58m4vZ0AGNZjKeGIywKhxnepwREguyj3bjBpZAGgl0M
+                        HQuXoO/BDC9yKyZslE5CpWp5xP4XzY2/LrorrkwOJLnFuk1sox4/gvkDQukUx/jr
+                        YRbrWfOjcNBx3LE/HI6RNLINicK7yUwerDE86nix5Zc3hskVcCykW+r6HbY6bx7P
+                        YmNKYMZhQAgDtXIjFHOy+WbyVTidmJvxM9UeYCY=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </KeyDescriptor>
+        <ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding"
+            Location="https://idp2.iay.org.uk:8443/idp/profile/SAML1/SOAP/ArtifactResolution" index="1"/>
+        <ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+            Location="https://idp2.iay.org.uk:8443/idp/profile/SAML2/SOAP/ArtifactResolution" index="2"/>
+        <NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+        <SingleSignOnService Binding="urn:mace:shibboleth:1.0:profiles:AuthnRequest"
+            Location="https://idp2.iay.org.uk/idp/profile/Shibboleth/SSO"/>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+            Location="https://idp2.iay.org.uk/idp/profile/SAML2/POST/SSO"/>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign"
+            Location="https://idp2.iay.org.uk/idp/profile/SAML2/POST-SimpleSign/SSO"/>
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+            Location="https://idp2.iay.org.uk/idp/profile/SAML2/Redirect/SSO"/>
+    </IDPSSODescriptor>
+    <AttributeAuthorityDescriptor
+        protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol">
+        <KeyDescriptor>
+            <ds:KeyInfo>
+                <ds:X509Data>
+                    <ds:X509Certificate>
+                        MIIDSTCCAjGgAwIBAgIhAMSPOSGN+3UUTXSKV+2EBOuF3x/pwPX/TD9GfyEkzLp+
+                        MA0GCSqGSIb3DQEBBQUAMFgxGDAWBgNVBAMMD2lkcDIuaWF5Lm9yZy51azETMBEG
+                        CgmSJomT8ixkARkWA2lheTETMBEGCgmSJomT8ixkARkWA29yZzESMBAGCgmSJomT
+                        8ixkARkWAnVrMB4XDTA4MDIyNTEwMzAxNFoXDTI4MDIyNTEwMzAxNFowWDEYMBYG
+                        A1UEAwwPaWRwMi5pYXkub3JnLnVrMRMwEQYKCZImiZPyLGQBGRYDaWF5MRMwEQYK
+                        CZImiZPyLGQBGRYDb3JnMRIwEAYKCZImiZPyLGQBGRYCdWswggEiMA0GCSqGSIb3
+                        DQEBAQUAA4IBDwAwggEKAoIBAQCb6ts48g10XHTnpy+23huzR184aahkrG0AoeUl
+                        FVlomPjoFDk6czq0S3Qyd+ceF7tMRu3XzS7cMmtVH53O9d+wCs8aPQcPXxHQ5gLk
+                        L7Gu6eJ+3N3jXhpt7/DDPhnzFPNW3EVMueHJ/0IzyspTvq2LPbNWXJ86NKJ+gesZ
+                        QftskwXScOjpoJEIP0EA890QYd4WdYtQPqVV+LPKtnYBoGOnuRhSAM1D/EhCbeb0
+                        lCmRGcdGbDFBchiPO4VLGl85sLa0EhjxMIPAOKXcj8bBlO9Ww9kkG06kQp6eLHwm
+                        Jmt7VNKveCGhyF2QH/CvmdUaPv3gcp1UjrlqFN9LBVSaTIL/AgMBAAEwDQYJKoZI
+                        hvcNAQEFBQADggEBAG+jDBAtlKoHaEBB+l6PpW5zuiDjyHG4zZZYqX77mZ9xP/xe
+                        Kn0yJ18ZLjS3b9WztGLYyC4SJHSF2okq1K02bqsCv9YeP+UWpw2uRR8jt96lLWxZ
+                        jTjoko2v8jBtzDk8LZsqw58m4vZ0AGNZjKeGIywKhxnepwREguyj3bjBpZAGgl0M
+                        HQuXoO/BDC9yKyZslE5CpWp5xP4XzY2/LrorrkwOJLnFuk1sox4/gvkDQukUx/jr
+                        YRbrWfOjcNBx3LE/HI6RNLINicK7yUwerDE86nix5Zc3hskVcCykW+r6HbY6bx7P
+                        YmNKYMZhQAgDtXIjFHOy+WbyVTidmJvxM9UeYCY=
+                    </ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </KeyDescriptor>
+        <AttributeService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding"
+            Location="https://idp2.iay.org.uk:8443/idp/profile/SAML1/SOAP/AttributeQuery"/>
+        <AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
+            Location="https://idp2.iay.org.uk:8443/idp/profile/SAML2/SOAP/AttributeQuery"/>
+        <NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+    </AttributeAuthorityDescriptor>
+    <Organization>
+        <OrganizationName xml:lang="en">Ian A. Young</OrganizationName>
+        <OrganizationDisplayName xml:lang="en">Ian A. Young</OrganizationDisplayName>
+        <OrganizationURL xml:lang="en">http://iay.org.uk/</OrganizationURL>
+    </Organization>
+    <ContactPerson contactType="support">
+        <GivenName>Ian</GivenName>
+        <SurName>Young</SurName>
+        <EmailAddress>mailto:ukfed+fc2ee77e@iay.org.uk</EmailAddress>
+    </ContactPerson>
+    <ContactPerson contactType="technical">
+        <GivenName>Ian</GivenName>
+        <SurName>Young</SurName>
+        <EmailAddress>mailto:ukfed+fc2ee77e@iay.org.uk</EmailAddress>
+    </ContactPerson>
+    <ContactPerson contactType="administrative">
+        <GivenName>Ian</GivenName>
+        <SurName>Young</SurName>
+        <EmailAddress>mailto:ian@iay.org.uk</EmailAddress>
+    </ContactPerson>
+</EntityDescriptor>
