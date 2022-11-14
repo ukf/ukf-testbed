@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 require 'new_api'
-require 'pp'
 
 def poke_host(api)
   puts "\nPoking #{api.api_client.config.host}..."
