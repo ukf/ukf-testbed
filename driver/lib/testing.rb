@@ -10,7 +10,7 @@ module Testing
   # Representation of an individual testing endpoint.
   #
   class Endpoint
-    attr :name, :api
+    attr_reader :name, :api
 
     def initialize(name, host)
       @name = name
