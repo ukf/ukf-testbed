@@ -5,18 +5,21 @@ require 'testbed'
 failures = []
 endpoints = Testbed.all_endpoints
 Testbed::XMLTest.find_all_tests.each do |test|
-  test.execute(endpoints)
-rescue ValidatorClient::ApiError => e
-  puts "Exception when executing #{test.name}: #{e.code} #{e}"
-  failures << "API code #{e.code}"
-rescue StandardError => e
-  puts "StandardError raised when executing #{test.name}: #{e}"
-  failures << e
+  test.execute(endpoints) do |problem|
+    failures << problem
+  end
 end
 
 unless failures.empty?
   puts 'Test failures were detected:'
   failures.each do |f|
-    puts "   #{f}"
+    puts "*** #{f[:problem]} in #{f[:test]} on #{f[:endpoint]}'s #{f[:validator]} validator"
+    if f[:problem] == 'result mismatch'
+      puts '   expected result: '
+      puts YAML.dump(f[:expected])
+      puts '   actual result:'
+      puts YAML.dump(f[:actual])
+    end
+    puts
   end
 end

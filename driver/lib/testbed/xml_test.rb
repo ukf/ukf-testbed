@@ -65,31 +65,42 @@ module Testbed
       @options['expected'] || []
     end
 
-    def process_results(actual, expected)
+    #
+    # Process the results of a validator invocation.
+    #
+    # If the actual results differ from what was expected,
+    # call the handler using the passed context augmented with
+    # details of the results in question.
+    #
+    def process_results(actual, expected, context)
       if actual == expected
         # log that they are the same
       else
-        puts 'Result mismatch; expected: '
-        puts YAML.dump(expected)
-        puts 'actual result:'
-        puts YAML.dump(actual)
-        raise StandardError, 'result mismatch'
+        yield context.merge(problem: 'result mismatch',
+                            actual: actual, expected: expected)
       end
     end
 
-    def execute_validator(endpoint, validator, metadata)
+    def execute_validator(endpoint, validator, metadata, &handler)
       puts "Running #{@name} through #{validator} on #{endpoint.name}..."
-      results = results_to_array endpoint.api.validate(validator, metadata)
-      process_results results, expected_results
+      begin
+        actual = results_to_array endpoint.api.validate(validator, metadata)
+      rescue ValidatorClient::ApiError => e
+        yield problem: "ApiError code #{e.code}",
+              endpoint: endpoint.name, validator: validator, test: @name
+        return
+      end
+      process_results actual, expected_results,
+                      endpoint: endpoint.name, validator: validator, test: @name, &handler
     end
 
-    def execute_one(endpoint)
+    def execute_one(endpoint, &handler)
       metadata = IO.read @xml_file
-      validators.each { |validator| execute_validator(endpoint, validator, metadata) }
+      validators.each { |validator| execute_validator(endpoint, validator, metadata, &handler) }
     end
 
-    def execute(endpoints)
-      endpoints.each { |endpoint| execute_one(endpoint) }
+    def execute(endpoints, &handler)
+      endpoints.each { |endpoint| execute_one(endpoint, &handler) }
     end
 
     def self.find_all_tests
