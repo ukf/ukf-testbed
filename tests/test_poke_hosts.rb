@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'new_api'
+require 'testing'
 
-def poke_host(api)
-  puts "\nPoking #{api.api_client.config.host}..."
+def poke_host(endpoint)
+  puts "\nPoking #{endpoint.name}..."
   begin
     # lists available validators
-    result = api.get_validators
+    result = endpoint.api.get_validators
     puts "Validators detected: #{result.length}"
     result.each do |val|
       puts "   #{val.validator_id}: #{val.description}"
@@ -16,4 +16,4 @@ def poke_host(api)
   end
 end
 
-all_apis.each { |api| poke_host(api) }
+Testing.all_endpoints.each { |endpoint| poke_host(endpoint) }
