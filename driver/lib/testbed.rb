@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'testbed/endpoint'
+require 'testbed/xml_test'
+
 #
 # Module providing access to our testbed fleet of validators.
 #

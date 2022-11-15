@@ -2,20 +2,21 @@
 
 require 'testbed'
 
-def try_validate(endpoint, test_name)
-  puts "\nRunning #{test_name} on #{endpoint.name}..."
-  metadata = IO.read "tests/xml/#{test_name}.xml"
-  begin
-    results = endpoint.api.validate('default', metadata)
-    puts "Validation results: #{results.length}"
-    results.each do |result|
-      pp result
-    end
-  rescue ValidatorClient::ApiError => e
-    puts "Exception when calling ValidationApi->get_validators: #{e}"
-  end
+failures = []
+endpoints = Testbed.all_endpoints
+Testbed::XMLTest.find_all_tests.each do |test|
+  test.execute(endpoints)
+rescue ValidatorClient::ApiError => e
+  puts "Exception when executing #{test.name}: #{e.code} #{e}"
+  failures << "API code #{e.code}"
+rescue StandardError => e
+  puts "StandardError raised when executing #{test.name}: #{e}"
+  failures << e
 end
 
-Testbed.find_all_tests('xml', 'xml').each do |test_name|
-  Testbed.all_endpoints.each { |endpoint| try_validate(endpoint, test_name) }
+unless failures.empty?
+  puts 'Test failures were detected:'
+  failures.each do |f|
+    puts "   #{f}"
+  end
 end
