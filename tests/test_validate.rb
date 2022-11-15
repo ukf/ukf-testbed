@@ -2,9 +2,9 @@
 
 require 'testing'
 
-def try_validate(endpoint)
-  puts "\nPoking #{endpoint.name}..."
-  metadata = IO.read 'tests/test_validate.xml'
+def try_validate(endpoint, test_name)
+  puts "\nRunning #{test_name} on #{endpoint.name}..."
+  metadata = IO.read "tests/xml/#{test_name}.xml"
   begin
     results = endpoint.api.validate('default', metadata)
     puts "Validation results: #{results.length}"
@@ -16,4 +16,6 @@ def try_validate(endpoint)
   end
 end
 
-Testing.all_endpoints.each { |endpoint| try_validate(endpoint) }
+Testing.find_all_tests('xml', 'xml').each do |test_name|
+  Testing.all_endpoints.each { |endpoint| try_validate(endpoint, test_name) }
+end

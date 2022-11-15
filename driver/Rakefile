@@ -18,10 +18,6 @@ task :test_validate do
   run_test 'validate'
 end
 
-task :test_validate_bad do
-  run_test 'validate_bad'
-end
-
-task default: %i[poke test_validate test_validate_bad] do
+task default: %i[poke test_validate] do
   puts 'All tests done.'
 end
