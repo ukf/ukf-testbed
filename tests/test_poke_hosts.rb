@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'testing'
+require 'testbed'
 
 def poke_host(endpoint)
   puts "\nPoking #{endpoint.name}..."
@@ -16,4 +16,4 @@ def poke_host(endpoint)
   end
 end
 
-Testing.all_endpoints.each { |endpoint| poke_host(endpoint) }
+Testbed.all_endpoints.each { |endpoint| poke_host(endpoint) }

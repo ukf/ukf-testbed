@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'testing'
+require 'testbed'
 
 def try_validate(endpoint, test_name)
   puts "\nRunning #{test_name} on #{endpoint.name}..."
@@ -16,6 +16,6 @@ def try_validate(endpoint, test_name)
   end
 end
 
-Testing.find_all_tests('xml', 'xml').each do |test_name|
-  Testing.all_endpoints.each { |endpoint| try_validate(endpoint, test_name) }
+Testbed.find_all_tests('xml', 'xml').each do |test_name|
+  Testbed.all_endpoints.each { |endpoint| try_validate(endpoint, test_name) }
 end
