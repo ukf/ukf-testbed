@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_entityid_prefix
+    message: "entity ID urn:wombat:vombatus:ursinus does not start with acceptable prefix"
