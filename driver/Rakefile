@@ -11,7 +11,7 @@ def run_test(test_name)
 end
 
 task :poke do
-  run_test 'poke_hosts'
+  system 'bundle exec ruby -I lib bin/poke_hosts.rb'
 end
 
 task :test_validate do

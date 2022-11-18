@@ -7,6 +7,7 @@ RUN bundle config set --local path 'vendor'
 RUN bundle config set --local without 'devel'
 RUN bundle install
 
+COPY bin bin
 COPY lib lib
 COPY Rakefile ./
 
