@@ -14,10 +14,10 @@ task :poke do
   system 'bundle exec ruby -I lib bin/poke_hosts.rb'
 end
 
-task :test_validate do
-  run_test 'validate'
+task :validate_all do
+  system 'bundle exec ruby -I lib bin/validate_all.rb'
 end
 
-task default: %i[poke test_validate] do
+task default: %i[poke validate_all] do
   puts 'All tests done.'
 end
