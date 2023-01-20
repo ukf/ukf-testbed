@@ -38,10 +38,11 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-darwin-22
 
 DEPENDENCIES
   md-validator-client
   rubocop
 
 BUNDLED WITH
-   2.2.33
+   2.4.1
