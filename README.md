@@ -30,7 +30,7 @@ If you want a less interactive experience, you can just invoke commands
 within the `driver` container directly, for example:
 
 ```bash
-docker compose exec driver rake test_validate
+docker compose exec driver rake validate_all
 ```
 
 Output from the command will appear in your terminal.
