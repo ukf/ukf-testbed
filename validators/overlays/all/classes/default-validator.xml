@@ -22,11 +22,9 @@
         p:XSLResource="classpath:_rules/check_entityid_prefix.xsl"/>
 
     <bean id="pipeline" parent="mda.SimplePipeline">
-        <property name="stages">
-            <list>
-                <ref bean="check_entityid_prefix"/>
-            </list>
-        </property>
+        <property name="stages" ref="default_validator_stages"/>
     </bean>
+
+    <import resource="default-validator-stages.xml"/>
 
 </beans>
