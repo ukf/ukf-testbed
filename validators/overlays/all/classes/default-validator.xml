@@ -10,7 +10,7 @@
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <!-- *** Default Shibboleth component bean id property from Spring bean id *** -->
-    <bean class="net.shibboleth.shared.spring.config.IdentifiableBeanPostProcessor" lazy-init="false"/>
+    <bean parent="mda.IdentifiableBeanPostProcessor" lazy-init="false"/>
 
     <bean id="id" parent="String" c:_="default"/>
     <bean id="description" parent="String" c:_="Default validator."/>
