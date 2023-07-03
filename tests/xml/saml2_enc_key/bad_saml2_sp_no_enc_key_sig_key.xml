@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Test a signing KeyDescriptor. Should fail as no encryption key will be found. -->
+<EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol"
+    xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
+    xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute"
+    xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
+    xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+    xmlns:remd="http://refeds.org/metadata"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
+    xmlns:ukfedlabel="http://ukfederation.org.uk/2006/11/label"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd
+        urn:oasis:names:tc:SAML:metadata:algsupport sstc-saml-metadata-algsupport-v1.0.xsd
+        urn:oasis:names:tc:SAML:metadata:attribute sstc-metadata-attr.xsd
+        urn:oasis:names:tc:SAML:metadata:rpi saml-metadata-rpi-v1.0.xsd
+        urn:oasis:names:tc:SAML:metadata:ui sstc-saml-metadata-ui-v1.0.xsd
+        urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol sstc-saml-idp-discovery.xsd
+        urn:oasis:names:tc:SAML:profiles:SSO:request-init sstc-request-initiation.xsd
+        urn:oasis:names:tc:SAML:2.0:assertion saml-schema-assertion-2.0.xsd
+        urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd
+        http://ukfederation.org.uk/2006/11/label uk-fed-label.xsd
+        http://refeds.org/metadata refeds-metadata.xsd
+        http://www.w3.org/2001/04/xmlenc# xenc-schema.xsd
+        http://www.w3.org/2009/xmlenc11# xenc-schema-11.xsd
+        http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"
+    ID="uk000006" entityID="http://idp2.iay.org.uk/idp/shibboleth">
+    <!--
+        This is an "Ian A. Young" IdP for Ian A. Young.
+    -->
+    <Extensions>
+        <ukfedlabel:UKFederationMember orgID="ukforg4590"/>
+        <shibmd:Scope regexp="false">iay.org.uk</shibmd:Scope>
+        <ukfedlabel:Software date="2016-11-17" fullVersion="3.3.0" name="Shibboleth" version="3"/>
+        <ukfedlabel:ExportOptIn date="2009-09-11"/>
+        <mdrpi:RegistrationInfo registrationAuthority="http://ukfederation.org.uk"
+            registrationInstant="2007-03-30T16:36:00Z">
+            <mdrpi:RegistrationPolicy xml:lang="en"
+                >http://ukfederation.org.uk/doc/mdrps-20130902</mdrpi:RegistrationPolicy>
+        </mdrpi:RegistrationInfo>
+        <mdattr:EntityAttributes xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+            <saml:Attribute Name="http://macedir.org/entity-category-support"
+                NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+                <saml:AttributeValue>http://refeds.org/category/research-and-scholarship</saml:AttributeValue>
+            </saml:Attribute>
+        </mdattr:EntityAttributes>
+    </Extensions>
+     <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+            <Extensions>
+                <init:RequestInitiator xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Binding="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Location="https://example.org/Shibboleth.sso/Login"/>
+                <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://example.org/Shibboleth.sso/Login" index="1"/>
+                <mdui:UIInfo>
+                    <mdui:DisplayName xml:lang="en">Test SPSSODescriptor</mdui:DisplayName>
+                </mdui:UIInfo>                
+            </Extensions>            
+            <KeyDescriptor use="signing">
+                <ds:KeyInfo>
+                    <ds:KeyName>example.org</ds:KeyName>
+                    <ds:X509Data>
+                        <ds:X509SubjectName>CN=example.org,DC=example,DC=org</ds:X509SubjectName>
+                        <ds:X509Certificate>
+MIIDRjCCAi6gAwIBAgIJAPpEsjMpUtq9MA0GCSqGSIb3DQEBBQUAMFExEzARBgoJ
+kiaJk/IsZAEZFgNuZXQxGjAYBgoJkiaJk/IsZAEZFgpzaGliYm9sZXRoMR4wHAYD
+VQQDExVpc3N1ZXMuc2hpYmJvbGV0aC5uZXQwHhcNMTEwMTA3MTg0MTQ4WhcNMTQw
+MTA2MTg0MTQ4WjBRMRMwEQYKCZImiZPyLGQBGRYDbmV0MRowGAYKCZImiZPyLGQB
+GRYKc2hpYmJvbGV0aDEeMBwGA1UEAxMVaXNzdWVzLnNoaWJib2xldGgubmV0MIIB
+IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtb4jIloWGvHJsSeq0PMjkWDA
++hseZ6/6/cEJKPk245f6hktC2k3z0AqJL8Kw9OudOjDx2op2jKm45TuIA46ti6VP
+f4stLIi7mO1B4A6jTWThCwU0DjMCwBXLhANdBQloyUYJU/usN8RBXlPnWZAV1dVb
+ygb7GUorkMON+wnFd7nhBePmQdJfbsqvKN8MykWfQ56chS+0lCYhyT7qql2bskJ4
+y621WSo47php2NyyU1KNcaFBLoao+UTH7KZ9qHOWJyGJGuWKwgZmCiVd0LQhWywP
+3M/JxZvpTr2Bs/J5d8BzZGSFUaHrVcPzIX+5c3sdK4d1wXUur1XE++bh9F9TjwID
+AQABoyEwHzAdBgNVHQ4EFgQUHtV8GWr64AIUV634b9YBlMEpHOwwDQYJKoZIhvcN
+AQEFBQADggEBAEzcImXrjUNZF/8AbpcDOqlBO/neTxE0Lcnv4HevHmjqVaemxXK5
+E2pAIJexcyCnp4EV7EK+5hpkr5J26iESHr3w4u/BvUvgSLNjlrIFw58mpBM9f+Qe
+q5bQWff+dmkhrxdhaIVraH70bsuxVKwycmUS0L11nOTxAQbh85wJbIwqH4fKAzQm
+jPp4VbLesRmUyDV+fY4YrZXHYosfuZLEexJgmgcRgZFug6NbWTclKnxKPhquYjem
+oHlA8E0OvkQswalMPLfSzhgftYNHohjdQ2oMBUC4uMk9T+r7ZeKkeCiXIzUzEh8M
+uQfWf/K4Fj4CqCzMOU3mmvy7ricwz/4Kzas=
+                           </ds:X509Certificate>
+                    </ds:X509Data>
+                </ds:KeyInfo>
+            </KeyDescriptor>            
+            <ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://example.org/Shibboleth.sso/Artifact/SOAP" index="0"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://example.org/Shibboleth.sso/SLO/Artifact"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://example.org/Shibboleth.sso/SLO/POST"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://example.org/Shibboleth.sso/SLO/Redirect"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://example.org/Shibboleth.sso/SLO/SOAP"/>
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:artifact-01" Location="https://example.org/Shibboleth.sso/SAML/Artifact" index="0"/>
+
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:browser-post" Location="https://example.org/Shibboleth.sso/SAML/POST" index="1"/>
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://example.org/Shibboleth.sso/SAML2/Artifact" index="2"/>
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:PAOS" Location="https://example.org/Shibboleth.sso/SAML2/ECP" index="3"/>
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://example.org/Shibboleth.sso/SAML2/POST" index="4"/>
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://example.org/Shibboleth.sso/SAML2/POST-SimpleSign" index="5"/>
+            
+            <AttributeConsumingService index="1">
+                <RequestedAttribute FriendlyName="eduPersonPrincipalName" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.6" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="true"/>
+                <RequestedAttribute FriendlyName="mail" Name="urn:oid:0.9.2342.19200300.100.1.3" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+                <RequestedAttribute FriendlyName="displayName" Name="urn:oid:2.16.840.1.113730.3.1.241" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
+            </AttributeConsumingService>
+        </SPSSODescriptor>
+    <Organization>
+        <OrganizationName xml:lang="en">Ian A. Young</OrganizationName>
+        <OrganizationDisplayName xml:lang="en">Ian A. Young</OrganizationDisplayName>
+        <OrganizationURL xml:lang="en">http://iay.org.uk/</OrganizationURL>
+    </Organization>
+    <ContactPerson contactType="support">
+        <GivenName>Ian</GivenName>
+        <SurName>Young</SurName>
+        <EmailAddress>mailto:ukfed+fc2ee77e@iay.org.uk</EmailAddress>
+    </ContactPerson>
+    <ContactPerson contactType="technical">
+        <GivenName>Ian</GivenName>
+        <SurName>Young</SurName>
+        <EmailAddress>mailto:ukfed+fc2ee77e@iay.org.uk</EmailAddress>
+    </ContactPerson>
+    <ContactPerson contactType="administrative">
+        <GivenName>Ian</GivenName>
+        <SurName>Young</SurName>
+        <EmailAddress>mailto:ian@iay.org.uk</EmailAddress>
+    </ContactPerson>
+</EntityDescriptor>
