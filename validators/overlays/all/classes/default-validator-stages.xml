@@ -10,6 +10,7 @@
     <!-- The list of tests (stages) used by the default validator -->
     <util:list id="default_validator_stages">
        <ref bean="check_entityid_prefix"/>
+       <ref bean="check_saml2"/>
     </util:list>
 
 </beans>
