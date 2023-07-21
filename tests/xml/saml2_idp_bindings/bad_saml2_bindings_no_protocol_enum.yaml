@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_saml2
+  message: "SAML 2.0 binding requires SAML 2.0 token in IDPSSODescriptor/@protocolSupportEnumeration"
