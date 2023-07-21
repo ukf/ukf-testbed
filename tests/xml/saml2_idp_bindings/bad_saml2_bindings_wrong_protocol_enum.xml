@@ -56,7 +56,7 @@
                 <mdui:Logo height="104" width="240">https://idp.example.org/images/heads_240x104.jpg</mdui:Logo>
             </mdui:UIInfo>
             <mdui:DiscoHints>
-                <mdui:IPHint>127.0.0.1/32</mdui:IPHint>
+                <mdui:IPHint>192.0.2.0/24</mdui:IPHint>
                 <mdui:DomainHint>example.org</mdui:DomainHint>
                 <mdui:GeolocationHint>geo:105.616257,-10.474895</mdui:GeolocationHint>
             </mdui:DiscoHints>

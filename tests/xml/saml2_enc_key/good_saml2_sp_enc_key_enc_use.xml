@@ -26,13 +26,11 @@
         http://www.w3.org/2001/04/xmlenc# xenc-schema.xsd
         http://www.w3.org/2009/xmlenc11# xenc-schema-11.xsd
         http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"
-    ID="uk000006" entityID="http://idp2.iay.org.uk/idp/shibboleth">
-    <!--
-        This is an "Ian A. Young" IdP for Ian A. Young.
-    -->
+    ID="uk999999" entityID="http://sp.example.org/sp/shibboleth">
+
     <Extensions>
-        <ukfedlabel:UKFederationMember orgID="ukforg4590"/>
-        <shibmd:Scope regexp="false">iay.org.uk</shibmd:Scope>
+        <ukfedlabel:UKFederationMember orgID="ukforg9999"/>
+        <shibmd:Scope regexp="false">example.org</shibmd:Scope>
         <ukfedlabel:Software date="2016-11-17" fullVersion="3.3.0" name="Shibboleth" version="3"/>
         <ukfedlabel:ExportOptIn date="2009-09-11"/>
         <mdrpi:RegistrationInfo registrationAuthority="http://ukfederation.org.uk"
@@ -61,24 +59,24 @@
                     <ds:X509Data>
                         <ds:X509SubjectName>CN=example.org,DC=example,DC=org</ds:X509SubjectName>
                         <ds:X509Certificate>
-MIIDRjCCAi6gAwIBAgIJAPpEsjMpUtq9MA0GCSqGSIb3DQEBBQUAMFExEzARBgoJ
-kiaJk/IsZAEZFgNuZXQxGjAYBgoJkiaJk/IsZAEZFgpzaGliYm9sZXRoMR4wHAYD
-VQQDExVpc3N1ZXMuc2hpYmJvbGV0aC5uZXQwHhcNMTEwMTA3MTg0MTQ4WhcNMTQw
-MTA2MTg0MTQ4WjBRMRMwEQYKCZImiZPyLGQBGRYDbmV0MRowGAYKCZImiZPyLGQB
-GRYKc2hpYmJvbGV0aDEeMBwGA1UEAxMVaXNzdWVzLnNoaWJib2xldGgubmV0MIIB
-IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtb4jIloWGvHJsSeq0PMjkWDA
-+hseZ6/6/cEJKPk245f6hktC2k3z0AqJL8Kw9OudOjDx2op2jKm45TuIA46ti6VP
-f4stLIi7mO1B4A6jTWThCwU0DjMCwBXLhANdBQloyUYJU/usN8RBXlPnWZAV1dVb
-ygb7GUorkMON+wnFd7nhBePmQdJfbsqvKN8MykWfQ56chS+0lCYhyT7qql2bskJ4
-y621WSo47php2NyyU1KNcaFBLoao+UTH7KZ9qHOWJyGJGuWKwgZmCiVd0LQhWywP
-3M/JxZvpTr2Bs/J5d8BzZGSFUaHrVcPzIX+5c3sdK4d1wXUur1XE++bh9F9TjwID
-AQABoyEwHzAdBgNVHQ4EFgQUHtV8GWr64AIUV634b9YBlMEpHOwwDQYJKoZIhvcN
-AQEFBQADggEBAEzcImXrjUNZF/8AbpcDOqlBO/neTxE0Lcnv4HevHmjqVaemxXK5
-E2pAIJexcyCnp4EV7EK+5hpkr5J26iESHr3w4u/BvUvgSLNjlrIFw58mpBM9f+Qe
-q5bQWff+dmkhrxdhaIVraH70bsuxVKwycmUS0L11nOTxAQbh85wJbIwqH4fKAzQm
-jPp4VbLesRmUyDV+fY4YrZXHYosfuZLEexJgmgcRgZFug6NbWTclKnxKPhquYjem
-oHlA8E0OvkQswalMPLfSzhgftYNHohjdQ2oMBUC4uMk9T+r7ZeKkeCiXIzUzEh8M
-uQfWf/K4Fj4CqCzMOU3mmvy7ricwz/4Kzas=
+                            MIIDRjCCAi6gAwIBAgIJAPpEsjMpUtq9MA0GCSqGSIb3DQEBBQUAMFExEzARBgoJ
+                            kiaJk/IsZAEZFgNuZXQxGjAYBgoJkiaJk/IsZAEZFgpzaGliYm9sZXRoMR4wHAYD
+                            VQQDExVpc3N1ZXMuc2hpYmJvbGV0aC5uZXQwHhcNMTEwMTA3MTg0MTQ4WhcNMTQw
+                            MTA2MTg0MTQ4WjBRMRMwEQYKCZImiZPyLGQBGRYDbmV0MRowGAYKCZImiZPyLGQB
+                            GRYKc2hpYmJvbGV0aDEeMBwGA1UEAxMVaXNzdWVzLnNoaWJib2xldGgubmV0MIIB
+                            IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtb4jIloWGvHJsSeq0PMjkWDA
+                            +hseZ6/6/cEJKPk245f6hktC2k3z0AqJL8Kw9OudOjDx2op2jKm45TuIA46ti6VP
+                            f4stLIi7mO1B4A6jTWThCwU0DjMCwBXLhANdBQloyUYJU/usN8RBXlPnWZAV1dVb
+                            ygb7GUorkMON+wnFd7nhBePmQdJfbsqvKN8MykWfQ56chS+0lCYhyT7qql2bskJ4
+                            y621WSo47php2NyyU1KNcaFBLoao+UTH7KZ9qHOWJyGJGuWKwgZmCiVd0LQhWywP
+                            3M/JxZvpTr2Bs/J5d8BzZGSFUaHrVcPzIX+5c3sdK4d1wXUur1XE++bh9F9TjwID
+                            AQABoyEwHzAdBgNVHQ4EFgQUHtV8GWr64AIUV634b9YBlMEpHOwwDQYJKoZIhvcN
+                            AQEFBQADggEBAEzcImXrjUNZF/8AbpcDOqlBO/neTxE0Lcnv4HevHmjqVaemxXK5
+                            E2pAIJexcyCnp4EV7EK+5hpkr5J26iESHr3w4u/BvUvgSLNjlrIFw58mpBM9f+Qe
+                            q5bQWff+dmkhrxdhaIVraH70bsuxVKwycmUS0L11nOTxAQbh85wJbIwqH4fKAzQm
+                            jPp4VbLesRmUyDV+fY4YrZXHYosfuZLEexJgmgcRgZFug6NbWTclKnxKPhquYjem
+                            oHlA8E0OvkQswalMPLfSzhgftYNHohjdQ2oMBUC4uMk9T+r7ZeKkeCiXIzUzEh8M
+                            uQfWf/K4Fj4CqCzMOU3mmvy7ricwz/4Kzas=
                            </ds:X509Certificate>
                     </ds:X509Data>
                 </ds:KeyInfo>
@@ -103,23 +101,23 @@ uQfWf/K4Fj4CqCzMOU3mmvy7ricwz/4Kzas=
             </AttributeConsumingService>
         </SPSSODescriptor>
     <Organization>
-        <OrganizationName xml:lang="en">Ian A. Young</OrganizationName>
-        <OrganizationDisplayName xml:lang="en">Ian A. Young</OrganizationDisplayName>
-        <OrganizationURL xml:lang="en">http://iay.org.uk/</OrganizationURL>
+        <OrganizationName xml:lang="en">An Example Organization</OrganizationName>
+        <OrganizationDisplayName xml:lang="en">An Example Organization</OrganizationDisplayName>
+        <OrganizationURL xml:lang="en">http://example.org/</OrganizationURL>
     </Organization>
     <ContactPerson contactType="support">
-        <GivenName>Ian</GivenName>
-        <SurName>Young</SurName>
-        <EmailAddress>mailto:ukfed+fc2ee77e@iay.org.uk</EmailAddress>
+        <GivenName>An</GivenName>
+        <SurName>Example</SurName>
+        <EmailAddress>mailto:ukfed@example.org</EmailAddress>
     </ContactPerson>
     <ContactPerson contactType="technical">
-        <GivenName>Ian</GivenName>
-        <SurName>Young</SurName>
-        <EmailAddress>mailto:ukfed+fc2ee77e@iay.org.uk</EmailAddress>
+        <GivenName>An</GivenName>
+        <SurName>Example</SurName>
+        <EmailAddress>mailto:ukfed@example.org</EmailAddress>
     </ContactPerson>
     <ContactPerson contactType="administrative">
-        <GivenName>Ian</GivenName>
-        <SurName>Young</SurName>
-        <EmailAddress>mailto:ian@iay.org.uk</EmailAddress>
+        <GivenName>An</GivenName>
+        <SurName>Example</SurName>
+        <EmailAddress>mailto:anexample@example.org</EmailAddress>
     </ContactPerson>
 </EntityDescriptor>
