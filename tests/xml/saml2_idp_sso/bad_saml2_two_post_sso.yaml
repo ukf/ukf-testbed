@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_saml2
+  message: "more than one SingleSignOnService with SAML 2.0 HTTP-POST binding"
