@@ -27,6 +27,14 @@
     <bean id="check_saml2" parent="mda.XSLValidationStage"
         p:XSLResource="classpath:_rules/check_saml2.xsl"/>
 
+    <!--
+        check_mdrpi_xslt
+
+        Miscellaneous MDRPI tests, in XSLT.
+    -->
+    <bean id="check_mdrpi_xslt" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_mdrpi.xsl"/>
+
     <bean id="pipeline" parent="mda.SimplePipeline">
         <property name="stages" ref="default_validator_stages"/>
     </bean>
