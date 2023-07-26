@@ -11,6 +11,7 @@
     <util:list id="default_validator_stages">
        <ref bean="check_entityid_prefix"/>
        <ref bean="check_saml2"/>
+       <ref bean="check_mdrpi_xslt"/>
     </util:list>
 
 </beans>
