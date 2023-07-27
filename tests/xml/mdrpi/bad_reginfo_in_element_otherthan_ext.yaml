@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_mdrpi_xslt
+  message: "RegistrationInfo must only appear within Extensions of EntityDescriptor or EntitiesDescriptor"

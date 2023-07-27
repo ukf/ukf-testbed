@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_mdrpi_xslt
+  message: "non-unique lang values on mdrpi:RegistrationPolicy elements"

@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_mdrpi_xslt
+  message: "registrationInstant does not end with 'Z': 2007-03-30T16:36:00"

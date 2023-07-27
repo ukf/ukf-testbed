@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+    xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol"
+    xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init"
+    xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute"
+    xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
+    xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
+    xmlns:remd="http://refeds.org/metadata"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
+    xmlns:ukfedlabel="http://ukfederation.org.uk/2006/11/label"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:oasis:names:tc:SAML:2.0:metadata saml-schema-metadata-2.0.xsd
+        urn:oasis:names:tc:SAML:metadata:algsupport sstc-saml-metadata-algsupport-v1.0.xsd
+        urn:oasis:names:tc:SAML:metadata:attribute sstc-metadata-attr.xsd
+        urn:oasis:names:tc:SAML:metadata:rpi saml-metadata-rpi-v1.0.xsd
+        urn:oasis:names:tc:SAML:metadata:ui sstc-saml-metadata-ui-v1.0.xsd
+        urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol sstc-saml-idp-discovery.xsd
+        urn:oasis:names:tc:SAML:profiles:SSO:request-init sstc-request-initiation.xsd
+        urn:oasis:names:tc:SAML:2.0:assertion saml-schema-assertion-2.0.xsd
+        urn:mace:shibboleth:metadata:1.0 shibboleth-metadata-1.0.xsd
+        http://ukfederation.org.uk/2006/11/label uk-fed-label.xsd
+        http://refeds.org/metadata refeds-metadata.xsd
+        http://www.w3.org/2001/04/xmlenc# xenc-schema.xsd
+        http://www.w3.org/2009/xmlenc11# xenc-schema-11.xsd
+        http://www.w3.org/2000/09/xmldsig# xmldsig-core-schema.xsd"
+    ID="uk999999" entityID="https://idp.example.org/idp/shibboleth">
+
+    <Extensions>
+        <ukfedlabel:UKFederationMember orgID="ukforg9999"/>
+        <shibmd:Scope regexp="false">example.org</shibmd:Scope>
+        <ukfedlabel:Software date="2016-11-17" fullVersion="3.3.0" name="Shibboleth" version="3"/>
+        <ukfedlabel:ExportOptIn date="2009-09-11"/>
+        <mdrpi:RegistrationInfo registrationAuthority="http://ukfederation.org.uk"
+            registrationInstant="2007-03-30T16:36:00Z">
+            <mdrpi:RegistrationPolicy xml:lang="en"
+                >http://ukfederation.org.uk/doc/mdrps-20130902</mdrpi:RegistrationPolicy>
+        </mdrpi:RegistrationInfo>
+        <mdrpi:PublicationInfo creationInstant="2017-08-16T19:10:29Z" publisher="http://ukfederation.org.uk"/>
+        <!-- This is misspelled -->
+        <mdrpi:PublicationInfoWrong creationInstant="2017-08-16T19:10:29Z" publisher="http://ukfederation.org.uk"/>
+        <mdattr:EntityAttributes xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+            <saml:Attribute Name="http://macedir.org/entity-category-support"
+                NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+                <saml:AttributeValue>http://refeds.org/category/research-and-scholarship</saml:AttributeValue>
+            </saml:Attribute>
+        </mdattr:EntityAttributes>
+    </Extensions>
+    <Organization>
+        <OrganizationName xml:lang="en">An Example Organization</OrganizationName>
+        <OrganizationDisplayName xml:lang="en">An Example Organization</OrganizationDisplayName>
+        <OrganizationURL xml:lang="en">http://example.org/</OrganizationURL>
+    </Organization>
+    <ContactPerson contactType="support">
+        <GivenName>An</GivenName>
+        <SurName>Example</SurName>
+        <EmailAddress>mailto:ukfed@example.org</EmailAddress>
+    </ContactPerson>
+    <ContactPerson contactType="technical">
+        <GivenName>An</GivenName>
+        <SurName>Example</SurName>
+        <EmailAddress>mailto:ukfed@example.org</EmailAddress>
+    </ContactPerson>
+    <ContactPerson contactType="administrative">
+        <GivenName>An</GivenName>
+        <SurName>Example</SurName>
+        <EmailAddress>mailto:anexample@example.org</EmailAddress>
+    </ContactPerson>
+</EntityDescriptor>
