@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_mdrpi_xslt
+  message: "PublicationInfo must only appear within an Extensions element"
