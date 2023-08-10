@@ -53,8 +53,8 @@
                     <mdui:DisplayName xml:lang="en">Test SPSSODescriptor</mdui:DisplayName>
                 </mdui:UIInfo>                
             </Extensions>            
-            <KeyDescriptor>
-                <ds:KeyInfo use="encryption">
+            <KeyDescriptor use="encryption">
+                <ds:KeyInfo>
                     <ds:KeyName>example.org</ds:KeyName>
                     <ds:X509Data>
                         <ds:X509SubjectName>CN=example.org,DC=example,DC=org</ds:X509SubjectName>
@@ -93,8 +93,20 @@
                            </ds:X509Certificate>
                     </ds:X509Data>
                 </ds:KeyInfo>
-            </KeyDescriptor>            
-          </SPSSODescriptor>
+            </KeyDescriptor>  
+            <ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sp.example.org/Shibboleth.sso/Artifact/SOAP" index="0"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://sp.example.org/Shibboleth.sso/SLO/Artifact"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SLO/POST"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://sp.example.org/Shibboleth.sso/SLO/Redirect"/>
+            <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://sp.example.org/Shibboleth.sso/SLO/SOAP"/>
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:artifact-01" Location="https://sp.example.org/Shibboleth.sso/SAML/Artifact" index="0"/>
+
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:browser-post" Location="https://sp.example.org/Shibboleth.sso/SAML/POST" index="1"/>
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://sp.example.org/Shibboleth.sso/SAML2/Artifact" index="2"/>
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:PAOS" Location="https://sp.example.org/Shibboleth.sso/SAML2/ECP" index="3"/>
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST" index="4"/>
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST-SimpleSign" index="5"/>  
+    </SPSSODescriptor>
     <Organization>
         <OrganizationName xml:lang="en">An Example Entity</OrganizationName>
         <OrganizationDisplayName xml:lang="en">An Example Entity</OrganizationDisplayName>

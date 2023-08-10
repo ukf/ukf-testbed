@@ -115,7 +115,7 @@
         <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
             Location="https://idp.example.org/idp/profile/SAML2/Redirect/SSO"/>
     </IDPSSODescriptor>
-    <AttributeAuthorityDescriptor>
+    <AttributeAuthorityDescriptor protocolSupportEnumeration="">
         <KeyDescriptor>
             <ds:KeyInfo>
                 <ds:X509Data>

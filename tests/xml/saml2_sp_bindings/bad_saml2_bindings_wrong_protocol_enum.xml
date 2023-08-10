@@ -53,8 +53,8 @@
                     <mdui:DisplayName xml:lang="en">Test SPSSODescriptor</mdui:DisplayName>
                 </mdui:UIInfo>                
             </Extensions>            
-            <KeyDescriptor>
-                <ds:KeyInfo use="encryption">
+            <KeyDescriptor use="encryption">
+                <ds:KeyInfo>
                     <ds:KeyName>example.org</ds:KeyName>
                     <ds:X509Data>
                         <ds:X509SubjectName>CN=example.org,DC=example,DC=org</ds:X509SubjectName>

@@ -45,7 +45,7 @@
             </saml:Attribute>
         </mdattr:EntityAttributes>
     </Extensions>
-    <IDPSSODescriptor>
+    <IDPSSODescriptor protocolSupportEnumeration="">
         <Extensions>
             <mdui:UIInfo>
                 <mdui:DisplayName xml:lang="en">An Example Entity</mdui:DisplayName>
