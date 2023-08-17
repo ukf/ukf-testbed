@@ -35,6 +35,12 @@
     <bean id="check_mdrpi_xslt" parent="mda.XSLValidationStage"
         p:XSLResource="classpath:_rules/check_mdrpi.xsl"/>
 
+    <!--
+        check_coco_v2_support
+    -->
+    <bean id="check_coco_v2_support" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_coco_v2_support.xsl"/>
+
     <bean id="pipeline" parent="mda.SimplePipeline">
         <property name="stages" ref="default_validator_stages"/>
     </bean>
