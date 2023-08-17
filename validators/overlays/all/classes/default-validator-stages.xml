@@ -13,6 +13,7 @@
        <ref bean="check_entityid_prefix"/>
        <ref bean="check_saml2"/>
        <ref bean="check_mdrpi_xslt"/>
+       <ref bean="check_coco_v2_support"/>
     </util:list>
 
 </beans>
