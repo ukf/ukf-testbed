@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_sirtfi
+  message: SIRTFI requires a REFEDS security contact with an EmailAddress
