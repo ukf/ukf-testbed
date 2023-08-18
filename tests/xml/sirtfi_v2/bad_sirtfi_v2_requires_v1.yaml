@@ -1,0 +1,5 @@
+expected:
+- status: error
+  component_id: check_sirtfi2
+  message: Sirtfi version 2 requires the entity to also support the original Sirtfi
+    entity attribute
