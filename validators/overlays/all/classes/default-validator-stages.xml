@@ -14,6 +14,8 @@
        <ref bean="check_saml2"/>
        <ref bean="check_mdrpi_xslt"/>
        <ref bean="check_coco_v2_support"/>
+       <ref bean="check_sirtfi"/>
+       <ref bean="check_sirtfi2"/>
     </util:list>
 
 </beans>

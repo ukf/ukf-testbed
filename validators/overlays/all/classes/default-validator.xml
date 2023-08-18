@@ -41,6 +41,18 @@
     <bean id="check_coco_v2_support" parent="mda.XSLValidationStage"
         p:XSLResource="classpath:_rules/check_coco_v2_support.xsl"/>
 
+    <!--
+        check_sirtfi
+    -->
+    <bean id="check_sirtfi" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_sirtfi.xsl"/>
+
+    <!--
+        check_sirtfi2
+    -->
+    <bean id="check_sirtfi2" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_sirtfi2.xsl"/>
+
     <bean id="pipeline" parent="mda.SimplePipeline">
         <property name="stages" ref="default_validator_stages"/>
     </bean>
