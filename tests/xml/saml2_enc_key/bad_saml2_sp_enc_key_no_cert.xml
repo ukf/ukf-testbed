@@ -39,12 +39,6 @@
             <mdrpi:RegistrationPolicy xml:lang="en"
                 >http://ukfederation.org.uk/doc/mdrps-20130902</mdrpi:RegistrationPolicy>
         </mdrpi:RegistrationInfo>
-        <mdattr:EntityAttributes xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
-            <saml:Attribute Name="http://macedir.org/entity-category-support"
-                NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-                <saml:AttributeValue>http://refeds.org/category/research-and-scholarship</saml:AttributeValue>
-            </saml:Attribute>
-        </mdattr:EntityAttributes>
     </Extensions>
      <SPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
             <Extensions>
@@ -54,19 +48,12 @@
                     <mdui:DisplayName xml:lang="en">Test SPSSODescriptor</mdui:DisplayName>
                 </mdui:UIInfo>                
             </Extensions>            
-            <KeyDescriptor use="encryption">
-                <ds:KeyInfo>
-                    <ds:KeyName>example.org</ds:KeyName>
-                </ds:KeyInfo>
-            </KeyDescriptor>            
+            <!-- No Key -->
             <ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://example.org/Shibboleth.sso/Artifact/SOAP" index="0"/>
             <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://example.org/Shibboleth.sso/SLO/Artifact"/>
             <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://example.org/Shibboleth.sso/SLO/POST"/>
             <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://example.org/Shibboleth.sso/SLO/Redirect"/>
             <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://example.org/Shibboleth.sso/SLO/SOAP"/>
-            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:artifact-01" Location="https://example.org/Shibboleth.sso/SAML/Artifact" index="0"/>
-
-            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:browser-post" Location="https://example.org/Shibboleth.sso/SAML/POST" index="1"/>
             <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://example.org/Shibboleth.sso/SAML2/Artifact" index="2"/>
             <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:PAOS" Location="https://example.org/Shibboleth.sso/SAML2/ECP" index="3"/>
             <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://example.org/Shibboleth.sso/SAML2/POST" index="4"/>
