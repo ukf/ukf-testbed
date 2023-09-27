@@ -6,4 +6,6 @@ WORKDIR /application
 # Customise by modifying /application/BOOT-INF/...
 #
 ADD overlays/all BOOT-INF/
+ADD overlays/ukf-mda BOOT-INF/
+ADD overlays/inc-mda BOOT-INF/
 ADD overlays/09  BOOT-INF/
