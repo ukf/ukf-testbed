@@ -39,12 +39,6 @@
                 >http://ukfederation.org.uk/doc/mdrps-20130902</mdrpi:RegistrationPolicy>
         </mdrpi:RegistrationInfo>
         <mdrpi:PublicationInfo creationInstant="2017-08-16T19:10:29Z" publisher="http://ukfederation.org.uk"/>
-        <mdattr:EntityAttributes xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
-            <saml:Attribute Name="http://macedir.org/entity-category-support"
-                NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-                <saml:AttributeValue>http://refeds.org/category/research-and-scholarship</saml:AttributeValue>
-            </saml:Attribute>
-        </mdattr:EntityAttributes>
     </Extensions>
      <IDPSSODescriptor
         protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0 urn:oasis:names:tc:SAML:2.0:protocol">

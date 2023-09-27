@@ -46,7 +46,7 @@
         </mdattr:EntityAttributes>
     </Extensions>
     <IDPSSODescriptor
-        protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol urn:mace:shibboleth:1.0 urn:oasis:names:tc:SAML:2.0:protocol">
+        protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
         <Extensions>
             <mdui:UIInfo>
                 <mdui:DisplayName xml:lang="en">An Example Entity</mdui:DisplayName>
@@ -100,14 +100,10 @@
                 </ds:X509Data>
             </ds:KeyInfo>
         </KeyDescriptor>
-        <ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding"
-            Location="https://idp.example.org:8443/idp/profile/SAML1/SOAP/ArtifactResolution" index="1"/>
         <ArtifactResolutionService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
             Location="https://idp.example.org:8443/idp/profile/SAML2/SOAP/ArtifactResolution" index="2"/>
         <NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</NameIDFormat>
         <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
-        <SingleSignOnService Binding="urn:mace:shibboleth:1.0:profiles:AuthnRequest"
-            Location="https://idp.example.org/idp/profile/Shibboleth/SSO"/>
         <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
             Location="https://idp.example.org/idp/profile/SAML2/POST/SSO"/>
         <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign"
@@ -155,8 +151,6 @@
                 </ds:X509Data>
             </ds:KeyInfo>
         </KeyDescriptor>
-        <AttributeService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding"
-            Location="https://idp.example.org:8443/idp/profile/SAML1/SOAP/AttributeQuery"/>
         <AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
             Location="https://idp.example.org:8443/idp/profile/SAML2/SOAP/AttributeQuery"/>
         <NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</NameIDFormat>

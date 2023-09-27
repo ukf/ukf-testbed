@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    default-lazy-init="true"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- *** Default Shibboleth component bean id property from Spring bean id *** -->
+    <bean parent="mda.IdentifiableBeanPostProcessor" lazy-init="false"/>
+
+    <!--
+        *****************************
+        ***                       ***
+        ***   U T I L I T I E S   ***
+        ***                       ***
+        *****************************
+    -->
+
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="net.shibboleth.ext.spring.config.StringToDurationConverter" />
+                <bean class="net.shibboleth.ext.spring.config.StringToIPRangeConverter" />
+                <bean class="net.shibboleth.ext.spring.config.BooleanToPredicateConverter" />
+                <bean class="net.shibboleth.ext.spring.config.StringBooleanToPredicateConverter" />
+                <bean class="net.shibboleth.ext.spring.config.StringToResourceConverter" />
+            </set>
+        </property>
+    </bean> 
+
+    <bean id="id" parent="String" c:_="default"/>
+    <bean id="description" parent="String" c:_="Default validator."/>
+
+    <!--
+        **************************
+        ***                    ***
+        ***   S T A G E S      ***
+        ***                    ***
+        **************************
+    -->
+
+    <!--
+        check_entityid_prefix
+    -->
+    <bean id="check_entityid_prefix" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_entityid_prefix.xsl"/>
+
+    <!--
+        check_saml2
+    -->
+    <bean id="check_saml2" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_saml2.xsl"/>
+
+    <!--
+        check_mdrpi_xslt
+
+        Miscellaneous MDRPI tests, in XSLT.
+    -->
+    <bean id="check_mdrpi_xslt" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_mdrpi.xsl"/>
+
+    <!--
+        check_sirtfi
+    -->
+    <bean id="check_sirtfi" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_sirtfi.xsl"/>
+
+    <!--
+        check_sirtfi2
+    -->
+    <bean id="check_sirtfi2" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_sirtfi2.xsl"/>
+
+    <!--
+        check_adfs
+    -->
+    <bean id="check_adfs" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_adfs.xsl"/>
+
+    <!--
+        check_algsupport
+    -->
+    <bean id="check_algsupport" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_algsupport.xsl"/>
+    
+    <!--
+        check_cr
+
+        Check for the presence of CR characters in text content or attribute values.
+        This protects against SSPCPP-684 in the Shibboleth SP.
+    -->
+    <bean id="mda.CRDetectionStage" abstract="true" parent="mda.stage_parent"
+        class="net.shibboleth.metadata.dom.CRDetectionStage"/>
+    <bean id="check_cr" parent="mda.CRDetectionStage"/>
+
+    <!--
+        check_validUntil
+
+        Check that an aggregate has a validUntil instant specified, and that it has not
+        yet expired.  Does not put an upper bound on validUntil intervals.
+    -->
+    <bean id="check_validUntil" parent="mda.ValidateValidUntilStage">
+        <!--
+            The validUntil attribute must be present.
+        -->
+        <property name="requireValidUntil" value="true"/>
+        <!--
+            Do not constrain the validity interval in this general stage.
+            Constrain if necessary on a per-channel basis.
+        -->
+        <property name="maxValidityInterval" value="0"/>
+    </bean>
+
+    <!--
+        check_hoksso
+    -->
+    <bean id="check_hoksso" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_hoksso.xsl"/>
+
+    <!--
+        check_idpdisc
+    -->
+    <bean id="check_idpdisc" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_idpdisc.xsl"/>
+
+    <!--
+        check_idp_tls
+    -->
+    <bean id="check_idp_tls" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_idp_tls.xsl"/>
+
+    <!--
+        check_incmd
+    -->
+    <bean id="check_incmd" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_incmd.xsl"/>
+
+    <!--
+        check_init
+    -->
+    <bean id="check_init" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_init.xsl"/>
+
+    <!--
+        check_mdattr
+    -->
+    <bean id="check_mdattr" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_mdattr.xsl"/>
+
+    <!--
+        check_mdiop
+    -->
+    <bean id="check_mdiop" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_mdiop.xsl"/>
+
+    <!--
+        check_mdrpi
+
+        Composite check for the MDRPI specification.
+    -->
+    <bean id="check_mdrpi" parent="mda.CompositeStage">
+        <property name="composedStages">
+            <list>
+                <ref bean="check_mdrpi_xslt"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        check_mdui_iphint
+
+        Checks for the mdui:IPHint element.
+    -->
+    <bean id="check_mdui_iphint" parent="ukf.IPHintValidationStage"
+        p:checkingNetworks="true"/>
+
+    <!--
+        check_mdui_xslt
+
+        Miscellaneous MDUI tests, in XSLT.
+    -->
+    <bean id="check_mdui_xslt" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_mdui.xsl"/>
+
+    <!--
+        check_mdui_logo_length
+
+        Add a warning for mdui:Logo elements longer than some
+        threshold.
+    -->
+    <bean id="check_mdui_logo_length" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_mdui_logo_length.xsl">
+        <property name="transformParameters">
+            <map>
+                <entry key="maxLength" value="${mdui.logo.length.warn:40000}"/>
+            </map>
+        </property>
+    </bean>
+
+    <!--
+        check_mdui
+
+        Composite check for the MDUI specification.
+    -->
+    <bean id="check_mdui" parent="mda.CompositeStage">
+        <property name="composedStages">
+            <list>
+                <ref bean="check_mdui_iphint"/>
+                <!-- <ref bean="check_mdui_xslt"/> requires Xalan -->
+                <ref bean="check_mdui_logo_length"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        checkCertificates (changed 'inc' to 'mda' in IDs)
+    -->
+    <bean id="compromised.2048" parent="X509RSAOpenSSLBlacklistValidator"
+        p:keySize="2048"
+        p:blacklistResource="classpath:net/shibboleth/metadata/validate/x509/compromised-2048.txt"/>
+    <bean id="X509RSAOpenSSLBlacklistValidator" abstract="true" parent="mda.validator_parent"
+        class="net.shibboleth.metadata.validate.x509.X509RSAOpenSSLBlacklistValidator"/>
+     <bean id="debian.2048" parent="X509RSAOpenSSLBlacklistValidator"
+        p:keySize="2048"
+        p:blacklistResource="classpath:net/shibboleth/metadata/validate/x509/debian-2048.txt"/>
+    <bean id="debian.4096" parent="X509RSAOpenSSLBlacklistValidator"
+        p:keySize="4096"
+        p:blacklistResource="classpath:net/shibboleth/metadata/validate/x509/debian-4096.txt"/>
+    <bean id="ukf.X509ROCAValidator" abstract="true" parent="ukf.component_parent"
+        class="uk.org.ukfederation.mda.validate.x509.X509ROCAValidator"/>
+    <bean id="ukf.component_parent" abstract="true"
+        init-method="initialize" destroy-method="destroy"/>
+    <bean id="ukf.X509DSADetector" abstract="true" parent="ukf.component_parent"
+        class="uk.org.ukfederation.mda.validate.x509.X509DSADetector"/>
+    <bean id="checkCertificates" parent="mda.X509ValidationStage">
+        <property name="validators">
+            <list>
+                <!-- Error on DSA keys. -->
+                <bean p:id="DSA" parent="ukf.X509DSADetector"/>
+
+                <!-- Error on RSA key length less than 2048 bits. -->
+                <bean p:id="RSAKeyLength" parent="mda.X509RSAKeyLengthValidator"
+                    p:warningBoundary="0" p:errorBoundary="2048"/>
+                <!-- Error on small RSA public exponents. -->
+                <bean p:id="RSAExponent" parent="mda.X509RSAExponentValidator"/>
+                <!-- Error on keys vulnerable to ROCA. -->
+                <bean p:id="ROCA" parent="ukf.X509ROCAValidator"/>
+
+                <!--
+                    Debian weak key blacklists.
+
+                    Don't need to check for keys below our minimum key size.
+                -->
+                <ref bean="debian.2048"/>
+                <ref bean="debian.4096"/>
+
+                <!--
+                    Compromised key blacklists.
+
+                    Again, don't need to check for keys below our minimum key size.
+                -->
+                <ref bean="compromised.2048"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        checkScopes
+    -->
+    <bean id="inc.component_parent" abstract="true"
+        init-method="initialize" destroy-method="destroy"/>
+
+    <bean id="inc.stage_parent" abstract="true" parent="inc.component_parent"/>
+    <bean id="inc.RejectStringRegexValidator" abstract="true" parent="inc.component_parent"
+        class="uk.org.iay.incommon.mda.validate.string.RejectStringRegexValidator"/>
+    <bean id="inc.RejectDomainNamePublicSuffixValidator" abstract="true" parent="inc.component_parent"
+        class="uk.org.iay.incommon.mda.validate.net.RejectDomainNamePublicSuffixValidator"/>
+    <bean id="inc.AcceptStringValueValidator" abstract="true" parent="inc.component_parent"
+        class="uk.org.iay.incommon.mda.validate.string.AcceptStringValueValidator"/>
+    <bean id="inc.AsDomainNameStringValidator" abstract="true" parent="inc.component_parent"
+        class="uk.org.iay.incommon.mda.validate.string.AsDomainNameStringValidator"/>
+    <bean id="inc.RejectDomainNameNotUnderPublicSuffixValidator" abstract="true" parent="inc.component_parent"
+        class="uk.org.iay.incommon.mda.validate.net.RejectDomainNameNotUnderPublicSuffixValidator"/>
+    <bean id="inc.AsLiteralTailStringValidator" abstract="true" parent="inc.component_parent"
+        class="uk.org.iay.incommon.mda.validate.string.AsLiteralTailStringValidator"/>
+    <bean id="checkScopes" parent="inc.stage_parent" class="uk.org.iay.incommon.mda.dom.saml.shib.ScopeValidationStage">
+        <property name="validators">
+            <list>
+                <bean p:id="empty" parent="inc.RejectStringRegexValidator"
+                    p:regex="" p:message="scope element must not be empty"/>
+                <bean p:id="whiteSpace" parent="inc.RejectStringRegexValidator"
+                    p:regex=".*\s.*" p:message="scope '%s' includes white space"/>
+
+                <!--
+                    Explicitly accept domains which, although they
+                    fall afoul of the public suffic heuristic, are
+                    nevertheless known to be legitimately used as
+                    security domains.
+                -->
+                <bean p:id="mil.no" parent="inc.AcceptStringValueValidator"
+                    p:value="mil.no"/>
+
+                <bean p:id="domainName" parent="inc.AsDomainNameStringValidator"
+                    p:message="scope is not a valid domain name: %s">
+                    <property name="validators">
+                        <list>
+                            <!-- DNS name validators -->
+                            <bean p:id="publicSuffix" parent="inc.RejectDomainNamePublicSuffixValidator"
+                                p:message="scope is a public suffix: '%s'"/>
+                            <bean p:id="noPublicSuffix" parent="inc.RejectDomainNameNotUnderPublicSuffixValidator"
+                                p:message="scope is not under a public suffix: '%s'"/>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+        <property name="regexpValidators">
+            <list>
+                <bean p:id="empty" parent="inc.RejectStringRegexValidator"
+                    p:regex="" p:message="regex scope element must not be empty"/>
+                <bean p:id="whiteSpace" parent="inc.RejectStringRegexValidator"
+                    p:regex=".*\s.*" p:message="regex scope '%s' includes white space"/>
+                <bean p:id="endAnchor" parent="inc.RejectStringRegexValidator"
+                    p:regex=".*[^$]" p:message="regex scope '%s' does not end with an anchor ('$')"/>
+                <bean p:id="literalTail" parent="inc.AsLiteralTailStringValidator"
+                    p:message="regular expression '%s' does not end with a literal tail">
+                    <property name="validators">
+                        <!-- validators to apply to the literal tail -->
+                        <list>
+                            <bean p:id="domainName" parent="inc.AsDomainNameStringValidator"
+                                p:message="literal tail is not a valid domain name: %s">
+                                <property name="validators">
+                                    <list>
+                                        <!-- DNS name validators for the literal tail -->
+                                        <bean p:id="publicSuffix" parent="inc.RejectDomainNamePublicSuffixValidator"
+                                            p:message="literal tail is a public suffix: '%s'"/>
+                                        <bean p:id="noPublicSuffix" parent="inc.RejectDomainNameNotUnderPublicSuffixValidator"
+                                            p:message="literal tail is not under a public suffix: '%s'"/>
+                                    </list>
+                                </property>
+                            </bean>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        check_misc
+    -->
+    <bean id="check_misc" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_misc.xsl"/>
+
+
+    <!--
+        check_rands_member
+    -->
+    <bean id="check_rands_member" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_rands_member.xsl"/>
+
+    <!--
+        check_rands_support
+    -->
+    <bean id="check_rands_support" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_rands_support.xsl"/>
+
+<!--
+        check_rands
+    -->
+    <bean id="check_rands" parent="mda.CompositeStage">
+        <property name="composedStages">
+            <list>
+                <ref bean="check_rands_member"/>
+                <ref bean="check_rands_support"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        check_coco_v2_support
+    -->
+    <bean id="check_coco_v2_support" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_coco_v2_support.xsl"/>
+
+    <bean id="check_coco_v2" parent="mda.CompositeStage">
+        <property name="composedStages">
+            <list>
+                <ref bean="check_coco_v2_support"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        check_reqattr
+    -->
+    <bean id="check_reqattr" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_reqattr.xsl">
+        <property name="transformAttributes">
+            <map>
+                <entry key="jdk.xml.xpathExprOpLimit" value="0"/>
+            </map>
+        </property>
+    </bean>
+
+    <!--
+        check_saml1
+    -->
+    <bean id="check_saml1" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_saml1.xsl"/>
+
+    <!--
+        check_saml2_lang
+    -->
+    <bean id="check_saml2_lang" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_saml2_lang.xsl"/>
+
+    <!--
+        check_saml2int
+    -->
+    <bean id="check_saml2int" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_saml2int.xsl"/>
+
+    <!--
+        check_saml2meta
+    -->
+    <bean id="check_saml2meta" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_saml2meta.xsl"/>
+
+    <!--
+        check_shib_noregscope
+    -->
+    <bean id="check_shib_noregscope" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_shib_noregscope.xsl"/>
+
+    <!--
+        check_shibboleth
+    -->
+    <bean id="check_shibboleth" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_shibboleth.xsl"/>
+
+    <!--
+        check_sp_tls
+    -->
+    <bean id="check_sp_tls" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_sp_tls.xsl"/>
+
+    <!--
+        check_uk_algorithms
+    -->
+    <bean id="check_uk_algorithms" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_uk_algorithms.xsl"/>
+
+    <!--
+        check_uk_trust
+    -->
+    <bean id="check_uk_trust" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_uk_trust.xsl"/>
+
+    <!--
+        check_namespaces
+    -->
+    <bean id="check_namespaces" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_namespaces.xsl"/>
+
+    <!--
+        check_hasreginfo
+    -->
+    <bean id="check_hasreginfo" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_hasreginfo.xsl"/>
+
+    <!--
+        check_aggregate.
+    -->
+    <bean id="check_aggregate" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_aggregate.xsl"/>
+
+    <!--
+        check_filtered
+    -->
+    <bean id="check_filtered" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_filtered.xsl"/>
+
+    <!--
+        compromised.ukf
+
+        Check against UKf-specific list of compromised RSA keys.
+    -->
+    <bean id="compromised.ukf" parent="mda.X509RSAOpenSSLBlacklistValidator"
+        p:id="compromised.ukf">
+        <property name="blacklistResource">
+            <bean parent="FileSystemResource" c:_="${blocklists.dir}/compromised-keys.txt"/>
+        </property>
+    </bean>
+
+    <!--
+        check_ukf_compromised
+
+        Validation bean which just checks against the UKf-specific list of compromised RSA keys.
+    -->
+    <bean id="check_ukf_compromised" parent="mda.X509ValidationStage">
+        <property name="validators">
+            <list>
+                <ref bean="compromised.ukf"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        check_saml_strings
+    -->
+    <bean id="ukf.stage_parent" abstract="true" parent="ukf.component_parent"/>
+    <bean id="ukf.SAMLStringElementCheckingStage" abstract="true" parent="ukf.stage_parent"
+        class="uk.org.ukfederation.mda.dom.saml.SAMLStringElementCheckingStage"/>
+    <bean id="shibmd-Scope" parent="QName" c:_0-ref="shibmd_namespace" c:_1="Scope"/>
+    <bean id="md_namespace"         parent="String" c:_0="urn:oasis:names:tc:SAML:2.0:metadata"/>
+    <bean id="mdui_namespace"       parent="String" c:_0="urn:oasis:names:tc:SAML:metadata:ui"/>
+    <bean id="shibmd_namespace"     parent="String" c:_="urn:mace:shibboleth:metadata:1.0"/>
+    <bean id="md-AdditionalMetadataLocation"  parent="QName" c:_0-ref="md_namespace" c:_1="AdditionalMetadataLocation"/>
+    <bean id="md-AttributeProfile"            parent="QName" c:_0-ref="md_namespace" c:_1="AttributeProfile"/>
+    <bean id="md-Company"                     parent="QName" c:_0-ref="md_namespace" c:_1="Company"/>
+    <bean id="md-EmailAddress"                parent="QName" c:_0-ref="md_namespace" c:_1="EmailAddress"/>
+    <bean id="md-GivenName"                   parent="QName" c:_0-ref="md_namespace" c:_1="GivenName"/>
+    <bean id="md-NameIDFormat"                parent="QName" c:_0-ref="md_namespace" c:_1="NameIDFormat"/>
+    <bean id="md-OrganizationDisplayName"     parent="QName" c:_0-ref="md_namespace" c:_1="OrganizationDisplayName"/>
+    <bean id="md-OrganizationName"            parent="QName" c:_0-ref="md_namespace" c:_1="OrganizationName"/>
+    <bean id="md-OrganizationURL"             parent="QName" c:_0-ref="md_namespace" c:_1="OrganizationURL"/>
+    <bean id="md-ServiceDescription"          parent="QName" c:_0-ref="md_namespace" c:_1="ServiceDescription"/>
+    <bean id="md-ServiceName"                 parent="QName" c:_0-ref="md_namespace" c:_1="ServiceName"/>
+    <bean id="md-SurName"                     parent="QName" c:_0-ref="md_namespace" c:_1="SurName"/>
+    <bean id="md-TelephoneNumber"             parent="QName" c:_0-ref="md_namespace" c:_1="TelephoneNumber"/>
+    <bean id="mdui-Description"         parent="QName" c:_0-ref="mdui_namespace" c:_1="Description"/>
+    <bean id="mdui-DisplayName"         parent="QName" c:_0-ref="mdui_namespace" c:_1="DisplayName"/>
+    <bean id="mdui-DomainHint"          parent="QName" c:_0-ref="mdui_namespace" c:_1="DomainHint"/>
+    <bean id="mdui-GeolocationHint"     parent="QName" c:_0-ref="mdui_namespace" c:_1="GeolocationHint"/>
+    <bean id="mdui-InformationURL"      parent="QName" c:_0-ref="mdui_namespace" c:_1="InformationURL"/>
+    <bean id="mdui-IPHint"              parent="QName" c:_0-ref="mdui_namespace" c:_1="IPHint"/>
+    <bean id="mdui-Keywords"            parent="QName" c:_0-ref="mdui_namespace" c:_1="Keywords"/>
+    <bean id="mdui-Logo"                parent="QName" c:_0-ref="mdui_namespace" c:_1="Logo"/>
+    <bean id="mdui-PrivacyStatementURL" parent="QName" c:_0-ref="mdui_namespace" c:_1="PrivacyStatementURL"/>
+    <bean id="check_saml_strings" parent="ukf.SAMLStringElementCheckingStage">
+        <property name="elementNames">
+            <set>
+                <ref bean="md-Company"/>
+                <ref bean="md-GivenName"/>
+                <ref bean="md-OrganizationDisplayName"/>
+                <ref bean="md-OrganizationName"/>
+                <ref bean="md-ServiceDescription"/>
+                <ref bean="md-ServiceName"/>
+                <ref bean="md-SurName"/>
+                <ref bean="md-TelephoneNumber"/>
+
+                <ref bean="mdui-Description"/>
+                <ref bean="mdui-DisplayName"/>
+                <ref bean="mdui-DomainHint"/>
+                <ref bean="mdui-GeolocationHint"/>
+                <ref bean="mdui-IPHint"/>
+                <ref bean="mdui-Keywords"/>
+
+                <ref bean="shibmd-Scope"/>
+            </set>
+        </property>
+    </bean>
+
+</beans>

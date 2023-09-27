@@ -9,54 +9,34 @@
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <!-- *** Default Shibboleth component bean id property from Spring bean id *** -->
-    <bean parent="mda.IdentifiableBeanPostProcessor" lazy-init="false"/>
-
-    <bean id="id" parent="String" c:_="default"/>
-    <bean id="description" parent="String" c:_="Default validator."/>
+    <!--
+        *********************************
+        ***                           ***
+        ***   Import the stage beans  ***
+        ***                           ***
+        *********************************
+    -->
+    <import resource="default-validator-beans.xml"/>
 
     <!--
-        check_entityid_prefix
+        *********************************
+        ***                           ***
+        ***   Pipeline stages to run  ***
+        ***                           ***
+        *********************************
     -->
-    <bean id="check_entityid_prefix" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_entityid_prefix.xsl"/>
-
-    <!--
-        check_saml2
-    -->
-    <bean id="check_saml2" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_saml2.xsl"/>
-
-    <!--
-        check_mdrpi_xslt
-
-        Miscellaneous MDRPI tests, in XSLT.
-    -->
-    <bean id="check_mdrpi_xslt" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_mdrpi.xsl"/>
-
-    <!--
-        check_coco_v2_support
-    -->
-    <bean id="check_coco_v2_support" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_coco_v2_support.xsl"/>
-
-    <!--
-        check_sirtfi
-    -->
-    <bean id="check_sirtfi" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_sirtfi.xsl"/>
-
-    <!--
-        check_sirtfi2
-    -->
-    <bean id="check_sirtfi2" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_sirtfi2.xsl"/>
-
     <bean id="pipeline" parent="mda.SimplePipeline">
         <property name="stages" ref="default_validator_stages"/>
     </bean>
 
+    <!--
+        ****************************************************************
+        ***                                                          ***
+        ***   Import stages to run and any validator bean overrides  ***
+        ***                                                          ***
+        ****************************************************************
+    -->
     <import resource="default-validator-stages.xml"/>
+    <import resource="../default-validator-beans-overrides.xml"/>
 
 </beans>

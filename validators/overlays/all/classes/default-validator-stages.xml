@@ -7,15 +7,48 @@
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <!-- The list of tests (stages) used by the default validator -->
+    <!-- The list of tests (stages) used by the default validator following the eduGAIN profile -->
     <util:list id="default_validator_stages">
-       <ref bean="checkSchemas"/>
-       <ref bean="check_entityid_prefix"/>
-       <ref bean="check_saml2"/>
-       <ref bean="check_mdrpi_xslt"/>
-       <ref bean="check_coco_v2_support"/>
-       <ref bean="check_sirtfi"/>
-       <ref bean="check_sirtfi2"/>
+        <ref bean="checkSchemas"/>
+        <ref bean="check_validUntil"/>
+        <ref bean="check_adfs"/>
+        <ref bean="check_algsupport"/>
+        <ref bean="check_bindings"/>
+        <ref bean="check_cr"/>
+        <ref bean="check_entityid_prefix"/>
+        <ref bean="check_hoksso"/>
+        <ref bean="check_idpdisc"/>
+        <ref bean="check_idp_tls"/>
+        <ref bean="check_incmd"/>
+        <ref bean="check_init"/>
+        <ref bean="check_mdattr"/>
+        <ref bean="check_mdiop"/>
+        <ref bean="check_mdrpi"/>
+        <!-- <ref bean="check_mdui"/> xalan specific import required in check_mdui_xslt -->
+        <ref bean="check_misc"/>
+        <ref bean="check_rands"/>
+        <ref bean="check_reqattr"/>
+        <ref bean="check_saml1"/>
+        <ref bean="check_saml2"/>
+        <ref bean="check_saml2_lang"/>
+        <ref bean="check_saml2int"/>
+        <!--<ref bean="check_saml2meta"/> xalan specific import -->
+        <ref bean="check_saml_strings"/>
+        <ref bean="check_shib_noregscope"/>
+        <ref bean="check_shibboleth"/>
+        <ref bean="check_sirtfi"/>
+        <ref bean="check_sp_tls"/>
+        <ref bean="check_uk_algorithms"/>
+        <ref bean="check_uk_trust"/>
+        <ref bean="check_namespaces"/>
+        <ref bean="checkCertificates"/>
+        <ref bean="checkScopes"/> 
+        <ref bean="check_hasreginfo"/>
+        <!-- <ref bean="check_ukf_compromised"/> compromised-keys.txt is in ukf-data which would couple the two projects -->
+        <ref bean="check_aggregate"/>
+        <ref bean="check_filtered"/>
+        <ref bean="check_coco_v2_support"/>
+        <ref bean="check_sirtfi2"/>
     </util:list>
 
 </beans>

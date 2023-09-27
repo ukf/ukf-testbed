@@ -10,4 +10,7 @@
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 
+    <bean id="ukf.IPHintValidationStage" abstract="true" parent="ukf.stage_parent"
+        class="uk.org.ukfederation.mda.validate.mdui.IPHintValidationStage"/>
+        
 </beans>
