@@ -1,0 +1,11 @@
+expected:
+- status: error
+  component_id: checkSchemas
+  message: 'cvc-complex-type.2.4.b: The content of element ''ds:X509Data'' is not
+    complete. One of ''{"http://www.w3.org/2000/09/xmldsig#":X509IssuerSerial, "http://www.w3.org/2000/09/xmldsig#":X509SKI,
+    "http://www.w3.org/2000/09/xmldsig#":X509SubjectName, "http://www.w3.org/2000/09/xmldsig#":X509Certificate,
+    "http://www.w3.org/2000/09/xmldsig#":X509CRL, WC[##other:"http://www.w3.org/2000/09/xmldsig#"]}''
+    is expected.'
+- status: error
+  component_id: check_mdiop
+  message: KeyDescriptor does not contain a key representation
