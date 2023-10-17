@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_hoksso
+  message: holder of key binding requires SAML 2.0 token in AttributeAuthorityDescriptor/@protocolSupportEnumeration

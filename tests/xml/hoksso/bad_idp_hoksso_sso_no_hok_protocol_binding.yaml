@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_hoksso
+  message: holder of key SSO @Binding on SingleSignOnService also requires hoksso:ProtocolBinding
