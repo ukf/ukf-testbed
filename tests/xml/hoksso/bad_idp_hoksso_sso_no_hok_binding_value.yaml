@@ -1,0 +1,9 @@
+expected:
+- status: error
+  component_id: check_bindings
+  message: invalid binding 'urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser:wrong'
+    on SingleSignOnService
+- status: error
+  component_id: check_hoksso
+  message: hoksso:ProtocolBinding requires @Binding of urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser,
+    saw urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser:wrong

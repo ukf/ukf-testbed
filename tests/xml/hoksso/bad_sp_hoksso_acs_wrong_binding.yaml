@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_hoksso
+  message: holder of key SSO requires appropriate hoksso:ProtocolBinding, saw urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact-Wrong
