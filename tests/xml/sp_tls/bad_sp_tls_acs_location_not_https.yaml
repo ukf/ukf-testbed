@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_sp_tls
+  message: AssertionConsumerService Location does not start with https://
