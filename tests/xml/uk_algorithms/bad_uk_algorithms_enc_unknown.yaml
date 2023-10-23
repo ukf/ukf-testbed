@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_uk_algorithms
+  message: 'unknown algorithm in EncryptionMethod: ''http://www.w3.org/2001/04/xmlenc#unknown'''
