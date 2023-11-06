@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_idpdisc
+  message: incorrect Binding value on DiscoveryResponse
