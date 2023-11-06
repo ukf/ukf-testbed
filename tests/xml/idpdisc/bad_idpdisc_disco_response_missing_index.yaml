@@ -1,0 +1,7 @@
+expected:
+- status: error
+  component_id: checkSchemas
+  message: 'cvc-complex-type.4: Attribute ''index'' must appear on element ''idpdisc:DiscoveryResponse''.'
+- status: error
+  component_id: check_idpdisc
+  message: missing index attribute on DiscoveryResponse

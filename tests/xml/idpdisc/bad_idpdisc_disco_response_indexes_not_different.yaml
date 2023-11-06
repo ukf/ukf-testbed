@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_idpdisc
+  message: DiscoveryResponse index values not all different
