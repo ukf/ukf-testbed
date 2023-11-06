@@ -1,0 +1,7 @@
+expected:
+- status: error
+  component_id: checkSchemas
+  message: 'cvc-complex-type.4: Attribute ''Binding'' must appear on element ''init:RequestInitiator''.'
+- status: error
+  component_id: check_init
+  message: missing Binding attribute on RequestInitiator
