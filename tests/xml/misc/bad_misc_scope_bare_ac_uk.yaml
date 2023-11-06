@@ -1,0 +1,7 @@
+expected:
+- status: error
+  component_id: check_misc
+  message: bare 'ac.uk' scope not permitted
+- status: error
+  component_id: domainName/publicSuffix
+  message: 'scope is a public suffix: ''ac.uk'''
