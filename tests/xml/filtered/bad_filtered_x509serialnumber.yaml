@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_filtered
+  message: ds:X509SerialNumber should have been filtered out
