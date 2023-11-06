@@ -1,0 +1,8 @@
+expected:
+- status: error
+  component_id: checkSchemas
+  message: 'cvc-pattern-valid: Value '''' is not facet-valid with respect to pattern
+    ''([a-zA-Z]{1,8})(-[a-zA-Z0-9]{1,8})*'' for type ''language''.'
+- status: error
+  component_id: check_misc
+  message: empty xml:lang attribute

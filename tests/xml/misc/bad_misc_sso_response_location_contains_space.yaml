@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_misc
+  message: SingleSignOnService ResponseLocation contains space character
