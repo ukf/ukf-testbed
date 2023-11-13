@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_reqattr
+  message: RequestedAttribute uses unknown name unknown with SAML 2.0 NameFormat (unknown)

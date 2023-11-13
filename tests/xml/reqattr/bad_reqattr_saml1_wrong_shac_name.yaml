@@ -1,0 +1,9 @@
+expected:
+- status: error
+  component_id: check_reqattr
+  message: 'RequestedAttribute uses OID name urn:oid:1.3.6.1.4.1.25178.1.2.9 with
+    SAML 1.x NameFormat: should use urn:mace name or SAML 2.0 NameFormat (schacHomeOrganization)'
+- status: error
+  component_id: check_reqattr
+  message: 'RequestedAttribute uses OID name urn:oid:1.3.6.1.4.1.25178.1.2.14 with
+    SAML 1.x NameFormat: should use urn:mace name or SAML 2.0 NameFormat (schacPersonalUniqueCode)'
