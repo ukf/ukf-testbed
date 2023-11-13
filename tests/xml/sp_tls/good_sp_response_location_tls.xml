@@ -77,7 +77,7 @@
             </ds:KeyInfo>
         </KeyDescriptor>
         <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST" index="1"
-            ResponseLocation="http://sp.example.org/Shibboleth.sso/SAML2/POST/response"/>
+            ResponseLocation="https://sp.example.org/Shibboleth.sso/SAML2/POST/response"/>
     </SPSSODescriptor>
     <Organization>
         <OrganizationName xml:lang="en">An Example Organization</OrganizationName>
