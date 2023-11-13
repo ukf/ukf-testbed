@@ -1,0 +1,5 @@
+expected:
+- status: error
+  component_id: check_reqattr
+  message: 'RequestedAttribute (scopedAffiliation) uses OID name urn:oid:2.16.756.1.2.5.1.1.1
+    with SAML 1.x NameFormat: should use urn:mace name or SAML 2.0 NameFormat'

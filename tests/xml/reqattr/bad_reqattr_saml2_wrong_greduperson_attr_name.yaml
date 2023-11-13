@@ -1,0 +1,5 @@
+expected:
+- status: error
+  component_id: check_reqattr
+  message: 'RequestedAttribute uses legacy format name urn:mace:grnet.gr:grEduPerson:attribute-def:displayName
+    with SAML 2.0 NameFormat: should use urn:oid name or SAML 1.x NameFormat (grEduPerson)'
