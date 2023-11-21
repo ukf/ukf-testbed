@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_rands_member
+  message: REFEDS R+S only applies to service provider entities

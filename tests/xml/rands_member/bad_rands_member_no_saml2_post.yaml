@@ -1,0 +1,7 @@
+expected:
+- status: error
+  component_id: check_rands_member
+  message: REFEDS R+S requires SAML 2.0 POST support
+- status: error
+  component_id: check_saml2int
+  message: no HTTP-POST support on SAML 2.0 SP
