@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_namespaces
+  message: 'Unknown namespace: http://example.org/namespace on element unknown:NewElement'
