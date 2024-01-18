@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_shibboleth
+  message: Shibboleth 1.x support claimed but no appropriate SSO service binding

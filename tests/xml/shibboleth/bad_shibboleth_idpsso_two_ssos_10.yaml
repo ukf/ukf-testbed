@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_shibboleth
+  message: more than one SingleSignOnService with Shibboleth binding

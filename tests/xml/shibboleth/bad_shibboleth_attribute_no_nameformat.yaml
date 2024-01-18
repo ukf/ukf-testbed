@@ -1,0 +1,7 @@
+expected:
+- status: error
+  component_id: check_saml2int
+  message: Attribute urn:oid:1.3.6.1.4.1.5923.1.1.1.1 lacks NameFormat attribute
+- status: error
+  component_id: check_shibboleth
+  message: 'SIDPO-34: Attribute lacking NameFormat in IDPSSODescriptor'
