@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_shibboleth
+  message: ds:KeyInfo child element not in ds namespace
