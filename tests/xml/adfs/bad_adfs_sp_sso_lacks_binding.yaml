@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_adfs
+  message: ADFS SP role lacks SSO service with appropriate Binding
