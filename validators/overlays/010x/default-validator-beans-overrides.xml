@@ -23,12 +23,5 @@
     <bean id="debian.4096" parent="X509RSAOpenSSLBlacklistValidator"
         p:keySize="4096"
         p:blacklistResource="classpath:net/shibboleth/metadata/keylists/rsa/debian-4096.txt"/>
-
-     <!--
-        check_reqattr - override to disable jdk.xml.xpathExprOpLimit attribute required for 
-        the native JDK XSLT processor
-    -->
-    <bean id="check_reqattr" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_reqattr.xsl"/>
-
+        
 </beans>

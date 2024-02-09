@@ -9,13 +9,6 @@
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <!--
-        check_reqattr - override to disable jdk.xml.xpathExprOpLimit attribute required for 
-        the native JDK XSLT processor
-    -->
-    <bean id="check_reqattr" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_reqattr.xsl"/>
-
     <bean id="ukf.IPHintValidationStage" abstract="true" parent="ukf.stage_parent"
         class="uk.org.ukfederation.mda.validate.mdui.IPHintValidationStage"/>
 

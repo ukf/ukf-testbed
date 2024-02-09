@@ -10,6 +10,19 @@
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <bean id="child.MigrationAssistanceBean" lazy-init="false" parent="mda.MigrationAssistanceBean"/>
+
+    <!--
+        check_reqattr - override to disable jdk.xml.xpathExprOpLimit attribute required for 
+        the native JDK XSLT processor
+    -->
+    <bean id="check_reqattr" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_reqattr.xsl">
+        <property name="transformAttributes">
+            <map>
+                <entry key="jdk.xml.xpathExprOpLimit" value="0"/>
+            </map>
+        </property>
+    </bean>
     
     <!-- Locations of these lists have changed in 0.10 -->
     <bean id="compromised.2048" parent="X509RSAOpenSSLBlacklistValidator"
