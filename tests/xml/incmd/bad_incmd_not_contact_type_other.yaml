@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_incmd
+  message: incmd:contactType requires contactType='other', found 'technical'

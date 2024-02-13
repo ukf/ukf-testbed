@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_incmd
+    message: unknown value 'https://id.incommon.org/wrong-value' for incmd:contactType
