@@ -12,7 +12,7 @@
     <bean id="child.MigrationAssistanceBean" lazy-init="false" parent="mda.MigrationAssistanceBean"/>
 
     <!--
-        check_reqattr - override to disable jdk.xml.xpathExprOpLimit attribute required for 
+        check_reqattr - override to add jdk.xml.xpathExprOpLimit attribute required for 
         the native JDK XSLT processor
     -->
     <bean id="check_reqattr" parent="mda.XSLValidationStage"
