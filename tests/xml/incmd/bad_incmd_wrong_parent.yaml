@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_incmd
+  message: incmd:contactType should only appear on md:ContactPerson
