@@ -1,0 +1,5 @@
+expected:
+- status: error
+  component_id: check_mdattr
+  message: EntityAttributes must only appear within Extensions of EntityDescriptor
+    or EntitiesDescriptor

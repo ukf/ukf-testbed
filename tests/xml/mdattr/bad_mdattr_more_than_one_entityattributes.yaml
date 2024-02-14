@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_mdattr
+  message: more than one EntityAttributes element in an Extensions element
