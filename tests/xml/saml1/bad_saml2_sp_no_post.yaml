@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_saml1
+  message: no POST support on SAML 1.1 SP

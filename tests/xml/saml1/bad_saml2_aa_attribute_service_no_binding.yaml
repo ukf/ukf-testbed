@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_saml1
+  message: SAML 1.1 AttributeAuthority missing appropriately bound AttributeService
