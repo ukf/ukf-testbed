@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_saml2int
+  message: SAML 2.0 IdP has no embedded signing key

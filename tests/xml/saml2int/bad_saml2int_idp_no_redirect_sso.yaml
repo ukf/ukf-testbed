@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_saml2int
+  message: SAML 2.0 IDPSSODescriptor does not support HTTP-Redirect SSO binding

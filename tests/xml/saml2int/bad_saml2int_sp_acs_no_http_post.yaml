@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_saml2int
+  message: no HTTP-POST support on SAML 2.0 SP
