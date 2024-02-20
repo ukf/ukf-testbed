@@ -1,0 +1,7 @@
+expected:
+- status: error
+  component_id: check_saml2int
+  message: SAML 2.0 AttributeAuthority has no embedded signing key
+- status: error
+  component_id: check_uk_trust
+  message: IdP AA Descriptor lacking KeyDescriptor
