@@ -1,0 +1,7 @@
+expected:
+- status: error
+  component_id: check_saml2
+  message: SAML 2.0 SP has no encryption key
+- status: error
+  component_id: check_uk_trust
+  message: SAML 2.0 SP has KeyDescriptor without embedded key
