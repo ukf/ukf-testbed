@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_algsupport
+    message: alg:SigningMethod must only appear within an Extensions element
