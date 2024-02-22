@@ -21,6 +21,10 @@ module Testbed
       process_options
     end
 
+    #
+    # Process the sidecar file containing the test's options.
+    # If the file doesn't exist, the options are empty.
+    #
     def process_options
       yaml_file = test_file('yaml')
       @options = if File.file?(yaml_file)
@@ -31,16 +35,58 @@ module Testbed
     end
 
     #
+    # Return the value of a named option.
+    #
+    # The value returned may be the value of that
+    # option in a matching override. Failing that,
+    # it may be the top-level value of the option.
+    #
+    def option(optname, endpoint)
+      # Look for an override containing this option
+      overrides = @options['override'] || []
+      override = overrides.find { |override|
+        # Check to see if this endpoint matches the override
+        ep_names = override['endpoint']
+        if ep_names.is_a? String
+          ep_names = [ep_names]
+        end
+        # We want this one if it matches and contains the option
+        ep_names.find_index(endpoint.name) && override[optname]
+      }
+      if override
+        override[optname]
+      else
+        @options[optname]
+      end
+    end
+
+    #
     # Returns the array of validators specified in the options file,
     # or a default.
     #
-    def validators
-      option = @options['validators'] || ['default']
-      if option.is_a? Array
-        option
+    def validators_option(endpoint)
+      vals = option('validators', endpoint) || ['default']
+      if vals.is_a? Array
+        vals
       else
-        [option]
+        [vals]
       end
+    end
+
+    #
+    # Returns the array of statuses that are expected by this test.
+    # By default, none.
+    #
+    def expected_option(endpoint)
+      option('expected', endpoint) || []
+    end
+
+    #
+    # Returns the option indicating whether this test should be
+    # skipped.
+    #
+    def skip_option(endpoint)
+      option('skip', endpoint) || false
     end
 
     def test_file(extension)
@@ -55,14 +101,6 @@ module Testbed
           'message' => r.message
         }
       end
-    end
-
-    #
-    # Returns the array of statuses that are expected by this test.
-    # By default, none.
-    #
-    def expected_results
-      @options['expected'] || []
     end
 
     #
@@ -82,6 +120,10 @@ module Testbed
     end
 
     def execute_validator(endpoint, validator, metadata, &handler)
+
+      # Silently skip this execution if the skip option is present
+      return if skip_option(endpoint)
+
       puts "Running #{@name} through #{validator} on #{endpoint.name}..."
       begin
         actual = results_to_array endpoint.api.validate(validator, metadata)
@@ -90,13 +132,13 @@ module Testbed
               endpoint: endpoint.name, validator: validator, test: @name
         return
       end
-      process_results actual, expected_results,
+      process_results actual, expected_option(endpoint),
                       endpoint: endpoint.name, validator: validator, test: @name, &handler
     end
 
     def execute_one(endpoint, &handler)
       metadata = IO.read @xml_file
-      validators.each { |validator| execute_validator(endpoint, validator, metadata, &handler) }
+      validators_option(endpoint).each { |validator| execute_validator(endpoint, validator, metadata, &handler) }
     end
 
     def execute(endpoints, &handler)
