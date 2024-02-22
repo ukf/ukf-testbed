@@ -24,7 +24,7 @@
         <ref bean="check_mdattr"/>
         <ref bean="check_mdiop"/>
         <ref bean="check_mdrpi"/>
-        <!-- <ref bean="check_mdui"/> xalan specific import required in check_mdui_xslt -->
+        <ref bean="check_mdui"/>
         <ref bean="check_misc"/>
         <ref bean="check_rands"/>
         <ref bean="check_reqattr"/>
@@ -32,7 +32,7 @@
         <ref bean="check_saml2"/>
         <ref bean="check_saml2_lang"/>
         <ref bean="check_saml2int"/>
-        <!--<ref bean="check_saml2meta"/> xalan specific import -->
+        <ref bean="check_saml2meta"/>
         <ref bean="check_saml_strings"/>
         <ref bean="check_shib_noregscope"/>
         <ref bean="check_shibboleth"/>

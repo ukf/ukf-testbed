@@ -210,7 +210,7 @@
         <property name="composedStages">
             <list>
                 <ref bean="check_mdui_iphint"/>
-                <!-- <ref bean="check_mdui_xslt"/> requires Xalan -->
+                <ref bean="check_mdui_xslt"/>
                 <ref bean="check_mdui_logo_length"/>
             </list>
         </property>

@@ -85,10 +85,10 @@
         <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
 
         <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:1.0:profiles:browser-post" Location="https://sp.example.org/Shibboleth.sso/SAML/POST" index="1"/>
-        <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://sp.example.org/Shibboleth.sso/SAML2/Artifact" index="1"/>
-        <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:PAOS" Location="https://sp.example.org/Shibboleth.sso/SAML2/ECP" index="2"/>
-        <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST" index="3"/>
-        <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST-SimpleSign" index="4"/>
+        <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact" Location="https://sp.example.org/Shibboleth.sso/SAML2/Artifact" index="2"/>
+        <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:PAOS" Location="https://sp.example.org/Shibboleth.sso/SAML2/ECP" index="3"/>
+        <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST" index="4"/>
+        <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST-SimpleSign" index="5"/>
 
         
     </SPSSODescriptor>
