@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_hasreginfo
+    message: entity does not have an mdrpi:RegistrationInfo element
