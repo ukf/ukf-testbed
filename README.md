@@ -57,26 +57,34 @@ without having to rebuild the `driver` image for each change.
 
 ## Test Setup
 
-Individual unit tests are added to suitable subdirectories of `/tests/`. Each 'type' of unit test *should* go into its own subdirectory (or subdirectory hierarchy), for example, XML tests inside `/tests/xml/`. Tests can be executed against the fleet of validators by running the command `rake validate_all` inside the `driver` service. 
+Individual unit tests are added to suitable subdirectories of `/tests/`. Each 'type' of unit test *should* go into its own subdirectory (or subdirectory hierarchy), for example, XML tests inside `/tests/xml/`. Tests can be executed against the fleet of validators by running the command `rake validate_all` inside the `driver` service.
+
 ### XML Test Setup
 
-Unit tests that take XML elements (e.g. an EntityDescriptor) need to be placed in the `/tests/xml` directory and have a `.xml` file extension. Running `rake validate_all` from the `driver` service will process all test files using the `xml_tests.rb` module against the `default` validator fleet. The validators to run can be configured via a sidecar YAML file (see Individual Test Configuration). 
+Unit tests that take XML elements (e.g. an `EntityDescriptor`) need to be
+placed in the `/tests/xml` directory and have a `.xml` file extension.
+Running `rake validate_all` from the `driver` service will process all
+test files using the `xml_tests.rb` module against the `default` validator fleet.
 
-### Individual Test Configuration
+The validators to run can be configured via a sidecar YAML file (see Individual Test Configuration).
 
-The execution options and the expected outcome of individual tests can be configured in a sidecar YAML file. The YAML file needs the same name as and must be co-located with, the test. For example:
+## Individual Test Configuration
 
-``` bash
+The execution options and the expected outcome of individual tests can be configured in a sidecar YAML file.
+The YAML file needs the same name as, and must be co-located with, the test. For example:
+
+```bash
 /tests/<type>/<test-name>.<ext>
 /tests/<type>/<test-name>.yaml
 ```
 
 The YAML file can configure the following test options:
- - The `expected` result of the test. This includes:
-   - The result `status`, which is one-of, `error`, `info`, or `warning`.
-   - The `component_id` of the component that generated the result. 
-   - The result description `message`.
- - Which `validators` to run. If none are specified, the `default` validator is used.
+
+- The `expected` result of the test. This includes:
+  - The result `status`, which is one-of, `error`, `info`, or `warning`.
+  - The `component_id` of the component that generated the result.
+  - The result description `message`.
+- Which `validators` to run. If none are specified, the `default` validator is used.
 
 An example sidecar YAML options file is show below:
 
@@ -90,7 +98,10 @@ validators:
   - validator_2
 ```
 
-If a validator produces an "error", "info", or "warning" result for a given test that is not described by that test's `expected` configuration option, the test will fail. The actual result and expected result are equal if the String value of their `status`, `component_id`, and `message` match exactly.
+If a validator produces an "error", "info", or "warning" result for a given test
+that is not described by that test's `expected` configuration option, the test
+will fail. The actual result and expected result are equal if the String value
+of their `status`, `component_id`, and `message` match exactly.
 
 ## Copyright and License
 
