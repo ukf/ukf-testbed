@@ -22,10 +22,6 @@ Establish the running containers using `./up`; remove them using `./down`.
 Executing `./drive` will open a `bash` shell within the `driver` service
 in which test operations can be performed.
 
-Remember that it may take a while for the validator containers to fully initialise,
-and you may not be able to execute commands against them immediately on starting `./drive`.
-On my desktop machine, 20 seconds or so is required.
-
 If you want a less interactive experience, you can just invoke commands
 within the `driver` container directly, for example:
 
