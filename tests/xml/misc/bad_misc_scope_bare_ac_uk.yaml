@@ -1,7 +1,25 @@
+---
+#
+# Default "expected" is for MDA 0.10, which
+# improves the display of validator context.
+#
 expected:
-- status: error
-  component_id: check_misc
-  message: bare 'ac.uk' scope not permitted
-- status: error
-  component_id: domainName/publicSuffix
-  message: 'scope is a public suffix: ''ac.uk'''
+  - status: error
+    component_id: check_misc
+    message: bare 'ac.uk' scope not permitted
+  - status: error
+    component_id: checkScopes/domainName/publicSuffix
+    message: 'scope is a public suffix: ''ac.uk'''
+override:
+  #
+  # In the older code (actually part of inc-mda, which was
+  # upstreamed in 0.10) the component_id omits one level.
+  #
+  - endpoint: [v09x, v09]
+    expected:
+      - status: error
+        component_id: check_misc
+        message: bare 'ac.uk' scope not permitted
+      - status: error
+        component_id: domainName/publicSuffix
+        message: 'scope is a public suffix: ''ac.uk'''
