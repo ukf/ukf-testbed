@@ -128,7 +128,7 @@ module Testbed
       begin
         actual = results_to_array endpoint.api.validate(validator, metadata)
       rescue ValidatorClient::ApiError => e
-        yield problem: "ApiError code #{e.code}",
+        yield problem: "ApiError code #{e.code}: #{e.response_body}",
               endpoint: endpoint.name, validator: validator, test: @name
         return
       end
