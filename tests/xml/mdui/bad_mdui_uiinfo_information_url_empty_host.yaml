@@ -1,0 +1,7 @@
+expected:
+  - status: error
+    component_id: check_mdui_urls/url/host
+    message: host name not present
+override:
+ - endpoint : [v09x, v09, v010x]
+   skip: true
