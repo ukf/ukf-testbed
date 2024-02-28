@@ -24,5 +24,18 @@
 
     <bean id="ukf.IPHintValidationStage" abstract="true" parent="ukf.stage_parent"
         class="uk.org.ukfederation.mda.validate.mdui.IPHintValidationStage"/>
+    
+    <!--
+        check_mdui_logo_url override. No-op
+    -->
+    <bean id="check_mdui_logo_url" parent="mda.CompositeStage">
+    </bean>
+
+    <!--
+        check_mdui_urls override. No-op
+    -->
+     <bean id="check_mdui_urls" parent="mda.CompositeStage">
+    </bean>
+
         
 </beans>
