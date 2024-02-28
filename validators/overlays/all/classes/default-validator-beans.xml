@@ -201,7 +201,7 @@
         </property>
     </bean>
 
-    <!--
+     <!--
         check_mdui
 
         Composite check for the MDUI specification.
@@ -212,6 +212,8 @@
                 <ref bean="check_mdui_iphint"/>
                 <ref bean="check_mdui_xslt"/>
                 <ref bean="check_mdui_logo_length"/>
+                <ref bean="check_mdui_logo_url"/>
+                <ref bean="check_mdui_urls"/>
             </list>
         </property>
     </bean>

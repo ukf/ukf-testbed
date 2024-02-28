@@ -23,5 +23,18 @@
     <bean id="debian.4096" parent="X509RSAOpenSSLBlacklistValidator"
         p:keySize="4096"
         p:blacklistResource="classpath:net/shibboleth/metadata/keylists/rsa/debian-4096.txt"/>
+
+    <!--
+        check_mdui_logo_url override. No-op
+    -->
+    <bean id="check_mdui_logo_url" parent="mda.CompositeStage">
+    </bean>
+
+    <!--
+        check_mdui_urls override. No-op
+    -->
+     <bean id="check_mdui_urls" parent="mda.CompositeStage">
+    </bean>
+
         
 </beans>
