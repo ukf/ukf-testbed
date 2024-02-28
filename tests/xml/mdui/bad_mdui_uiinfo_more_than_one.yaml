@@ -1,0 +1,5 @@
+expected:
+  - status: error
+    component_id: check_mdui_xslt
+    message: more than one UIInfo element in one Extensions element
+

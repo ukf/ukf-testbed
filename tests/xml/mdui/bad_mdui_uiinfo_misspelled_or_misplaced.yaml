@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_mdui_xslt
+    message: 'misspelled or misplaced mdui element within md:Extensions: UIInfoWrong'

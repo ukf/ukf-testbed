@@ -1,0 +1,7 @@
+expected:
+  - status: error
+    component_id: check_mdui_logo_url/url/port
+    message: 'libxml2: port present but empty'
+override:
+ - endpoint : [v09x, v09, v010x]
+   skip: true
