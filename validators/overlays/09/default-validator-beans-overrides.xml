@@ -37,5 +37,21 @@
      <bean id="check_mdui_urls" parent="mda.CompositeStage">
     </bean>
 
+    <!--
+        check_saml2meta_urlattrs. No-op. Contained in XSLT override.
+
+        Check URL values of various attributes on md:* elements.
+    -->
+    <bean id="check_saml2meta_urlattrs" parent="mda.CompositeStage">
+    </bean>
+
+     <!--
+        check_saml2meta_urls. No-op. Contained in XSLT override.
+
+        Check URL values of md:* elements.
+    -->
+    <bean id="check_saml2meta_urls" parent="mda.CompositeStage">
+    </bean>
+
         
 </beans>

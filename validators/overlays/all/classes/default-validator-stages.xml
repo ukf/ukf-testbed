@@ -33,6 +33,8 @@
         <ref bean="check_saml2_lang"/>
         <ref bean="check_saml2int"/>
         <ref bean="check_saml2meta"/>
+        <ref bean="check_saml2meta_urlattrs"/>
+        <ref bean="check_saml2meta_urls"/>
         <ref bean="check_saml_strings"/>
         <ref bean="check_shib_noregscope"/>
         <ref bean="check_shibboleth"/>
