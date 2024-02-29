@@ -1,4 +1,23 @@
 expected:
-- status: error
-  component_id: check_misc
-  message: SingleSignOnService ResponseLocation contains space character
+  - status: error
+    component_id: check_misc
+    message: SingleSignOnService ResponseLocation contains space character
+  - status: error
+    component_id: saml2meta/url
+    message: 'value rejected: ''https://idp.example.org:8443/idp/profile/SAML2/SOAP/     AttributeQuery/response''
+      (Illegal character in path at index 52: https://idp.example.org:8443/idp/profile/SAML2/SOAP/     AttributeQuery/response)'
+override:
+ - endpoint : v09
+   expected:
+    - status: error
+      component_id: check_misc
+      message: SingleSignOnService ResponseLocation contains space character
+ - endpoint : [v09x, v010x]
+   expected:
+    - status: error
+      component_id: check_misc
+      message: SingleSignOnService ResponseLocation contains space character
+    - status: error
+      component_id: check_saml2meta
+      message: 'SingleSignOnService ResponseLocation is not a valid URL: URL value must
+        not contain an unencoded space character'
