@@ -3,5 +3,10 @@ expected:
     component_id: check_mdui_logo_url/nbs
     message: mdui:Logo contains non-breaking space
 override:
- - endpoint : [v09x, v09, v010x]
+ - endpoint : v09
    skip: true
+ - endpoint : [v09x, v010x]
+   expected:
+   - status: error
+     component_id: check_mdui_xslt
+     message: mdui:Logo contains non-breaking space
