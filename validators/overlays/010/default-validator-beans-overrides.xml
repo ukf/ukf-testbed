@@ -138,7 +138,7 @@
                 <!-- Accept data: URLs with no further scrutiny. -->
                 <bean parent="mda.AcceptStringRegexValidator"
                     p:regex="data:.*"/>
-                <ref bean="validate_url"/>
+                <ref bean="validate_https_url"/>
             </list>
         </property>
     </bean>
