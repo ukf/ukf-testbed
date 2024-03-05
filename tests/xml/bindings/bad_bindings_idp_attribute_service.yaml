@@ -1,0 +1,5 @@
+expected:
+  - status: error
+    component_id: check_bindings
+    message: invalid binding 'urn:oasis:names:tc:SAML:1.0:bindings:wrong' on AttributeService
+
