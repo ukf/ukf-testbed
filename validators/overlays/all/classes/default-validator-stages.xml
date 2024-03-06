@@ -53,6 +53,7 @@
         <!-- UKFed specific stages -->
         <ref bean="check_ukfedlabel"/>
         <ref bean="check_uk_mdrps"/>
+        <ref bean="check_uk_rands"/>
     </util:list>
 
 </beans>
