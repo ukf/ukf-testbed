@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_ukfedlabel
+    message: entity must not have more than one ukfedlabel:ExportOptIn element
