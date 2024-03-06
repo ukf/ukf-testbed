@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_ukfedlabel
+    message: entity cannot have both EnableFlow and DisableFlow constraints

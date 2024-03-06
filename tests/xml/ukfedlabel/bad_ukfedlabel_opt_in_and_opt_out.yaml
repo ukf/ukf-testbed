@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_ukfedlabel
+    message: entity cannot be both opted in to and opted out from export
