@@ -49,6 +49,9 @@
         <ref bean="check_filtered"/>
         <ref bean="check_coco_v2_support"/>
         <ref bean="check_sirtfi2"/>
+
+        <!-- UKFed specific stages -->
+        <ref bean="check_uk_mdrps"/>
     </util:list>
 
 </beans>
