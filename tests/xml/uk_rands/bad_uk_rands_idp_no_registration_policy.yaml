@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_uk_rands
+    message: IdP supports Research and Scholarship entity category but has no RegistrationPolicy element.
