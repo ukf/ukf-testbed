@@ -51,6 +51,7 @@
         <ref bean="check_sirtfi2"/>
 
         <!-- UKFed specific stages -->
+        <ref bean="check_ukfedlabel"/>
         <ref bean="check_uk_mdrps"/>
     </util:list>
 

@@ -561,6 +561,9 @@
         </property>
     </bean>
 
+    <bean id="check_ukfedlabel" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_ukfedlabel.xsl"/>
+
     <!--
         check_uk_mdrps
     -->
