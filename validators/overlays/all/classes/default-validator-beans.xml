@@ -561,4 +561,10 @@
         </property>
     </bean>
 
+    <!--
+        check_uk_mdrps
+    -->
+    <bean id="check_uk_mdrps" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_uk_mdrps.xsl"/>
+
 </beans>
