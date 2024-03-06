@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_uk_mdrps
+    message: invalid RegistrationPolicy value http://ukfederation.org.uk/doc/wrong-document

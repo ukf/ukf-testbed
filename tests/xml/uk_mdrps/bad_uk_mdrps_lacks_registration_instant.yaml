@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_uk_mdrps
+    message: exported entity lacks a registrationInstant value
