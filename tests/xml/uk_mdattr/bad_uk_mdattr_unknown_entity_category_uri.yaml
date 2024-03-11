@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_uk_mdattr
+    message: unknown entity category support URI http://refeds.org/category/unknown
