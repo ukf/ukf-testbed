@@ -1,0 +1,8 @@
+expected:
+- status: error
+  component_id: check_saml2int
+  message: Attribute http://macedir.org/entity-category-support lacks NameFormat attribute
+- status: error
+  component_id: check_uk_mdattr
+  message: entity attribute http://macedir.org/entity-category-support has no NameFormat
+    attribute

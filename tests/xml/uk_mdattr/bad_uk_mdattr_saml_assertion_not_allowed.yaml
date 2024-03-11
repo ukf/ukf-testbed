@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_uk_mdattr
+    message: Assertion not permitted within EntityAttributes
