@@ -54,6 +54,7 @@
         <ref bean="check_ukfedlabel"/>
         <ref bean="check_uk_mdrps"/>
         <ref bean="check_uk_rands"/>
+        <ref bean="check_uk_mdattr"/>
     </util:list>
 
 </beans>
