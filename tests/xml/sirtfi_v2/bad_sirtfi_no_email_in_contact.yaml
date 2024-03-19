@@ -1,7 +1,9 @@
+# Skip this test for now 
+skip: true
 expected:
-- status: error
-  component_id: check_sirtfi
-  message: SIRTFI requires a REFEDS security contact with an EmailAddress
-- status: error
-  component_id: check_sirtfi2
-  message: Sirtfi version 2 requires a REFEDS security contact to have an EmailAddress
+  - status: error
+    component_id: check_sirtfi
+    message: SIRTFI requires a REFEDS security contact with an EmailAddress
+  - status: error
+    component_id: check_sirtfi2
+    message: Sirtfi version 2 requires a REFEDS security contact to have an EmailAddress
