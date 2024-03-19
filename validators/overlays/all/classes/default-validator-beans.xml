@@ -576,6 +576,12 @@
         If an SP has the R&S entity category, it MUST have an MDRPS
     -->
     <bean id="check_uk_rands" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_uk_rands.xsl"/
+        p:XSLResource="classpath:_rules/check_uk_rands.xsl"/>
+    
+    <!--
+        check_uk_mdattr
+    -->
+    <bean id="check_uk_mdattr" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_uk_mdattr.xsl"/>
 
 </beans>
