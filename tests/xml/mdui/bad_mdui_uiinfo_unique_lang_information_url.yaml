@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_mdui_xslt
+    message: non-unique lang values on mdui:InformationURL elements

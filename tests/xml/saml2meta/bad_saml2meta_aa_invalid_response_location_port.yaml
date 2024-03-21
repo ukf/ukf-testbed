@@ -1,0 +1,13 @@
+expected:
+  - status: error
+    component_id: saml2meta/url/port
+    message: 'libxml2: port present but empty'
+override:
+  - endpoint : v09
+    skip: true
+  - endpoint : [v09x, v010x]
+    expected:
+      - status: error
+        component_id: check_saml2meta
+        message: 'AttributeService ResponseLocation is not a valid URL: libxml2: port present
+          but empty'

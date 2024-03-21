@@ -1,0 +1,12 @@
+expected:
+  - status: error
+    component_id: checkSchemas
+    message: 'cvc-complex-type.2.4.a: Invalid content was found starting with element
+      ''{"urn:oasis:names:tc:SAML:metadata:ui":UIInfo}''. One of ''{"urn:oasis:names:tc:SAML:2.0:metadata":RoleDescriptor,
+      "urn:oasis:names:tc:SAML:2.0:metadata":IDPSSODescriptor, "urn:oasis:names:tc:SAML:2.0:metadata":SPSSODescriptor,
+      "urn:oasis:names:tc:SAML:2.0:metadata":AuthnAuthorityDescriptor, "urn:oasis:names:tc:SAML:2.0:metadata":AttributeAuthorityDescriptor,
+      "urn:oasis:names:tc:SAML:2.0:metadata":PDPDescriptor, "urn:oasis:names:tc:SAML:2.0:metadata":AffiliationDescriptor}''
+      is expected.'
+  - status: error
+    component_id: check_mdui_xslt
+    message: UIInfo appearing outside Extensions element
