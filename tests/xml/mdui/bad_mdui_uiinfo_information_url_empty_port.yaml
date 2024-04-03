@@ -1,7 +1,8 @@
 expected:
   - status: error
     component_id: check_mdui_urls/url/port
-    message: 'libxml2: port present but empty'
+    message: "'https://www2.example.ac.uk:/information.html': libxml2: port present
+      but empty"
 override:
  - endpoint : v09
    skip: true

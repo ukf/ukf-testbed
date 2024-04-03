@@ -1,7 +1,7 @@
 expected:
   - status: error
     component_id: saml2meta/url/host
-    message: host name not present
+    message: "'http:///': host name not present"
 override:
   - endpoint : v09
     skip: true

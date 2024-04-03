@@ -1,7 +1,7 @@
 expected:
   - status: error
     component_id: check_mdui_urls/url/host
-    message: host name not present
+    message: "'https:///privacy.html': host name not present"
 override:
  - endpoint : v09
    skip: true
