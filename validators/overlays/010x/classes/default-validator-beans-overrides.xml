@@ -9,31 +9,23 @@
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="child.MigrationAssistanceBean" lazy-init="false" parent="mda.MigrationAssistanceBean"/>
-
-    <!-- Locations of these lists have changed in 0.10 -->
-    <bean id="compromised.2048" parent="X509RSAOpenSSLBlacklistValidator"
-        p:keySize="2048"
-        p:blacklistResource="classpath:net/shibboleth/metadata/keylists/rsa/compromised-2048.txt"/>
-    <bean id="X509RSAOpenSSLBlacklistValidator" abstract="true" parent="mda.validator_parent"
-        class="net.shibboleth.metadata.validate.x509.X509RSAOpenSSLBlacklistValidator"/>
-     <bean id="debian.2048" parent="X509RSAOpenSSLBlacklistValidator"
-        p:keySize="2048"
-        p:blacklistResource="classpath:net/shibboleth/metadata/keylists/rsa/debian-2048.txt"/>
-    <bean id="debian.4096" parent="X509RSAOpenSSLBlacklistValidator"
-        p:keySize="4096"
-        p:blacklistResource="classpath:net/shibboleth/metadata/keylists/rsa/debian-4096.txt"/>
-
     <!--
-        check_mdui_logo_url override. No-op
-    -->
-    <bean id="check_mdui_logo_url" parent="mda.CompositeStage">
-    </bean>
+        check_mdui
 
-    <!--
-        check_mdui_urls override. No-op
+        This is overridden so that it runs only the stages that the
+        09x configuration runs. This has to be done here in this way
+        because stubbing out the individual stages doesn't affect
+        how the version of check_mdui in the parent context has
+        already been built.
     -->
-     <bean id="check_mdui_urls" parent="mda.CompositeStage">
+    <bean id="check_mdui" parent="mda.CompositeStage">
+        <property name="stages">
+            <list>
+                <ref bean="check_mdui_iphint"/>
+                <ref bean="check_mdui_xslt"/>
+                <ref bean="check_mdui_logo_length"/>
+            </list>
+        </property>
     </bean>
 
     <!--
@@ -52,5 +44,4 @@
     <bean id="check_saml2meta_urls" parent="mda.CompositeStage">
     </bean>
 
-        
 </beans>

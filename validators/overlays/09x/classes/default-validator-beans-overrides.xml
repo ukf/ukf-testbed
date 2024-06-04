@@ -9,21 +9,6 @@
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="ukf.IPHintValidationStage" abstract="true" parent="ukf.stage_parent"
-        class="uk.org.ukfederation.mda.validate.mdui.IPHintValidationStage"/>
-
-    <!--
-        check_mdui_logo_url override. No-op. Contained in XSLT override.
-    -->
-    <bean id="check_mdui_logo_url" parent="mda.CompositeStage">
-    </bean>
-
-    <!--
-        check_mdui_urls override. No-op. Contained in XSLT override.
-    -->
-     <bean id="check_mdui_urls" parent="mda.CompositeStage">
-    </bean>
-
     <!--
         check_saml2meta_urlattrs. No-op. Contained in XSLT override.
 

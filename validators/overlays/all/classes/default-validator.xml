@@ -10,6 +10,17 @@
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <!--
+        Set up the validator context.
+    -->
+    <import resource="context-beans.xml"/>
+
+    <!--
+        Beans to define this specific validator context.
+    -->
+    <bean id="id" parent="String" c:_="default"/>
+    <bean id="description" parent="String" c:_="Default validator."/>
+
+    <!--
         *********************************
         ***                           ***
         ***   Import the stage beans  ***
