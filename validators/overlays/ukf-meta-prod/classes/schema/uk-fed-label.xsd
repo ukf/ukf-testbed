@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:ukfedlabel="http://ukfederation.org.uk/2006/11/label"
+    targetNamespace="http://ukfederation.org.uk/2006/11/label"
+    version="2020-02-13"
+    elementFormDefault="qualified">
+
+    <annotation>
+        <documentation>
+            This schema describes the UK federation label namespace.
+
+            For additional information, see the Federation Technical Specification.
+
+            This version of the schema includes the UKFederationMember and
+            AccountableUsers elements described in
+            FTS edition 1.5 of 6-October-2014.
+
+            All other types and elements defined here are for UK federation
+            internal use only and are not for publication.
+        </documentation>
+    </annotation>
+
+    <complexType name="basicLabel">
+        <annotation>
+            <documentation>
+                Most elements defined in the UK federation label namespace
+                are basic labels: empty elements whose presence or absence
+                is all that is important.
+            </documentation>
+        </annotation>
+        <!--
+            No content elements are defined, so a basicLabel may contain
+            neither text nor nested elements.
+        -->
+    </complexType>
+
+    <complexType name="datedLabel">
+        <annotation>
+            <documentation>
+                A datedLabel is like a basicLabel, but with a single
+                additional mandatory date attribute.
+            </documentation>
+        </annotation>
+        <complexContent>
+            <extension base="ukfedlabel:basicLabel">
+                <attribute name="date" type="date" use="required"/>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <simpleType name="orgIDType">
+        <restriction base="string">
+            <annotation>
+                <documentation>
+                    An organization ID is a string constrained to be the string "ukforg"
+                    followed by a numeric code.
+
+                    These codes are defined as IDs in the members.xml database, but
+                    are simple strings in entity metadata.
+                </documentation>
+            </annotation>
+            <pattern value="ukforg\d+"/>
+        </restriction>
+    </simpleType>
+
+    <element name="UKFederationMember">
+        <annotation>
+            <documentation>
+                Indicates an entity whose owner is a member in good standing
+                of the UK federation.
+            </documentation>
+        </annotation>
+        <complexType>
+            <complexContent>
+                <extension base="ukfedlabel:basicLabel">
+                    <attribute name="orgID" type="ukfedlabel:orgIDType" use="optional">
+                        <annotation>
+                            <documentation>
+                                The orgID attribute is described as "optional" in this schema
+                                so that it can be omitted in published metadata. However, it
+                                is mandatory in entity fragment files.
+
+                                orgID can become a mandatory attribute if we ever stop
+                                publishing UKFederationMember labels.
+                            </documentation>
+                        </annotation>
+                    </attribute>
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+
+    <element name="AccountableUsers" type="ukfedlabel:basicLabel">
+        <annotation>
+            <documentation>
+                Indicates an identity provider entity whose owner has
+                asserted to the UK federation that the entity provides
+                user accountability in terms of the definition given
+                in section 6 of the federation's Rules of Membership.
+            </documentation>
+        </annotation>
+    </element>
+
+    <element name="Software">
+        <annotation>
+            <documentation>
+                Indicates the software used to implement the entity, and
+                optionally both general and specific indications of the
+                version of software used.  This information is added to
+                an entity only if it has been received from the deployer
+                of the entity on the indicated date.
+
+                This information is used in entity fragment files only,
+                and is not included in the metadata published by the
+                UK federation.  Its principal use is in classifying
+                entities for statistical purposes.
+            </documentation>
+        </annotation>
+        <complexType>
+            <complexContent>
+                <extension base="ukfedlabel:datedLabel">
+                    <attribute name="name" use="required" type="token">
+                        <annotation>
+                            <documentation>
+                                The name of the software used to implement the entity.
+                                Although not described as such in this schema, the name
+                                should be picked from the controlled vocabulary understood
+                                by the federation statistics scripts.
+                            </documentation>
+                        </annotation>
+                    </attribute>
+
+                    <attribute name="version" use="optional" type="token">
+                        <annotation>
+                            <documentation>
+                                The general version of the software in use.  This should
+                                only be specific enough to identify the broad functionality
+                                of the entity, for example "1.3" vs. "2.0" would be sufficient
+                                for Shibboleth entities.
+                            </documentation>
+                        </annotation>
+                    </attribute>
+
+                    <attribute name="fullVersion" use="optional" type="token">
+                        <annotation>
+                            <documentation>
+                                The specific version of the software in use, if known.
+                            </documentation>
+                        </annotation>
+                    </attribute>
+                </extension>
+            </complexContent>
+        </complexType>
+    </element>
+
+    <element name="ExportOptIn" type="ukfedlabel:datedLabel">
+        <annotation>
+            <documentation>
+                Indicates that the entity has been opted-in to inclusion in
+                the UK federation export aggregate.
+            </documentation>
+        </annotation>
+    </element>
+
+    <element name="ExportOptOut" type="ukfedlabel:datedLabel">
+        <annotation>
+            <documentation>
+                Indicates that the entity has been opted-out from inclusion in
+                the UK federation export aggregate.
+            </documentation>
+        </annotation>
+    </element>
+
+    <!--
+        *****************************************
+        ***                                   ***
+        ***   F L O W   M A N A G E M E N T   ***
+        ***                                   ***
+        *****************************************
+    -->
+
+    <simpleType name="flowName">
+        <annotation>
+            <documentation>
+                A controlled vocabulary of names of flows in the
+                UK federation tooling.
+            </documentation>
+        </annotation>
+        <restriction base="string">
+            <annotation>
+                <documentation>
+                    Because we know the valid flow names, we can restrict
+                    values of flowName to just those names.
+                </documentation>
+            </annotation>
+            <enumeration value="cdsall"/>
+            <enumeration value="export"/>
+            <enumeration value="export-preview"/>
+            <enumeration value="fallback"/>
+            <enumeration value="production"/>
+            <enumeration value="statistics"/>
+            <enumeration value="test"/>
+            <enumeration value="wayf"/>
+        </restriction>
+    </simpleType>
+
+    <complexType name="flowConstraint">
+        <annotation>
+            <documentation>
+                A flow constraint is a dated label naming
+                a flow within the UK federation tooling.
+            </documentation>
+        </annotation>
+        <complexContent>
+            <extension base="ukfedlabel:datedLabel">
+                <attribute name="flow" type="ukfedlabel:flowName" use="required"/>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <element name="DisableFlow" type="ukfedlabel:flowConstraint">
+        <annotation>
+            <documentation>
+                Indicates that the entity should be removed from the
+                named flow.
+
+                If labelled with multiple DisableFlow elements, the
+                entity should be removed from each named flow.
+
+                An entity MUST NOT be labelled with both
+                EnableFlow and DisableFlow elements.
+            </documentation>
+        </annotation>
+    </element>
+
+    <element name="EnableFlow" type="ukfedlabel:flowConstraint">
+        <annotation>
+            <documentation>
+                Indicates that the entity should be allowed to pass
+                through the named flow, and removed from other
+                flows.
+
+                If labelled with multiple EnableFlow elements, the
+                entity should be allowed to pass through all named
+                flows, and only removed from flows not named by any
+                EnableFlow element.
+
+                An entity MUST NOT be labelled with both
+                EnableFlow and DisableFlow elements.
+            </documentation>
+        </annotation>
+    </element>
+
+</schema>

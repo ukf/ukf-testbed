@@ -1,0 +1,1126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Verb to generate all UK aggregates.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    default-lazy-init="true"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--
+        Import commonly used beans.
+    -->
+    <import resource="classpath:common-beans.xml"/>
+
+    <!--
+        Import channel-specific beans.
+    -->
+    <import resource="classpath:uk/beans.xml"/>
+    <import resource="classpath:uk/blacklist.xml"/>
+
+    <!--
+        Import beans from other channels.
+    -->
+    <import resource="classpath:int_edugain/beans.xml"/>
+
+    <!--
+        Import beans for blocklists.
+    -->
+    <import resource="file:${blocklists.dir}/fallback-blocklist.xml"/>
+
+    <!--
+        Import inc-mda beans.
+    -->
+    <import resource="classpath:uk/org/iay/incommon/mda/beans.xml"/>
+
+    <!--
+        Import UK federation ingress policy for eduGAIN.
+    -->
+    <import resource="classpath:uk/edugain-policy.xml"/>
+
+    <!--
+        *****************************
+        ***                       ***
+        ***   U T I L I T I E S   ***
+        ***                       ***
+        *****************************
+    -->
+
+    <!--
+        finalise_parent
+
+        Template for a stage used in each output pipeline which performs
+        final tweaks on the document.
+    -->
+    <bean id="finalise_parent" abstract="true" parent="mda.XSLTransformationStage"
+        p:XSLResource="classpath:uk/final_tweak.xsl"/>
+
+    <!--
+        assembleAggregate
+
+        Assemble a UK-style aggregate with an appropriate ID.
+    -->
+    <bean id="assembleAggregate" parent="mda.CompositeStage">
+        <property name="composedStages">
+            <list>
+                <ref bean="uk_assemble"/>
+                <!--
+                    setStaticID
+
+                    Set the item's ID attribute to the static string "_".
+                -->
+                <bean id="setStaticID" parent="mda.GenerateIdStage">
+                    <constructor-arg>
+                        <bean parent="ukf.FixedStringIdentifierGenerationStrategy" c:_="_"/>
+                    </constructor-arg>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        checkPublishable
+
+        Check an aggregate metadata document for publishability.  This is applied during
+        all UK publication flows prior to any signature step.  It is not applied to
+        export flows, for which we desire the closest possible correspondence to
+        the registered metadata.
+    -->
+    <bean id="checkPublishable" parent="mda.CompositeStage">
+        <property name="composedStages">
+            <list>
+                <ref bean="checkSchemas"/>
+                <ref bean="check_aggregate"/>
+                <ref bean="check_filtered"/>
+                <ref bean="check_namespaces"/>
+            </list>
+        </property>
+    </bean>
+
+
+    <!--
+        *****************************************
+        ***                                   ***
+        ***   S I R T F I   H A N D L I N G   ***
+        ***                                   ***
+        *****************************************
+    -->
+
+    <!--
+        Entity attribute matcher for the SIRTFI assurance certification.
+    -->
+    <bean id="SIRTFI.entity.attribute.matcher" parent="ukf.AssuranceCertificationMatcher"
+        c:_="https://refeds.org/sirtfi"/>
+
+    <!--
+        Remove the REFEDS metadata namespace.
+    -->
+    <bean id="strip.remd.namespace" parent="mda.NamespaceStrippingStage"
+        p:namespace-ref="remd_namespace"/>
+
+    <!--
+        Strip SIRTFI information.
+    -->
+    <bean id="strip.SIRTFI" parent="mda.CompositeStage">
+        <property name="composedStages">
+            <list>
+                <!-- remove REFEDS contacts associated with SIRTFI -->
+                <bean id="strip.SIRTFI.contacts" parent="mda.XSLTransformationStage"
+                    p:XSLResource="classpath:uk/strip_sirtfi_contacts.xsl"/>
+
+                <!-- remove the REFEDS metadata namespace -->
+                <ref bean="strip.remd.namespace"/>
+
+                <!-- remove the SIRTFI entity attribute -->
+                <bean id="entityAttributes" parent="mda.EntityAttributeFilteringStage"
+                    p:whitelisting="false">
+                    <property name="rules">
+                        <list>
+                            <ref bean="SIRTFI.entity.attribute.matcher"/>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        *******************************************
+        ***                                     ***
+        ***   I M P O R T   P I P E L I N E S   ***
+        ***                                     ***
+        *******************************************
+    -->
+
+    <!--
+        removeUKEntities
+
+        Filter out entities which declare themselves as registered
+        by the UK federation.  We don't want those coming back in
+        from another registrar or metadata exchange as they may be
+        old versions of entities we have deregistered, or spoofed.
+    -->
+    <bean id="removeUKEntities" parent="mda.EntityRegistrationAuthorityFilterStage">
+        <property name="designatedRegistrationAuthorities">
+            <list>
+                <ref bean="uk_ukf_registrar"/>
+            </list>
+        </property>
+        <property name="requiringRegistrationInformation" value="true"/>
+        <property name="whitelistingRegistrationAuthorities" value="false"/>
+    </bean>
+
+    <!--
+        removeBlacklistedEntities
+
+        Filter out entities which are included in our global import blacklist.
+    -->
+    <bean id="removeBlacklistedEntities" parent="mda.EntityFilterStage"
+        p:whitelistingEntities="false"
+        p:designatedEntities-ref="importEntityBlacklist"/>
+
+    <bean id="entityAttributes.blacklist" parent="mda.EntityAttributeFilteringStage">
+        <property name="whitelisting" value="false"/>
+        <property name="rules">
+            <list>
+                <!-- Deny "InCommon registration" attribute (duplicates mdrpi:registrationAuthority) -->
+                <bean parent="mda.EntityCategoryMatcher"
+                    c:category="http://id.incommon.org/category/registered-by-incommon"/>
+
+                <!-- Deny InCommon "supports InCommon R+S" attribute (duplicates REFEDS variant) -->
+                <bean parent="mda.EntityCategorySupportMatcher"
+                    c:category="http://id.incommon.org/category/research-and-scholarship"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="uk_int_edugain_importPipeline" parent="mda.SimplePipeline">
+        <property name="stages">
+            <list>
+                <ref bean="int_edugain_productionEntities"/>
+
+                <!--
+                    Entity Attribute policy for entities from eduGAIN participants.
+                -->
+                <ref bean="entityAttributes.blacklist"/>
+
+                <ref bean="removeUKEntities"/>
+                <ref bean="removeBlacklistedEntities"/>
+                <ref bean="standardImportActions"/>
+                <ref bean="edugainPolicy"/>
+
+                <!--
+                    Silently remove entities which are marked as
+                    having errors.
+                -->
+                <ref bean="errorRemover"/>
+
+                <ref bean="uk_fix_mailto"/>
+            </list>
+        </property>
+    </bean>
+
+
+    <!--
+        ***************************************************
+        ***                                             ***
+        ***   P R O D U C T I O N   A G G R E G A T E   ***
+        ***                                             ***
+        ***************************************************
+    -->
+
+    <bean id="uk_finaliseProduction" parent="finalise_parent">
+        <property name="transformParameters">
+            <map>
+                <entry key="publisher" value-ref="uk_federation_uri"/>
+                <entry key="validityDays" value="${validUntil.aggregate.days}"/>
+                <entry key="now_ISO" value-ref="now_ISO"/>
+                <entry key="now_local_ISO" value-ref="now_local_ISO"/>
+                <entry key="validUntil_ISO" value-ref="validUntil_aggregate_ISO"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="serializeUnsignedProductionAggregate" parent="mda.SerializationStage">
+        <property name="serializer" ref="serializer"/>
+        <property name="outputFile">
+            <bean parent="File">
+                <constructor-arg value="${output.dir}/ukfederation-metadata-unsigned.xml"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="uk_productionPipeline" parent="mda.SimplePipeline">
+        <property name="stages">
+            <list>
+                <!-- Apply flow constraints for this flow. -->
+                <bean id="flowConstraints" parent="ukf.FlowConstraintApplyingStage"
+                    p:flowName="production"/>
+
+                <ref bean="assembleAggregate"/>
+                <bean parent="mda.SetCacheDurationStage"
+                    p:cacheDuration="${cacheDuration.aggregate.duration}"/>
+
+                <ref bean="uk_finaliseProduction"/>
+                <ref bean="uk_normaliseNamespaces"/>
+
+                <!-- production aggregate MUST pass publishability test -->
+                <ref bean="checkPublishable"/>
+                <ref bean="errorTerminatingFilter"/>
+
+                <ref bean="serializeUnsignedProductionAggregate"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        ***************************************
+        ***                                 ***
+        ***   W A Y F   A G G R E G A T E   ***
+        ***                                 ***
+        ***************************************
+    -->
+
+    <!--
+        Select all entities which are not both:
+
+           * identity providers, and
+           * members of the "hide from discovery" entity category.
+    -->
+    <bean id="uk_wayfSelector" parent="mda.XPathItemSelectionStrategy">
+        <constructor-arg value="/md:EntityDescriptor[not(md:IDPSSODescriptor and
+            md:Extensions[mdattr:EntityAttributes/saml:Attribute
+                [@Name = 'http://macedir.org/entity-category']
+                [@NameFormat = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri']
+                [saml:AttributeValue[.='http://refeds.org/category/hide-from-discovery']]
+            ])]"/>
+        <constructor-arg ref="commonNamespaces"/>
+    </bean>
+
+    <bean id="serializeUnsignedWayfAggregate" parent="mda.SerializationStage">
+        <property name="serializer" ref="serializer"/>
+        <property name="outputFile">
+            <bean parent="File">
+                <constructor-arg value="${output.dir}/ukfederation-wayf-unsigned.xml"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="uk_wayfPipeline" parent="mda.SimplePipeline">
+        <property name="stages">
+            <list>
+                <!-- Apply flow constraints for this flow. -->
+                <bean id="flowConstraints" parent="ukf.FlowConstraintApplyingStage"
+                    p:flowName="wayf"/>
+
+                <!--
+                    Remove SIRTFI metadata.
+                -->
+                <ref bean="strip.SIRTFI"/>
+
+                <ref bean="assembleAggregate"/>
+                <bean parent="mda.SetCacheDurationStage"
+                    p:cacheDuration="${cacheDuration.aggregate.duration}"/>
+
+                <!--
+                    Remove embedded images used in mdui:Logo elements.
+                -->
+                <ref bean="stripMDUILogoData"/>
+                <ref bean="stripEmptyMDUIUIInfo"/>
+                <ref bean="stripEmptyExtensions"/>
+
+                <ref bean="stripMdattrNamespace"/>
+                <ref bean="uk_finaliseProduction"/>
+                <ref bean="uk_normaliseNamespaces"/>
+
+                <!-- WAYF aggregate MUST pass publishability test -->
+                <ref bean="checkPublishable"/>
+                <ref bean="errorTerminatingFilter"/>
+
+                <ref bean="serializeUnsignedWayfAggregate"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        ***************************************
+        ***                                 ***
+        ***   C D S   A G G R E G A T E S   ***
+        ***                                 ***
+        ***************************************
+    -->
+
+    <!--
+        CDSStripUnwanted
+
+        The CDS needs only a very restricted subset of
+        normal metadata in order to do its job.  This stage
+        removes everything it does not need.
+    -->
+    <bean id="CDSStripUnwanted" parent="mda.CompositeStage">
+        <property name="composedStages">
+            <list>
+                <ref bean="stripComments"/>
+
+                <ref bean="stripAlgNamespace"/>
+                <ref bean="stripMdattrNamespace"/>
+                <ref bean="stripMdrpiNamespace"/>
+                <ref bean="stripUkfedlabelNamespace"/>
+
+                <ref bean="stripArtifactResolutionService"/>
+                <ref bean="stripAttributeAuthorityDescriptor"/>
+                <ref bean="stripAttributeConsumingService"/>
+                <ref bean="stripContactPerson"/>
+                <ref bean="stripKeyDescriptor"/>
+                <ref bean="stripManageNameIDService"/>
+                <ref bean="stripNameIDFormat"/>
+                <ref bean="stripSingleLogoutService"/>
+
+                <ref bean="stripShibScope"/>
+
+                <!-- remove any now-empty Extensions elements -->
+                <ref bean="stripEmptyExtensions"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="CDSFinalise" parent="finalise_parent">
+        <property name="transformParameters">
+            <map>
+                <entry key="extraText"
+                    value="Central Discovery Service metadata; not for end entity use"/>
+                <entry key="publisher" value-ref="uk_federation_uri"/>
+                <entry key="validityDays" value="${validUntil.aggregate.days}"/>
+                <entry key="now_ISO" value-ref="now_ISO"/>
+                <entry key="now_local_ISO" value-ref="now_local_ISO"/>
+                <entry key="validUntil_ISO" value-ref="validUntil_aggregate_ISO"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="CDSNormaliseNamespaces" parent="mda.XSLTransformationStage"
+        p:XSLResource="classpath:uk/ns_norm_cds.xsl"/>
+
+    <!--
+        *******************************************
+        ***                                     ***
+        ***   C D S A L L   A G G R E G A T E   ***
+        ***                                     ***
+        *******************************************
+    -->
+
+    <!--
+        Entities in the CDSALL aggregate are restricted to those entities registered by the
+        UK federation plus all identity providers from whatever source.
+    -->
+    <bean id="CDSAllSelector" parent="mda.XPathItemSelectionStrategy">
+        <constructor-arg value="/md:EntityDescriptor[md:IDPSSODescriptor or
+            md:Extensions/mdrpi:RegistrationInfo/@registrationAuthority = 'http://ukfederation.org.uk']"/>
+        <constructor-arg ref="commonNamespaces"/>
+    </bean>
+
+    <bean id="serializeCDSAllAggregate" parent="mda.SerializationStage">
+        <property name="serializer" ref="serializer"/>
+        <property name="outputFile">
+            <bean parent="File">
+                <constructor-arg value="${output.dir}/ukfederation-cdsall-unsigned.xml"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="CDSAllPipeline" parent="mda.SimplePipeline">
+        <property name="stages">
+            <list>
+                <!-- Apply flow constraints for this flow. -->
+                <bean id="flowConstraints" parent="ukf.FlowConstraintApplyingStage"
+                    p:flowName="cdsall"/>
+
+                <!-- make an aggregate first so that we're only traversing one item -->
+                <ref bean="assembleAggregate"/>
+                <bean parent="mda.SetCacheDurationStage"
+                    p:cacheDuration="${cacheDuration.aggregate.duration}"/>
+
+                <!-- remove many things that the CDS doesn't look at -->
+                <ref bean="stripInitNamespace"/>
+                <ref bean="CDSStripUnwanted"/>
+
+                <!--
+                    Remove embedded images used in mdui:Logo elements.
+                -->
+                <ref bean="stripMDUILogoData"/>
+                <ref bean="stripEmptyMDUIUIInfo"/>
+                <ref bean="stripEmptyExtensions"/>
+
+                <ref bean="CDSFinalise"/>
+                <ref bean="CDSNormaliseNamespaces"/>
+
+                <!-- schema validity check MUST pass -->
+                <ref bean="checkSchemas"/>
+                <ref bean="errorTerminatingFilter"/>
+
+                <ref bean="serializeCDSAllAggregate"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        *****************************************
+        ***                                   ***
+        ***   W U G E N   A G G R E G A T E   ***
+        ***                                   ***
+        *****************************************
+    -->
+
+    <!--
+        The Wugen aggregate includes all entities except standalone AttributeAuthorities
+        (which cannot have WAYFless URLs)
+    -->
+    <bean id="WugenSelector" parent="mda.XPathItemSelectionStrategy">
+        <constructor-arg value="/md:EntityDescriptor[md:IDPSSODescriptor or md:SPSSODescriptor]" />
+        <constructor-arg ref="commonNamespaces"/>
+    </bean>
+
+    <bean id="serializeWugenAggregate" parent="mda.SerializationStage">
+        <property name="serializer" ref="serializer"/>
+        <property name="outputFile">
+            <bean parent="File">
+                <constructor-arg value="${output.dir}/ukfederation-wugen-unsigned.xml"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="WugenPipeline" parent="mda.SimplePipeline">
+        <property name="stages">
+            <list>
+                <!-- Apply flow constraints for this flow. -->
+                <bean id="flowConstraints" parent="ukf.FlowConstraintApplyingStage"
+                    p:flowName="wugen"/>
+
+                <!-- make an aggregate first so that we're only traversing one item -->
+                <ref bean="assembleAggregate"/>
+
+                <!-- remove many things that the CDS doesn't look at -->
+                <ref bean="CDSStripUnwanted"/>
+
+                <!--
+                    Remove embedded images used in mdui:Logo elements.
+                -->
+                <ref bean="stripMDUILogoData"/>
+                <ref bean="stripEmptyMDUIUIInfo"/>
+                <ref bean="stripEmptyExtensions"/>
+
+                <ref bean="CDSFinalise"/>
+                <ref bean="CDSNormaliseNamespaces"/>
+
+                <!-- schema validity check MUST pass -->
+                <ref bean="checkSchemas"/>
+                <ref bean="errorTerminatingFilter"/>
+
+                <ref bean="serializeWugenAggregate"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        ***********************************************
+        ***                                         ***
+        ***   F A L L B A C K   A G G R E G A T E   ***
+        ***                                         ***
+        ***********************************************
+    -->
+
+    <bean id="uk_finaliseFallback" parent="finalise_parent">
+        <property name="transformParameters">
+            <map>
+                <entry key="extraText" value="Feature fallback metadata; not for production use"/>
+                <entry key="publisher" value-ref="uk_federation_uri"/>
+                <entry key="validityDays" value="${validUntil.aggregate.days}"/>
+                <entry key="now_ISO" value-ref="now_ISO"/>
+                <entry key="now_local_ISO" value-ref="now_local_ISO"/>
+                <entry key="validUntil_ISO" value-ref="validUntil_aggregate_ISO"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="uk_normaliseFallback" parent="mda.XSLTransformationStage"
+        p:XSLResource="classpath:uk/ns_norm_back.xsl"/>
+
+    <bean id="serializeUnsignedFallbackAggregate" parent="mda.SerializationStage">
+        <property name="serializer" ref="serializer"/>
+        <property name="outputFile">
+            <bean parent="File">
+                <constructor-arg value="${output.dir}/ukfederation-back-unsigned.xml"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="uk_fallbackPipeline" parent="mda.SimplePipeline">
+        <property name="stages">
+            <list>
+                <!-- Apply flow constraints for this flow. -->
+                <bean id="flowConstraints" parent="ukf.FlowConstraintApplyingStage"
+                    p:flowName="fallback"/>
+
+                <bean id="removeFallbackBlocklist" parent="mda.EntityFilterStage"
+                    p:whitelistingEntities="false"
+                    p:designatedEntities-ref="fallbackEntityBlocklist"/>
+
+                <ref bean="assembleAggregate"/>
+                <bean parent="mda.SetCacheDurationStage"
+                    p:cacheDuration="${cacheDuration.aggregate.duration}"/>
+                <ref bean="stripEmptyExtensions"/>
+                <ref bean="uk_finaliseFallback"/>
+                <ref bean="uk_normaliseFallback"/>
+
+                <!-- fallback aggregate MUST pass publishability test -->
+                <ref bean="checkPublishable"/>
+                <ref bean="errorTerminatingFilter"/>
+
+                <ref bean="serializeUnsignedFallbackAggregate"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        ***************************************
+        ***                                 ***
+        ***   T E S T   A G G R E G A T E   ***
+        ***                                 ***
+        ***************************************
+    -->
+
+    <bean id="uk_finaliseTest" parent="finalise_parent">
+        <property name="transformParameters">
+            <map>
+                <entry key="extraText" value="Feature test metadata; not for production use"/>
+                <entry key="publisher" value-ref="uk_federation_uri"/>
+                <entry key="validityDays" value="${validUntil.aggregate.days}"/>
+                <entry key="now_ISO" value-ref="now_ISO"/>
+                <entry key="now_local_ISO" value-ref="now_local_ISO"/>
+                <entry key="validUntil_ISO" value-ref="validUntil_aggregate_ISO"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="uk_normaliseTest" parent="mda.XSLTransformationStage"
+        p:XSLResource="classpath:uk/ns_norm_test.xsl"/>
+
+    <bean id="serializeUnsignedTestAggregate" parent="mda.SerializationStage">
+        <property name="serializer" ref="serializer"/>
+        <property name="outputFile">
+            <bean parent="File">
+                <constructor-arg value="${output.dir}/ukfederation-test-unsigned.xml"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="uk_testPipeline" parent="mda.CompositeStage">
+        <property name="composedStages">
+            <list>
+                <!-- Apply flow constraints for this flow. -->
+                <bean id="flowConstraints" parent="ukf.FlowConstraintApplyingStage"
+                    p:flowName="test"/>
+
+                <ref bean="assembleAggregate"/>
+                <bean parent="mda.SetCacheDurationStage"
+                    p:cacheDuration="${cacheDuration.aggregate.duration}"/>
+
+                <ref bean="uk_finaliseTest"/>
+                <ref bean="uk_normaliseTest"/>
+
+                <!-- test aggregate MUST pass publishability test -->
+                <ref bean="checkPublishable"/>
+                <ref bean="errorTerminatingFilter"/>
+
+                <ref bean="serializeUnsignedTestAggregate"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        *******************************************
+        ***                                     ***
+        ***   E X P O R T   A G G R E G A T E   ***
+        ***                                     ***
+        *******************************************
+    -->
+
+    <bean id="uk_finaliseExport" parent="finalise_parent">
+        <property name="transformParameters">
+            <map>
+                <entry key="extraText" value="Export metadata for use by partner federations"/>
+                <entry key="publisher" value-ref="uk_federation_uri"/>
+                <entry key="validityDays" value="${validUntil.aggregate.days}"/>
+                <entry key="now_ISO" value-ref="now_ISO"/>
+                <entry key="now_local_ISO" value-ref="now_local_ISO"/>
+                <entry key="validUntil_ISO" value-ref="validUntil_aggregate_ISO"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="uk_exportSelector" parent="mda.XPathItemSelectionStrategy">
+        <constructor-arg value="/md:EntityDescriptor[not(md:Extensions/ukfedlabel:ExportOptOut)]"/>
+        <constructor-arg ref="commonNamespaces"/>
+    </bean>
+
+    <bean id="serializeUnsignedExportAggregate" parent="mda.SerializationStage">
+        <property name="serializer" ref="serializer"/>
+        <property name="outputFile">
+            <bean parent="File">
+                <constructor-arg value="${output.dir}/ukfederation-export-unsigned.xml"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="uk_exportPipeline" parent="mda.SimplePipeline">
+        <property name="stages">
+            <list>
+                <!-- Apply flow constraints for this flow. -->
+                <bean id="flowConstraints" parent="ukf.FlowConstraintApplyingStage"
+                    p:flowName="export"/>
+
+                <!--
+                    Additional rules excluding entities from the aggregate.
+
+                    The basic rule (expressed in uk_exportSelector) is that
+                    entities are excluded if they do not have the ExportOptOut label.
+                    Additional rules below are applied to entities which do not
+                    have the ExportOptIn label: in other words, a rule in this section
+                    can always be overridden by an explicit ExportOptIn.
+                -->
+                <bean id="exclusion" parent="mda.SplitMergeStage">
+
+                    <!-- select entities with ExportOptIn label -->
+                    <property name="selectionStrategy">
+                        <bean parent="mda.XPathItemSelectionStrategy">
+                            <constructor-arg value="/md:EntityDescriptor[md:Extensions/ukfedlabel:ExportOptIn]"/>
+                            <constructor-arg ref="commonNamespaces"/>
+                        </bean>
+                    </property>
+
+                    <!--
+                        The pipeline for unselected (not explicitly opted in) items removes entities
+                        matching specific rules.
+                    -->
+                    <property name="nonselectedItemPipeline">
+                        <bean id="nonSelectedItemPipeline" parent="mda.SimplePipeline">
+                            <property name="stages">
+                                <list>
+
+                                    <!-- Aggregated schools sector identity providers -->
+                                    <!--
+                                        Preferred implementation:
+
+                                        <bean id="syntheticScopes" parent="mda.XPathFilteringStage"
+                                            p:namespaceContext-ref="commonNamespaces"
+                                            p:XPathExpression="shibmd:Scope[ends-with(., '.eng.ukfederation.org.uk']"/>
+
+                                        Unfortunately, the "ends-with" function is an XPath 2 feature, so we settle for
+                                        using "contains" instead; in our case it is equivalent.
+                                    -->
+                                    <bean id="syntheticScopes" parent="mda.XPathFilteringStage"
+                                        p:namespaceContext-ref="commonNamespaces"
+                                        p:XPathExpression="//shibmd:Scope[contains(., '.eng.ukfederation.org.uk')]"/>
+
+                                    <!-- Identity providers with regular expression scopes -->
+                                    <bean id="regexScopes" parent="mda.XPathFilteringStage"
+                                        p:namespaceContext-ref="commonNamespaces"
+                                        p:XPathExpression="//shibmd:Scope[@regexp='true']"/>
+                                </list>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+
+                <ref bean="stripUkfedlabelNamespace"/>
+                <ref bean="assembleAggregate"/>
+                <bean parent="mda.SetCacheDurationStage"
+                    p:cacheDuration="${cacheDuration.aggregate.duration}"/>
+                <ref bean="stripEmptyExtensions"/>
+
+                <ref bean="uk_finaliseExport"/>
+
+                <bean id="uk_normaliseExport" parent="mda.XSLTransformationStage"
+                    p:XSLResource="classpath:uk/ns_norm_export.xsl"/>
+
+                <!--
+                    Schema validity and other checks MUST pass.
+
+                    These are a subset of the publishability tests applied to
+                    aggregates published to federation members.
+                -->
+                <ref bean="checkSchemas"/>
+                <ref bean="check_aggregate"/>
+                <ref bean="check_namespaces"/>
+                <ref bean="errorTerminatingFilter"/>
+
+                <ref bean="serializeUnsignedExportAggregate"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        ***********************************************************
+        ***                                                     ***
+        ***   E X P O R T   P R E V I E W   A G G R E G A T E   ***
+        ***                                                     ***
+        ***********************************************************
+    -->
+
+    <bean id="uk_exportPreviewSelector" parent="mda.XPathItemSelectionStrategy">
+        <constructor-arg value="/md:EntityDescriptor[not(md:Extensions/ukfedlabel:ExportOptOut)]"/>
+        <constructor-arg ref="commonNamespaces"/>
+    </bean>
+
+    <bean id="uk_exportPreviewPipeline" parent="mda.SimplePipeline">
+        <property name="stages">
+            <list>
+                <!-- Apply flow constraints for this flow. -->
+                <bean id="flowConstraints" parent="ukf.FlowConstraintApplyingStage"
+                    p:flowName="export-preview"/>
+
+                <!--
+                    Additional rules excluding entities from the aggregate.
+
+                    The basic rule (expressed in uk_exportPreviewSelector) is that
+                    entities are excluded if they do not have the ExportOptOut label.
+                    Additional rules below are applied to entities which do not
+                    have the ExportOptIn label: in other words, a rule in this section
+                    can always be overridden by an explicit ExportOptIn.
+                -->
+                <bean id="exclusion" parent="mda.SplitMergeStage">
+
+                    <!-- select entities with ExportOptIn label -->
+                    <property name="selectionStrategy">
+                        <bean parent="mda.XPathItemSelectionStrategy">
+                            <constructor-arg value="/md:EntityDescriptor[md:Extensions/ukfedlabel:ExportOptIn]"/>
+                            <constructor-arg ref="commonNamespaces"/>
+                        </bean>
+                    </property>
+
+                    <!--
+                        The pipeline for unselected (not explicitly opted in) items removes entities
+                        matching specific rules.
+                    -->
+                    <property name="nonselectedItemPipeline">
+                        <bean id="nonSelectedItemPipeline" parent="mda.SimplePipeline">
+                            <property name="stages">
+                                <list>
+
+                                    <!-- Aggregated schools sector identity providers -->
+                                    <!--
+                                        Preferred implementation:
+
+                                        <bean id="syntheticScopes" parent="mda.XPathFilteringStage"
+                                            p:namespaceContext-ref="commonNamespaces"
+                                            p:XPathExpression="shibmd:Scope[ends-with(., '.eng.ukfederation.org.uk']"/>
+
+                                        Unfortunately, the "ends-with" function is an XPath 2 feature, so we settle for
+                                        using "contains" instead; in our case it is equivalent.
+                                    -->
+                                    <bean id="syntheticScopes" parent="mda.XPathFilteringStage"
+                                        p:namespaceContext-ref="commonNamespaces"
+                                        p:XPathExpression="//shibmd:Scope[contains(., '.eng.ukfederation.org.uk')]"/>
+
+                                    <!-- Identity providers with regular expression scopes -->
+                                    <bean id="regexScopes" parent="mda.XPathFilteringStage"
+                                        p:namespaceContext-ref="commonNamespaces"
+                                        p:XPathExpression="//shibmd:Scope[@regexp='true']"/>
+                                </list>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+
+                <ref bean="stripUkfedlabelNamespace"/>
+                <ref bean="assembleAggregate"/>
+                <bean parent="mda.SetCacheDurationStage"
+                    p:cacheDuration="${cacheDuration.aggregate.duration}"/>
+                <ref bean="stripEmptyExtensions"/>
+
+                <ref bean="uk_finaliseExport"/>
+
+                <bean id="uk_normaliseExportPreview" parent="mda.XSLTransformationStage"
+                    p:XSLResource="classpath:uk/ns_norm_export_preview.xsl"/>
+
+                <!--
+                    Schema validity and other checks MUST pass.
+
+                    These are a subset of the publishability tests applied to
+                    aggregates published to federation members.
+                -->
+                <ref bean="checkSchemas"/>
+                <ref bean="check_aggregate"/>
+                <ref bean="check_namespaces"/>
+                <ref bean="errorTerminatingFilter"/>
+
+                <bean id="serializeUnsignedExportPreviewAggregate" parent="mda.SerializationStage">
+                    <property name="serializer" ref="serializer"/>
+                    <property name="outputFile">
+                        <bean parent="File">
+                            <constructor-arg value="${output.dir}/ukfederation-export-preview-unsigned.xml"/>
+                        </bean>
+                    </property>
+                </bean>
+
+            </list>
+        </property>
+    </bean>
+
+
+    <!--
+        *************************************
+        ***                               ***
+        ***   M A I N   P I P E L I N E   ***
+        ***                               ***
+        *************************************
+    -->
+
+    <bean id="generate" parent="mda.SimplePipeline">
+        <property name="stages">
+            <list>
+                <!--
+                    Acquire metadata for all UK-registered entities.
+                -->
+                <ref bean="uk_registeredEntities"/>
+
+                <!--
+                    *******************************************************
+                    ***                                                 ***
+                    ***   R A W   R E G I S T R A R   E N T I T I E S   ***
+                    ***                                                 ***
+                    *******************************************************
+
+                    At this point, the collection contains only entities
+                    registered by the UK federation registrar.  The minimum
+                    changes possible have been performed, so that the statistics
+                    report can be as comprehensive as possible.
+                -->
+
+                <!--
+                    Fork a new output pipeline for the registrar statistics.
+                -->
+                <bean id="rawRegistrarDemux" parent="mda.PipelineDemultiplexerStage">
+                    <property name="pipelineAndSelectionStrategies">
+                        <list>
+                            <bean class="net.shibboleth.utilities.java.support.collection.Pair">
+                                <constructor-arg ref="uk_statisticsPipeline"/>
+                                <constructor-arg ref="everythingSelector"/>
+                            </bean>
+                        </list>
+                    </property>
+                    <property name="waitingForPipelines" value="true"/>
+                </bean>
+
+                <!--
+                    Remove constructs which we no longer publish to any
+                    external registry clients.
+                -->
+                <ref bean="uk_stripAdminContacts"/>
+                <ref bean="stripEmptyExtensions"/>
+
+                <!--
+                    odn_to_mdui
+
+                    Ensure that beyond this point, all UKf-registered identity providers
+                    have mdui:DisplayName and mdui:Description elements.
+                -->
+                <bean id="odn_to_mdui" parent="mda.XSLTransformationStage"
+                    p:XSLResource="classpath:uk/odn_to_mdui.xsl"/>
+
+                <!--
+                    ***********************************************
+                    ***                                         ***
+                    ***   R E G I S T R A R   E N T I T I E S   ***
+                    ***                                         ***
+                    ***********************************************
+
+                    At this point, the collection contains only
+                    entities registered by the UK federation registrar.
+                -->
+
+                <!--
+                    Fork a new output pipeline for the export and export preview aggregates.
+
+                    These aggregates only include UK-registered entities,
+                    so the fork needs to occur before any others are introduced.
+
+                    The export aggregates are also intended to reflect the registered
+                    metadata as closely as possible, so the fork must happen before
+                    too many UK-specific transformations are performed.
+                -->
+                <bean id="registrarDemux" parent="mda.PipelineDemultiplexerStage">
+                    <property name="pipelineAndSelectionStrategies">
+                        <list>
+                            <bean class="net.shibboleth.utilities.java.support.collection.Pair">
+                                <constructor-arg ref="uk_exportPipeline"/>
+                                <constructor-arg ref="uk_exportSelector"/>
+                            </bean>
+                            <bean class="net.shibboleth.utilities.java.support.collection.Pair">
+                                <constructor-arg ref="uk_exportPreviewPipeline"/>
+                                <constructor-arg ref="uk_exportPreviewSelector"/>
+                            </bean>
+                        </list>
+                    </property>
+                    <property name="waitingForPipelines" value="true"/>
+                </bean>
+
+                <!--
+                    Strip out those ukfedlabel extensions that we don't publish.
+
+                    This is performed independently on the export pipeline because
+                    selection for that pipeline is based on these same extensions.
+                    A better solution would be to extract the ExportOptIn label into
+                    an item metadata object, and move this section before the export fork.
+                -->
+                <ref bean="uk_stripExtensions"/>
+                <ref bean="stripEmptyExtensions"/>
+
+                <!--
+                    ***************************************************
+                    ***                                             ***
+                    ***   P R O D U C T I O N   M D X   M E R G E   ***
+                    ***                                             ***
+                    ***************************************************
+
+                    Merge in entities from production metadata exchange sources.
+                -->
+
+                <bean id="mergeProductionMDXEntities" parent="mda.PipelineMergeStage"
+                    p:collectionMergeStrategy-ref="deduplicateMergeStrategy">
+                    <property name="mergedPipelines">
+                        <list>
+                            <!-- entries earlier in the list have higher precedence -->
+                            <ref bean="uk_int_edugain_importPipeline"/>
+                        </list>
+                    </property>
+                </bean>
+
+                <!--
+                    Deconflict the discovery names of any entities
+                    brought in from production metadata exchange sources.
+                -->
+                <bean id="deconflictProductionMDXEntities"
+                    parent="ukf.IdPDisplayNameDuplicateAvoidingStage"
+                    p:registrationAuthorityDisplayNames-ref="registrationAuthorityDisplayNameMap"
+                />
+
+                <!--
+                    *************************************************
+                    ***                                           ***
+                    ***   P R O D U C T I O N   E N T I T I E S   ***
+                    ***                                           ***
+                    *************************************************
+
+                    At this point, the collection contains entities
+                    registered by the UK federation registrar plus
+                    entities received through production-status MDX
+                    relationships.
+                -->
+
+                <!--
+                    Fork into new pipelines for the production, fallback and WAYF aggregates.
+                -->
+                <bean id="productionDemux" parent="mda.PipelineDemultiplexerStage">
+                    <property name="pipelineAndSelectionStrategies">
+                        <list>
+                            <bean class="net.shibboleth.utilities.java.support.collection.Pair">
+                                <constructor-arg ref="uk_productionPipeline"/>
+                                <constructor-arg ref="everythingSelector"/>
+                            </bean>
+                            <bean class="net.shibboleth.utilities.java.support.collection.Pair">
+                                <constructor-arg ref="uk_fallbackPipeline"/>
+                                <constructor-arg ref="everythingSelector"/>
+                            </bean>
+                            <bean class="net.shibboleth.utilities.java.support.collection.Pair">
+                                <constructor-arg ref="uk_wayfPipeline"/>
+                                <constructor-arg ref="uk_wayfSelector"/>
+                            </bean>
+                        </list>
+                    </property>
+                    <property name="waitingForPipelines" value="true"/>
+                </bean>
+
+                <!--
+                    ***********************************************************
+                    ***                                                     ***
+                    ***   P R E - P R O D U C T I O N   M D X   M E R G E   ***
+                    ***                                                     ***
+                    ***********************************************************
+
+                    Merge in entities from pre-production metadata exchange sources.
+                -->
+
+                <bean id="mergePreproductionMDXEntities" parent="mda.PipelineMergeStage"
+                    p:collectionMergeStrategy-ref="deduplicateMergeStrategy">
+                    <property name="mergedPipelines">
+                        <list>
+                            <!-- entries earlier in the list have higher precedence -->
+                            <!-- List is currently empty. -->
+                        </list>
+                    </property>
+                </bean>
+
+                <!--
+                    Deconflict the discovery names of any entities
+                    brought in from pre-production metadata exchange sources.
+
+                    This will not affect entities from production sources
+                    which have already been renamed.
+                -->
+                <bean id="deconflictPreproductionMDXEntities"
+                    parent="ukf.IdPDisplayNameDuplicateAvoidingStage"
+                    p:registrationAuthorityDisplayNames-ref="registrationAuthorityDisplayNameMap"
+                />
+
+                <!--
+                    Output any INFO metadata we may have accumulated, such
+                    as from discovery name deconfliction.
+                -->
+                <ref bean="infoAnnouncer"/>
+
+                <!--
+                    *********************************************************
+                    ***                                                   ***
+                    ***   P R E - P R O D U C T I O N   E N T I T I E S   ***
+                    ***                                                   ***
+                    *********************************************************
+
+                    At this point, the collection contains entities
+                    registered by the UK federation registrar plus
+                    entities received through both production-status
+                    and pre-production-status MDX relationships.
+                -->
+
+                <!--
+                    Fork into new pipelines for additional aggregates.
+                -->
+                <bean id="preProductionDemux" parent="mda.PipelineDemultiplexerStage">
+                    <property name="pipelineAndSelectionStrategies">
+                        <list>
+                            <bean class="net.shibboleth.utilities.java.support.collection.Pair">
+                                <constructor-arg ref="CDSAllPipeline"/>
+                                <constructor-arg ref="CDSAllSelector"/>
+                            </bean>
+                            <bean class="net.shibboleth.utilities.java.support.collection.Pair">
+                                <constructor-arg ref="WugenPipeline"/>
+                                <constructor-arg ref="WugenSelector"/>
+                            </bean>
+                        </list>
+                    </property>
+                    <property name="waitingForPipelines" value="true"/>
+                </bean>
+
+                <!-- pipeline continues to generate test aggregate -->
+                <ref bean="uk_testPipeline"/>
+
+            </list>
+        </property>
+    </bean>
+
+</beans>
