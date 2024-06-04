@@ -5,9 +5,9 @@
 #
 
 cd validators
-./build-images
+./build-images $@
 cd ..
 
 cd driver
-./build-image
+./build-image $@
 cd ..
