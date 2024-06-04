@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    default-lazy-init="true"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--
+        Set up the validator context.
+
+        The majority of beans in a validator context can be inherited from the parent.
+        Bean post processors and conversion services are exceptions, and need to
+        be re-instantiated within each child context.
+    -->
+
+    <!-- *** Default Shibboleth component bean id property from Spring bean id *** -->
+    <bean class="net.shibboleth.ext.spring.config.IdentifiableBeanPostProcessor" lazy-init="false"/>
+
+    <!-- This bean MUST be called "conversionService" to work properly. -->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="net.shibboleth.ext.spring.config.DurationToLongConverter" />
+                <bean class="net.shibboleth.ext.spring.config.StringToIPRangeConverter" />
+                <bean class="net.shibboleth.ext.spring.config.BooleanToPredicateConverter" />
+                <bean class="net.shibboleth.ext.spring.config.StringBooleanToPredicateConverter" />
+                <bean class="net.shibboleth.ext.spring.config.StringToResourceConverter" />
+            </set>
+        </property>
+    </bean>
+
+</beans>
