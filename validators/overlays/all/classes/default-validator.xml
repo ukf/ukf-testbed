@@ -37,6 +37,6 @@
         ****************************************************************
     -->
     <import resource="default-validator-stages.xml"/>
-    <import resource="../default-validator-beans-overrides.xml"/>
+    <import resource="default-validator-beans-overrides.xml"/>
 
 </beans>
