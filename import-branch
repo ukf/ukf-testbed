@@ -1,0 +1,40 @@
+#!/bin/bash
+
+#
+# Pull the latest version of a branch from the ukf-meta repository into
+# the imports directory and sync it across to its location in the
+# testbed.
+#
+# $1 - testbed branch name
+# $2 - repository branch name
+#
+local_name="$1"
+repo_branch="$2"
+
+set -e
+
+import_dir="imports/${local_name}"
+copy_dir="`pwd`/validators/overlays/${local_name}"
+repo_url="git@repo.infr.ukfederation.org.uk:ukf/ukf-meta.git"
+
+
+mkdir -p imports
+
+# Clone the repository if we haven't already
+if [ ! -d "${import_dir}" ]; then
+    git clone ${repo_url} --branch ${repo_branch} ${import_dir}
+fi
+
+# Everything else is done from the import directory
+cd "${import_dir}"
+
+# Bring our clone up to date
+git pull --ff-only --quiet
+
+#--verbose --dry-run
+# Synchronise the mdx path across to our local copy's classes.
+rsync \
+    --exclude at_aconet --exclude us_incommon \
+    --exclude int_edugain --exclude test \
+    --recursive --copy-links --delete --delete-excluded \
+    mdx/ "${copy_dir}/classes/"

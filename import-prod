@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./import-branch ukf-meta-prod master
