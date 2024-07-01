@@ -37,12 +37,4 @@
     <bean id="check_sirtfi2" parent="mda.XSLValidationStage"
         p:XSLResource="classpath:_rules/check_sirtfi2.xsl"/>
 
-    <!--
-        check_ukfedlabel
-
-        Not exposed at top level.
-    -->
-    <bean id="check_ukfedlabel" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:uk/check_ukfedlabel.xsl"/>
-
 </beans>

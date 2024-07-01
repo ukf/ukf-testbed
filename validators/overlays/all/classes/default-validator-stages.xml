@@ -43,8 +43,8 @@
         <ref bean="check_uk_algorithms"/>
         <ref bean="check_uk_trust"/>
         <ref bean="check_namespaces"/>
-        <ref bean="checkCertificates"/>
-        <ref bean="checkScopes"/> 
+        <ref bean="check_standard_certificates"/>
+        <ref bean="check_edugain_scopes"/>
         <ref bean="check_hasreginfo"/>
         <!-- <ref bean="check_ukf_compromised"/> compromised-keys.txt is in ukf-data which would couple the two projects -->
         <ref bean="check_aggregate"/>

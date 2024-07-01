@@ -28,12 +28,12 @@
     <import resource="classpath:uk/edugain-policy.xml"/>
 
     <!--
-        checkCertificates
+        check_standard_certificates
 
         This bean is defined as an inner bean in common-beans.xml but inner
         beans can't be referenced. This is a literal copy of that bean.
     -->
-    <bean id="checkCertificates" parent="mda.X509ValidationStage">
+    <bean id="check_standard_certificates" parent="mda.X509ValidationStage">
         <property name="validators">
             <list>
                 <!-- Error on DSA keys. -->
@@ -66,12 +66,12 @@
     </bean>
 
     <!--
-        checkScopes
+        check_edugain_scopes
 
         This bean is defined as an inner bean in edugain-policy.xml but inner
         beans can't be referenced. This is a literal copy of that bean.
     -->
-    <bean id="checkScopes" parent="mda.ScopeValidationStage">
+    <bean id="check_edugain_scopes" p:id="checkScopes" parent="mda.ScopeValidationStage">
         <property name="validators">
             <list>
                 <bean p:id="empty" parent="mda.RejectStringRegexValidator"
@@ -133,5 +133,13 @@
             </list>
         </property>
     </bean>
+
+    <!--
+        check_ukfedlabel
+
+        Not exposed at top level.
+    -->
+    <bean id="check_ukfedlabel" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:uk/check_ukfedlabel.xsl"/>
 
 </beans>
