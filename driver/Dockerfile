@@ -24,4 +24,4 @@ COPY Rakefile ./
 
 # This container doesn't do anything on startup; instead,
 # you're expected to "exec" into it to perform operations.
-CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
+CMD ["/bin/bash", "-c", "trap : TERM INT; sleep infinity & wait"]
