@@ -1,4 +1,15 @@
-FROM ruby:3.3 AS build
+FROM ruby:3.3-slim AS build
+
+#
+# The slim image is missing some packages required
+# to build the json dependency.
+#
+RUN apt-get update \
+    && apt-get -y install \
+        curl \
+        gcc \
+        make \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /application
 
