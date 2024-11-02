@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 group :devel do # required for development
-  gem 'rubocop'
+  gem 'rubocop', '>= 1.66.0'
 end
 
 gem 'md-validator-client'
