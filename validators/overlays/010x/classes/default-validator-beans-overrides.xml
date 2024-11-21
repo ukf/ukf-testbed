@@ -44,4 +44,7 @@
     <bean id="check_saml2meta_urls" parent="mda.CompositeStage">
     </bean>
 
+    <bean id="check_reqattr" parent="mda.XSLValidationStage"
+        p:XSLResource="classpath:_rules/check_reqattr.xsl"/>
+
 </beans>
