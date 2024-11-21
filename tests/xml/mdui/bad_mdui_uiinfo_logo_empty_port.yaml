@@ -4,9 +4,7 @@ expected:
     message: "'https://idp.example.org:/images/heads_80x80.jpg': libxml2: port present
       but empty"
 override:
- - endpoint : v09
-   skip: true
- - endpoint : [v09x, v010x]
+ - endpoint: v010x
    expected:
    - status: error
      component_id: check_mdui_xslt

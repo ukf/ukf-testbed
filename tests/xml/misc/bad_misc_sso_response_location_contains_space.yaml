@@ -7,12 +7,7 @@ expected:
     message: 'value rejected: ''https://idp.example.org:8443/idp/profile/SAML2/SOAP/     AttributeQuery/response''
       (Illegal character in path at index 52: https://idp.example.org:8443/idp/profile/SAML2/SOAP/     AttributeQuery/response)'
 override:
- - endpoint : v09
-   expected:
-    - status: error
-      component_id: check_misc
-      message: SingleSignOnService ResponseLocation contains space character
- - endpoint : [v09x, v010x]
+ - endpoint: v010x
    expected:
     - status: error
       component_id: check_misc

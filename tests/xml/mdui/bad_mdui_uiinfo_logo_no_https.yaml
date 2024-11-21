@@ -4,9 +4,7 @@ expected:
     message: "'http://idp.example.org/images/heads_80x80.jpg': protocol 'http' must
       be https"
 override:
- - endpoint : v09
-   skip: true
- - endpoint : [v09x, v010x]
+ - endpoint: v010x
    expected:
     - status: error
       component_id: check_mdui_xslt

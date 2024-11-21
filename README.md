@@ -57,27 +57,16 @@ The `docker compose` deployment currently includes four containers
 implementing a fleet of metadata validation web services which are referenced
 inside the testbed as the following named *endpoints*:
 
-- `v09x` represents the current production deployment. Its name reflects
-  that environment's composition: v0.9 of the Shibboleth Metadata
-  Aggregator, and the Xalan XSL processor included in the classpath.
-- `v09` is identical to `v09x` with the exclusion of the Xalan processor.
-  Because this can run neither the old nor new versions of the URL checking
-  code (the old system involves a Xalan extension, while the new system only
-  exists under MDA v0.10), we do not expect to ever use this configuration
-  in production.
-- `v010x` is anticipated to represent the next step in the evolution of
-  the UK federation tooling, switching out MDA v0.9 for MDA v0.10 but
-  retaining Xalan for compatibility until we are certain that all of the
-  XSL in the production deployment behaves the same under the XSL processor
-  included in the JDK.
-- `v010` is, for now, the anticipated final state for the UK federation
-  deployment once all compatibility issues are resolved so that Xalan can
-  be removed.
+- `v010` represents the current production environment: v0.10 of
+  the Shibboleth Metadata Aggregator, *without* the use of Xalan
+  and extensions.
+- `v010x` is ther same as `v010` but with the use of Xalan and
+  extensions for some functionality.
 
 ## Development mode
 
 The validator fleet has one distinguished member representing the current
-production deployment, currently `v09x`. This validator's port 8080 is
+production deployment, currently `v010`. This validator's port 8080 is
 bound to `localhost:8080` as well as being available within the
 `docker compose` internal network.
 
@@ -87,12 +76,15 @@ to determine which validators are available:
 - Inside the `driver` service (where `RAILS_ENV` is set to `production`),
   `all_endpoints` returns an array of all available endpoints so that the
   same operation can be performed against each validator in turn.
-- Outside the `driver` service (e.g., on the host) `all_endpoints` returns
-  a singleton endpoint for `localhost:8080` which accesses the `v09x`
-  container alone.
+- Outside the `driver` service (e.g., on the host, in the `driver` directory)
+ `all_endpoints` return a singleton endpoint for `localhost:8080` which accesses
+  the `v010` container alone.
 
-This arrangement allows the test framework itself to be developed
+This arrangement allows the test framework itself, and individual tests, to be developed
 without having to rebuild the `driver` image for each change.
+
+To take advantage of this, `cd driver` and run `bundle install` to
+set up the required dependencies.
 
 ## Configuring tests
 
