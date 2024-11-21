@@ -3,9 +3,7 @@ expected:
     component_id: saml2meta/url/host
     message: "'https:///idp/profile/Shibboleth/SSO': host name not present"
 override:
-  - endpoint : v09
-    skip: true
-  - endpoint : [v09x, v010x]
+  - endpoint: v010x
     expected:
     - status: error
       component_id: check_saml2meta

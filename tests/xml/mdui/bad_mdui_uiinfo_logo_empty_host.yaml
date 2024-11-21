@@ -3,9 +3,7 @@ expected:
     component_id: check_mdui_logo_url/url/host
     message: "'https:///images/heads_80x80.jpg': host name not present"
 override:
- - endpoint : v09
-   skip: true
- - endpoint : [v09x, v010x]
+ - endpoint: v010x
    expected:
    - status: error
      component_id: check_mdui_xslt

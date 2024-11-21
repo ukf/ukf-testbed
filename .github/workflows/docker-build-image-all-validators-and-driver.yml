@@ -12,10 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Build the 09 Docker image
-      run: docker buildx build validators --file validators/Dockerfile.09 --tag ukf/testbed:0.9 --output type=docker
-    - name: Build the 09x Docker image
-      run: docker buildx build validators --file validators/Dockerfile.09x --tag ukf/testbed:0.9-xalan --output type=docker
     - name: Build the 010 Docker image
       run: docker buildx build validators --file validators/Dockerfile.010 --tag ukf/testbed:0.10 --output type=docker
     - name: Build the 010x Docker image
