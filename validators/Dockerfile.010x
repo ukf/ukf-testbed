@@ -6,7 +6,7 @@ WORKDIR /application
 # Customise by modifying /application/BOOT-INF/...
 #
 ADD overlays/all            BOOT-INF/
-ADD overlays/ukf-meta-239   BOOT-INF/
+ADD overlays/ukf-meta-prod  BOOT-INF/
 ADD overlays/010-common     BOOT-INF/
 ADD overlays/010x           BOOT-INF/
 ADD overlays/xalan          BOOT-INF/
