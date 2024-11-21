@@ -31,11 +31,12 @@
     <xsl:output method="html" omit-xml-declaration="yes"/>
 
     <!--
-        memberDocument
+        memberDocumentLocation
 
-        The members.xml file, as a DOM document, is passed as a parameter.
+        The location of the members.xml file is passed as a parameter.
     -->
-    <xsl:param name="memberDocument"/>
+    <xsl:param name="memberDocumentLocation"/>
+    <xsl:variable name="memberDocument" select="document($memberDocumentLocation)"/>
 
     <!--
         now_ISO
@@ -1779,7 +1780,6 @@
                 <xsl:if test="($show != 0) or ($n &lt;= $show.max)">
                     <ul>
                         <xsl:for-each select="$entities">
-                            <xsl:sort select="@ID"/>
                             <li>
                                 <xsl:value-of select="@ID"/>:
                                 <code><xsl:value-of select="@entityID"/></code>

@@ -42,7 +42,7 @@
                 <value>administrative</value>
             </list>
         </property>
-        <property name="whitelistingTypes" value="false"/>
+        <property name="keepingTypes" value="false"/>
     </bean>
 
 
@@ -107,7 +107,7 @@
     <bean id="uk_exportAggregate" parent="mda.DOMResourceSourceStage">
         <property name="parserPool" ref="parserPool"/>
         <property name="DOMResource">
-            <bean parent="HTTPResource">
+            <bean parent="mda.HTTPResource">
                 <constructor-arg name="client" ref="httpClient"/>
                 <constructor-arg name="url" ref="uk_exportAggregate_url"/>
             </bean>
@@ -121,7 +121,7 @@
     <bean id="uk_productionAggregate" parent="mda.DOMResourceSourceStage">
         <property name="parserPool" ref="parserPool"/>
         <property name="DOMResource">
-            <bean parent="HTTPResource">
+            <bean parent="mda.HTTPResource">
                 <constructor-arg name="client" ref="httpClient"/>
                 <constructor-arg name="url" ref="uk_productionAggregate_url"/>
             </bean>
@@ -132,7 +132,7 @@
     <!--
         Metadata signing certificate.
     -->
-    <bean id="uk_signingCertificate" parent="X509CertificateFactoryBean"
+    <bean id="uk_signingCertificate" parent="mda.X509CertificateFactoryBean"
         p:resource="classpath:uk/ukfederation-2014.pem"/>
 
 
@@ -177,7 +177,7 @@
 
         This bean contains the contents of the members.xml file as a DOM Document.
     -->
-    <bean id="uk_membersDocument" parent="DOMDocumentFactoryBean">
+    <bean id="uk_membersDocument" parent="mda.DOMDocumentFactoryBean">
         <property name="resource">
             <bean parent="FileSystemResource" c:_="${members.dir}/members.xml"/>
         </property>
@@ -190,7 +190,7 @@
 
         This bean loads the schema for the members.xml file as a DOM Document.
     -->
-    <bean id="uk_membersSchemaDocument" parent="DOMDocumentFactoryBean">
+    <bean id="uk_membersSchemaDocument" parent="mda.DOMDocumentFactoryBean">
         <property name="resource">
             <bean parent="FileSystemResource" c:_="${members.dir}/ukfederation-members.xsd"/>
         </property>
@@ -238,9 +238,9 @@
 
         Check against UKf-specific list of compromised RSA keys.
     -->
-    <bean id="compromised.ukf" parent="mda.X509RSAOpenSSLBlacklistValidator"
+    <bean id="compromised.ukf" parent="mda.X509RSAOpenSSLKeylistValidator"
         p:id="compromised.ukf">
-        <property name="blacklistResource">
+        <property name="keylistResource">
             <bean parent="FileSystemResource" c:_="${blocklists.dir}/compromised-keys.txt"/>
         </property>
     </bean>
@@ -271,7 +271,7 @@
         described by the EmailAddressStringValidator. In particular,
         this requires the "mailto:" scheme."
     -->
-    <bean id="check_uk_email" parent="ukf.StringElementValidationStage"
+    <bean id="check_uk_email" parent="mda.StringElementValidationStage"
         p:elementName-ref="md-EmailAddress">
         <property name="validators">
             <bean id="format" parent="ukf.EmailAddressStringValidator"/>
@@ -377,7 +377,7 @@
             </bean>
         </property>
         <property name="sourceFileFilter">
-            <bean parent="ukf.RegexFileFilter">
+            <bean parent="mda.RegexFileFilter">
                 <constructor-arg value="uk\d{6}.xml"/>
             </bean>
         </property>
@@ -388,7 +388,7 @@
         Fetch and process the registered entities as a collection.
     -->
     <bean id="uk_registeredEntities" parent="mda.CompositeStage">
-        <property name="composedStages">
+        <property name="stages">
             <list>
                 <ref bean="uk_fetchFragmentFiles"/>
                 <ref bean="uk_processFragment"/>
@@ -442,7 +442,7 @@
                     <property name="validators">
                         <list>
                             <!-- Error on DSA keys. -->
-                            <bean p:id="DSA" parent="ukf.X509DSADetector"/>
+                            <bean p:id="DSA" parent="mda.X509DSADetector"/>
 
                             <!-- Error on RSA key length less than 2048 bits. -->
                             <bean p:id="RSAKeyLength" parent="mda.X509RSAKeyLengthValidator"
@@ -450,10 +450,10 @@
                             <!-- Error on small RSA public exponents. -->
                             <bean p:id="RSAExponent" parent="mda.X509RSAExponentValidator"/>
                             <!-- Error on keys vulnerable to ROCA. -->
-                            <bean p:id="ROCA" parent="ukf.X509ROCAValidator"/>
+                            <bean p:id="ROCA" parent="mda.X509ROCAValidator"/>
 
                             <!--
-                                Debian weak key blacklists.
+                                Debian weak key lists.
 
                                 Don't need to check for keys below our minimum key size.
                             -->
@@ -461,7 +461,7 @@
                             <ref bean="debian.4096"/>
 
                             <!--
-                                Compromised key blacklists.
+                                Compromised key lists.
 
                                 Again, don't need to check for keys below our minimum key size.
                             -->
@@ -577,7 +577,7 @@
         p:XSLResource="classpath:uk/statistics.xsl">
         <property name="transformParameters">
             <map>
-                <entry key="memberDocument" value-ref="uk_membersDocument"/>
+                <entry key="memberDocumentLocation" value="${members.dir}/members.xml"/>
                 <entry key="now_ISO" value-ref="now_ISO"/>
             </map>
         </property>
@@ -598,7 +598,7 @@
                 <bean id="flowConstraints" parent="ukf.FlowConstraintApplyingStage"
                     p:flowName="statistics"/>
 
-                <ref bean="assemble"/>
+                <ref bean="uk_assemble"/>
                 <ref bean="uk_generateStatistics"/>
                 <ref bean="uk_serializeStatistics"/>
             </list>
@@ -617,7 +617,7 @@
         Fetch the export entities as a collection.
     -->
     <bean id="uk_exportedEntities" parent="mda.CompositeStage">
-        <property name="composedStages">
+        <property name="stages">
             <list>
                 <ref bean="uk_exportAggregate"/>
 
