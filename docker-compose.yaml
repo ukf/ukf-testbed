@@ -7,20 +7,20 @@ services:
   # environment, so we expose it on localhost:8080
   # as well as on the private network.
   #
-  v010:
-    image: ukf/testbed:0.10
-    hostname: v010
+  prod:
+    image: ukf/testbed:prod
+    hostname: prod
     ports:
     - target: 8080
       published: 8080
       mode: host
 
   #
-  # MDA 0.10.0 _with_ external Xalan processor
+  # "next" is currently by default the same as "prod"
   #
-  v010x:
-    image: ukf/testbed:0.10-xalan
-    hostname: v010x
+  next:
+    image: ukf/testbed:next
+    hostname: next
 
   #
   # Test driver.

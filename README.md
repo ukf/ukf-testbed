@@ -57,16 +57,16 @@ The `docker compose` deployment currently includes four containers
 implementing a fleet of metadata validation web services which are referenced
 inside the testbed as the following named *endpoints*:
 
-- `v010` represents the current production environment: v0.10 of
+- `prod` represents the current production environment: v0.10 of
   the Shibboleth Metadata Aggregator, *without* the use of Xalan
   and extensions.
-- `v010x` is ther same as `v010` but with the use of Xalan and
-  extensions for some functionality.
+- `next` is currently the same as `prod`; the intention is to use this
+  to track some set of upcoming changes.
 
 ## Development mode
 
 The validator fleet has one distinguished member representing the current
-production deployment, currently `v010`. This validator's port 8080 is
+production deployment, currently `prod`. This validator's port 8080 is
 bound to `localhost:8080` as well as being available within the
 `docker compose` internal network.
 
@@ -78,7 +78,7 @@ to determine which validators are available:
   same operation can be performed against each validator in turn.
 - Outside the `driver` service (e.g., on the host, in the `driver` directory)
  `all_endpoints` return a singleton endpoint for `localhost:8080` which accesses
-  the `v010` container alone.
+  the `prod` container alone.
 
 This arrangement allows the test framework itself, and individual tests, to be developed
 without having to rebuild the `driver` image for each change.

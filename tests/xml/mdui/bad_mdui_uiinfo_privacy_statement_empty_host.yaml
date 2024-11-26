@@ -2,10 +2,3 @@ expected:
   - status: error
     component_id: check_mdui_urls/url/host
     message: "'https:///privacy.html': host name not present"
-override:
- - endpoint: v010x
-   expected:
-   - status: error
-     component_id: check_mdui_xslt
-     message: 'mdui:PrivacyStatementURL ''https:///privacy.html'' is not a valid URL:
-       host name not present'

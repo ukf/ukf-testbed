@@ -3,10 +3,3 @@ expected:
     component_id: check_mdui_urls/url/port
     message: "'https://www2.example.ac.uk:/information.html': libxml2: port present
       but empty"
-override:
- - endpoint: v010x
-   expected:
-   - status: error
-     component_id: check_mdui_xslt
-     message: 'mdui:InformationURL ''https://www2.example.ac.uk:/information.html'' is
-    not a valid URL: libxml2: port present but empty'

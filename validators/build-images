@@ -1,15 +1,15 @@
 #!/bin/bash
 
 docker buildx build \
-    --file Dockerfile.010 \
-    --tag ukf/testbed:0.10 \
+    --file Dockerfile.prod \
+    --tag ukf/testbed:prod \
     --output type=docker \
     $@ \
     .
 
 docker buildx build \
-    --file Dockerfile.010x \
-    --tag ukf/testbed:0.10-xalan \
+    --file Dockerfile.next \
+    --tag ukf/testbed:next \
     --output type=docker \
     $@ \
     .

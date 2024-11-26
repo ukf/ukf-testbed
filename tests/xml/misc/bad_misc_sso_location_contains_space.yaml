@@ -6,13 +6,3 @@ expected:
     component_id: saml2meta/url
     message: 'value rejected: ''https://idp.example.org/idp/profile/       Shibboleth/SSO''
       (Illegal character in path at index 36: https://idp.example.org/idp/profile/       Shibboleth/SSO)'
-override:
- - endpoint: v010x
-   expected:
-    - status: error
-      component_id: check_misc
-      message: SingleSignOnService Location contains space character
-    - status: error
-      component_id: check_saml2meta
-      message: 'SingleSignOnService Location is not a valid URL: URL value must not contain
-        an unencoded space character'
