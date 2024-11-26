@@ -8,4 +8,4 @@ WORKDIR /application
 ADD overlays/all            BOOT-INF/
 ADD overlays/ukf-meta-prod  BOOT-INF/
 ADD overlays/010-common     BOOT-INF/
-ADD overlays/010            BOOT-INF/
+ADD overlays/prod           BOOT-INF/

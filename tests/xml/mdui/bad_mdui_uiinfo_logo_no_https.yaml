@@ -3,9 +3,3 @@ expected:
     component_id: check_mdui_logo_url/url/https
     message: "'http://idp.example.org/images/heads_80x80.jpg': protocol 'http' must
       be https"
-override:
- - endpoint: v010x
-   expected:
-    - status: error
-      component_id: check_mdui_xslt
-      message: mdui:Logo URL does not start with https://

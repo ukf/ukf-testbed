@@ -32,8 +32,8 @@ module Testbed
       [Endpoint.new('localhost', 'localhost:8080')]
     else
       [
-        Endpoint.new('v010x', 'v010x:8080'),
-        Endpoint.new('v010', 'v010:8080')
+        Endpoint.new('prod', 'prod:8080'),
+        Endpoint.new('next', 'next:8080')
       ]
     end
   end
