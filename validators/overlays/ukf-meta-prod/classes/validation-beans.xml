@@ -13,6 +13,63 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <!--
+        ***************************************
+        ***                                 ***
+        ***   U R L   V A L I D A T I O N   ***
+        ***                                 ***
+        ***************************************
+    -->
+
+    <!--
+        Shared validator beans.
+
+        The beans in this section have both "id" values by which they can
+        be referenced in Spring configuration, but also simpler "p:id"
+        values to simplify their contributions to error messages
+        composed from a series of component ID values.
+    -->
+
+    <!-- Reject "https://host:/xxx" because libxml2 has issues with that. -->
+    <bean id="validate_url_port" p:id="port" parent="mda.EmptyPortURLValidator"/>
+
+    <!-- Reject "https:///xxx" because it lacks an authority entirely. -->
+    <bean id="validate_url_host" p:id="host" parent="mda.MissingHostURLValidator"/>
+
+    <!-- Reject URLs which don't have an https:// protocol. -->
+    <bean id="validate_url_https" p:id="https" parent="mda.HTTPSProtocolURLValidator"/>
+
+    <!--
+        validate_url
+
+        Validate a string as a URL. Includes checking for port and host
+        issues.
+    -->
+    <bean id="validate_url" p:id="url" parent="mda.AsURLStringValidator">
+        <property name="validators">
+            <list>
+                <ref bean="validate_url_port"/>
+                <ref bean="validate_url_host"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        validate_https_url
+
+        Validate a string as a https:// URL. Includes checking for port and host
+        issues.
+    -->
+    <bean id="validate_https_url" p:id="url" parent="mda.AsURLStringValidator">
+        <property name="validators">
+            <list>
+                <ref bean="validate_url_https"/>
+                <ref bean="validate_url_port"/>
+                <ref bean="validate_url_host"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
         ***********************************
         ***                             ***
         ***   F U T U R E   T E S T S   ***
@@ -100,7 +157,7 @@
         Combines all check_future_N stages.
     -->
     <bean id="check_future" parent="mda.CompositeStage">
-        <property name="composedStages">
+        <property name="stages">
             <list>
                 <ref bean="check_future_0"/>
                 <ref bean="check_future_1"/>
@@ -169,7 +226,7 @@
         Composite check for the MDRPI specification.
     -->
     <bean id="check_mdrpi" parent="mda.CompositeStage">
-        <property name="composedStages">
+        <property name="stages">
             <list>
                 <ref bean="check_mdrpi_xslt"/>
             </list>
@@ -209,7 +266,7 @@
 
         Checks for the mdui:IPHint element.
     -->
-    <bean id="check_mdui_iphint" parent="ukf.IPHintValidationStage"
+    <bean id="check_mdui_iphint" parent="mda.IPHintValidationStage"
         p:checkingNetworks="true"/>
 
     <!--
@@ -219,6 +276,29 @@
     -->
     <bean id="check_mdui_xslt" parent="mda.XSLValidationStage"
         p:XSLResource="classpath:_rules/check_mdui.xsl"/>
+
+    <!--
+        check_mdui_logo_url
+
+        Section 2.1.5: Check the URL value of mdui:Logo elements.
+    -->
+    <bean id="check_mdui_logo_url" parent="mda.StringElementValidationStage">
+        <property name="elementName" ref="mdui-Logo"/>
+        <property name="validators">
+            <list>
+                <bean p:id="newline" parent="mda.RejectStringRegexValidator"
+                    p:regex=".*\n.*"
+                    p:message="mdui:Logo contains line break" />
+                <bean p:id="nbs" parent="mda.RejectStringRegexValidator"
+                    p:regex=".*\u00a0.*"
+                    p:message="mdui:Logo contains non-breaking space" />
+                <!-- Accept data: URLs with no further scrutiny. -->
+                <bean parent="mda.AcceptStringRegexValidator"
+                    p:regex="data:.*"/>
+                <ref bean="validate_https_url"/>
+            </list>
+        </property>
+    </bean>
 
     <!--
         check_mdui_logo_length
@@ -236,16 +316,33 @@
     </bean>
 
     <!--
+        check_mdui_urls
+
+        Check URL values of mdui:* elements other than mdui:Logo.
+    -->
+    <bean id="check_mdui_urls" parent="mda.StringElementValidationStage"
+        p:validators-ref="validate_url">
+        <property name="elementNames">
+            <set>
+                <ref bean="mdui-InformationURL"/>
+                <ref bean="mdui-PrivacyStatementURL"/>
+            </set>
+        </property>
+    </bean>
+
+    <!--
         check_mdui
 
         Composite check for the MDUI specification.
     -->
     <bean id="check_mdui" parent="mda.CompositeStage">
-        <property name="composedStages">
+        <property name="stages">
             <list>
                 <ref bean="check_mdui_iphint"/>
                 <ref bean="check_mdui_xslt"/>
                 <ref bean="check_mdui_logo_length"/>
+                <ref bean="check_mdui_logo_url"/>
+                <ref bean="check_mdui_urls"/>
             </list>
         </property>
     </bean>
@@ -281,7 +378,7 @@
         p:XSLResource="classpath:_rules/check_rands_support.xsl"/>
 
     <bean id="check_rands" parent="mda.CompositeStage">
-        <property name="composedStages">
+        <property name="stages">
             <list>
                 <ref bean="check_rands_member"/>
                 <ref bean="check_rands_support"/>
@@ -301,7 +398,7 @@
         p:XSLResource="classpath:_rules/check_coco_v2_support.xsl"/>
 
     <bean id="check_coco_v2" parent="mda.CompositeStage">
-        <property name="composedStages">
+        <property name="stages">
             <list>
                 <ref bean="check_coco_v2_support"/>
             </list>
@@ -399,8 +496,7 @@
 
         It is assumed that the entities are wrapped in a single EntitiesDescriptor.
     -->
-    <bean id="check_aggregate" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_aggregate.xsl"/>
+    <bean id="check_aggregate" parent="mda.DuplicateEntityInAggregateCheckingStage"/>
 
     <!--
         check_dup_display
@@ -423,36 +519,36 @@
     -->
 
     <!--
-        Debian weak key blacklists.
+        Debian weak key lists.
     -->
 
-    <bean id="debian.1024" parent="mda.X509RSAOpenSSLBlacklistValidator"
+    <bean id="debian.1024" parent="mda.X509RSAOpenSSLKeylistValidator"
         p:keySize="1024"
-        p:blacklistResource="classpath:net/shibboleth/metadata/validate/x509/debian-1024.txt"/>
+        p:keylistResource="classpath:net/shibboleth/metadata/keylists/rsa/legacy/debian-1024.txt"/>
 
-    <bean id="debian.2048" parent="mda.X509RSAOpenSSLBlacklistValidator"
+    <bean id="debian.2048" parent="mda.X509RSAOpenSSLKeylistValidator"
         p:keySize="2048"
-        p:blacklistResource="classpath:net/shibboleth/metadata/validate/x509/debian-2048.txt"/>
+        p:KeylistResource="classpath:net/shibboleth/metadata/keylists/rsa/debian-2048.txt"/>
 
-    <bean id="debian.4096" parent="mda.X509RSAOpenSSLBlacklistValidator"
+    <bean id="debian.4096" parent="mda.X509RSAOpenSSLKeylistValidator"
         p:keySize="4096"
-        p:blacklistResource="classpath:net/shibboleth/metadata/validate/x509/debian-4096.txt"/>
+        p:keylistResource="classpath:net/shibboleth/metadata/keylists/rsa/debian-4096.txt"/>
 
     <!--
-        Blacklist of known compromised 1024-bit keys, e.g., "dummy" keys shipped with
+        List of known compromised 1024-bit keys, e.g., "dummy" keys shipped with
         SAML products that are sometimes deployed by accident.
     -->
-    <bean id="compromised.1024" parent="mda.X509RSAOpenSSLBlacklistValidator"
+    <bean id="compromised.1024" parent="mda.X509RSAOpenSSLKeylistValidator"
         p:keySize="1024"
-        p:blacklistResource="classpath:net/shibboleth/metadata/validate/x509/compromised-1024.txt"/>
+        p:keylistResource="classpath:net/shibboleth/metadata/keylists/rsa/legacy/compromised-1024.txt"/>
 
     <!--
-        Blacklist of known compromised 2048-bit keys, e.g., "dummy" keys shipped with
+        List of known compromised 2048-bit keys, e.g., "dummy" keys shipped with
         SAML products that are sometimes deployed by accident.
     -->
-    <bean id="compromised.2048" parent="mda.X509RSAOpenSSLBlacklistValidator"
+    <bean id="compromised.2048" parent="mda.X509RSAOpenSSLKeylistValidator"
         p:keySize="2048"
-        p:blacklistResource="classpath:net/shibboleth/metadata/validate/x509/compromised-2048.txt"/>
+        p:keylistResource="classpath:net/shibboleth/metadata/keylists/rsa/compromised-2048.txt"/>
 
     <!--
         check_standard_certificates
@@ -463,7 +559,7 @@
         <property name="validators">
             <list>
                 <!-- Error on DSA keys. -->
-                <bean p:id="DSA" parent="ukf.X509DSADetector"/>
+                <bean p:id="DSA" parent="mda.X509DSADetector"/>
 
                 <!-- Error on RSA key length less than 2048 bits. -->
                 <bean p:id="RSAKeyLength" parent="mda.X509RSAKeyLengthValidator"
@@ -471,7 +567,7 @@
                 <!-- Error on small RSA public exponents. -->
                 <bean p:id="RSAExponent" parent="mda.X509RSAExponentValidator"/>
                 <!-- Error on keys vulnerable to ROCA. -->
-                <bean p:id="ROCA" parent="ukf.X509ROCAValidator"/>
+                <bean p:id="ROCA" parent="mda.X509ROCAValidator"/>
 
                 <!--
                     Debian weak key blacklists.
@@ -605,7 +701,13 @@
         check_reqattr
     -->
     <bean id="check_reqattr" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_reqattr.xsl"/>
+        p:XSLResource="classpath:_rules/check_reqattr.xsl">
+        <property name="transformAttributes">
+            <map>
+                <entry key="jdk.xml.xpathExprOpLimit" value="0"/>
+            </map>
+        </property>
+    </bean>
 
     <!--
         check_saml2int
@@ -632,9 +734,48 @@
         p:XSLResource="classpath:_rules/check_saml2meta.xsl"/>
 
     <!--
+        check_saml2meta_urlattrs
+
+        Check URL values of various attributes on md:* elements.
+    -->
+    <bean id="check_saml2meta_urlattrs" parent="mda.StringAttributeValidationStage"
+        p:id="saml2meta" p:validators-ref="validate_url">
+        <property name="elementNames">
+            <set>
+                <ref bean="md-AdditionalMetadataLocation"/>
+                <ref bean="md-AssertionConsumerService"/>
+                <ref bean="md-AssertionIDRequestService"/>
+                <ref bean="md-ArtifactResolutionService"/>
+                <ref bean="md-AttributeService"/>
+                <ref bean="md-AuthnQueryService"/>
+                <ref bean="md-AuthzService"/>
+                <ref bean="md-ManageNameIDService"/>
+                <ref bean="md-NameIDMappingService"/>
+                <ref bean="md-SingleLogoutService"/>
+                <ref bean="md-SingleSignOnService"/>
+            </set>
+        </property>
+        <property name="attributeNames">
+            <set>
+                <bean parent="QName" c:_0="Location"/>
+                <bean parent="QName" c:_0="ResponseLocation"/>
+            </set>
+        </property>
+    </bean>
+
+    <!--
+        check_saml2meta_urls
+
+        Check URL values of md:* elements.
+    -->
+    <bean id="check_saml2meta_urls" parent="mda.StringElementValidationStage"
+        p:id="saml2meta" p:validators-ref="validate_url"
+        p:elementName-ref="md-OrganizationURL"/>
+
+    <!--
         check_saml_strings
     -->
-    <bean id="check_saml_strings" parent="ukf.SAMLStringElementCheckingStage">
+    <bean id="check_saml_strings" parent="mda.SAMLStringElementCheckingStage">
         <property name="elementNames">
             <set>
                 <ref bean="md-Company"/>
@@ -695,7 +836,7 @@
         CHECK_std
     -->
     <bean id="CHECK_std" parent="mda.CompositeStage">
-        <property name="composedStages">
+        <property name="stages">
             <list>
                 <ref bean="check_adfs"/>
                 <ref bean="check_algsupport"/>
@@ -720,6 +861,8 @@
                 <ref bean="check_saml2_lang"/>
                 <ref bean="check_saml2int"/>
                 <ref bean="check_saml2meta"/>
+                <ref bean="check_saml2meta_urlattrs"/>
+                <ref bean="check_saml2meta_urls"/>
                 <ref bean="check_saml_strings"/>
                 <ref bean="check_shib_noregscope"/>
                 <ref bean="check_shibboleth"/>

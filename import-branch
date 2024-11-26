@@ -38,3 +38,8 @@ rsync \
     --exclude int_edugain --exclude test \
     --recursive --copy-links --delete --delete-excluded \
     mdx/ "${copy_dir}/classes/"
+
+# Synchronise the local MDA components across to our local copy.
+rsync \
+    --recursive --delete \
+    tools/ukf-mda/ "${copy_dir}/lib/"

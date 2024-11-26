@@ -3,12 +3,3 @@ expected:
     component_id: saml2meta/url/port
     message: "'https://idp.example.org:/idp/profile/Shibboleth/SSO': libxml2: port present
     but empty"
-override:
-  - endpoint : v09
-    skip: true
-  - endpoint : [v09x, v010x]
-    expected:
-    - status: error
-      component_id: check_saml2meta
-      message: 'SingleSignOnService Location is not a valid URL: libxml2: port present
-        but empty'

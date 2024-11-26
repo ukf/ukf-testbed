@@ -39,47 +39,7 @@
         <property name="stages">
             <list>
                 <ref bean="uk_registeredEntities"/>
-
-                <!--
-                    The rest of the pipeline is a duplicate of the
-                    uk_statisticsPipeline bean definition. It would
-                    be better to use that, but Pipeline isn't a thing
-                    that can appear within another Pipeline at
-                    present (MDA 0.9.x).
-                -->
-
-                <!-- Apply flow constraints for this flow. -->
-                <bean id="flowConstraints" parent="ukf.FlowConstraintApplyingStage"
-                    p:flowName="statistics"/>
-                
-                <ref bean="assemble"/>
-                <ref bean="uk_generateStatistics"/>
-                <ref bean="uk_serializeStatistics"/>
-            </list>
-        </property>
-    </bean>
-
-    <!--
-        sp_mdui_test
-
-        Generates a page of links to discovery services, for each SP that
-        has mdui:uiinfo metadata.
-    -->
-    <bean id="sp_mdui_test" parent="mda.SimplePipeline">
-        <property name="stages">
-            <list>
-                <ref bean="uk_registeredEntities"/>
-                <ref bean="assemble"/>
-                <bean id="process" parent="mda.XSLTransformationStage"
-                    p:XSLResource="classpath:uk/sp_mdui_test.xsl"/>
-                <bean id="serialize" parent="mda.SerializationStage">
-                    <property name="serializer" ref="serializer"/>
-                    <property name="outputFile">
-                        <bean parent="File">
-                            <constructor-arg value="${mdx.dir}/uk/temp.html"/>
-                        </bean>
-                    </property>
-                </bean>
+                <ref bean="uk_statisticsPipeline"/>
             </list>
         </property>
     </bean>
@@ -255,7 +215,7 @@
                     we don't accept from registrants.
                 -->
                 <bean id="whitelistImportedNamespaces" parent="mda.NamespacesStrippingStage"
-                    p:whitelisting="true">
+                    p:keeping="true">
                     <property name="namespaces">
                         <set>
                             <ref bean="alg_namespace"/>
@@ -339,7 +299,7 @@
                     <property name="validators">
                         <list>
                             <!-- Error on DSA keys. -->
-                            <bean p:id="DSA" parent="ukf.X509DSADetector"/>
+                            <bean p:id="DSA" parent="mda.X509DSADetector"/>
 
                             <!-- Error on RSA key length less than 2048 bits. -->
                             <bean p:id="RSAKeyLength" parent="mda.X509RSAKeyLengthValidator"
@@ -347,10 +307,10 @@
                             <!-- Error on small RSA public exponents. -->
                             <bean p:id="RSAExponent" parent="mda.X509RSAExponentValidator"/>
                             <!-- Error on keys vulnerable to ROCA. -->
-                            <bean p:id="ROCA" parent="ukf.X509ROCAValidator"/>
+                            <bean p:id="ROCA" parent="mda.X509ROCAValidator"/>
 
                             <!--
-                                Debian weak key blacklists.
+                                Debian weak key lists.
 
                                 Don't need to check for keys below our minimum key size.
                             -->
@@ -358,7 +318,7 @@
                             <ref bean="debian.4096"/>
 
                             <!--
-                                Compromised key blacklists.
+                                Compromised key lists.
 
                                 Again, don't need to check for keys below our minimum key size.
                             -->
@@ -372,7 +332,6 @@
                 <ref bean="check_uk_urlenc"/>
                 <ref bean="check_future"/>
                 <ref bean="check_imported"/>
-                <ref bean="check_vhosts"/>
                 <ref bean="errorTerminatingFilter"/>
 
                 <!-- If there are no errors, log any warnings. -->
