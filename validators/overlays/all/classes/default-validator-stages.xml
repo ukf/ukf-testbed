@@ -7,56 +7,65 @@
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <!-- The list of tests (stages) used by the default validator following the eduGAIN profile -->
-    <util:list id="default_validator_stages">
-        <ref bean="checkSchemas"/>
-        <ref bean="check_validUntil"/>
-        <ref bean="check_adfs"/>
-        <ref bean="check_algsupport"/>
-        <ref bean="check_bindings"/>
-        <ref bean="check_cr"/>
-        <ref bean="check_entityid_prefix"/>
-        <ref bean="check_hoksso"/>
-        <ref bean="check_idpdisc"/>
-        <ref bean="check_idp_tls"/>
-        <ref bean="check_incmd"/>
-        <ref bean="check_init"/>
-        <ref bean="check_mdattr"/>
-        <ref bean="check_mdiop"/>
-        <ref bean="check_mdrpi"/>
-        <ref bean="check_mdui"/>
-        <ref bean="check_misc"/>
-        <ref bean="check_rands"/>
-        <ref bean="check_reqattr"/>
-        <ref bean="check_saml1"/>
-        <ref bean="check_saml2"/>
-        <ref bean="check_saml2_lang"/>
-        <ref bean="check_saml2int"/>
-        <ref bean="check_saml2meta"/>
-        <ref bean="check_saml2meta_urlattrs"/>
-        <ref bean="check_saml2meta_urls"/>
-        <ref bean="check_saml_strings"/>
-        <ref bean="check_shib_noregscope"/>
-        <ref bean="check_shibboleth"/>
-        <ref bean="check_sirtfi"/>
-        <ref bean="check_sp_tls"/>
-        <ref bean="check_uk_algorithms"/>
-        <ref bean="check_uk_trust"/>
-        <ref bean="check_namespaces"/>
-        <ref bean="check_standard_certificates"/>
-        <ref bean="check_edugain_scopes"/>
-        <ref bean="check_hasreginfo"/>
-        <!-- <ref bean="check_ukf_compromised"/> compromised-keys.txt is in ukf-data which would couple the two projects -->
-        <ref bean="check_aggregate"/>
-        <ref bean="check_filtered"/>
-        <ref bean="check_coco_v2_support"/>
-        <ref bean="check_sirtfi2"/>
+    <!--
+        default_validator_stages
 
-        <!-- UKFed specific stages -->
-        <ref bean="check_ukfedlabel"/>
-        <ref bean="check_uk_mdrps"/>
-        <ref bean="check_uk_rands"/>
-        <ref bean="check_uk_mdattr"/>
-    </util:list>
+        This composite stage runs the checks used by the default validator.
+        This largely follows the eduGAIN profile.
+    -->
+    <bean id="default_validator_stages" parent="mda.CompositeStage">
+        <property name="stages">
+            <util:list>
+                <ref bean="checkSchemas"/>
+                <ref bean="check_validUntil"/>
+                <ref bean="check_adfs"/>
+                <ref bean="check_algsupport"/>
+                <ref bean="check_bindings"/>
+                <ref bean="check_cr"/>
+                <ref bean="check_entityid_prefix"/>
+                <ref bean="check_hoksso"/>
+                <ref bean="check_idpdisc"/>
+                <ref bean="check_idp_tls"/>
+                <ref bean="check_incmd"/>
+                <ref bean="check_init"/>
+                <ref bean="check_mdattr"/>
+                <ref bean="check_mdiop"/>
+                <ref bean="check_mdrpi"/>
+                <ref bean="check_mdui"/>
+                <ref bean="check_misc"/>
+                <ref bean="check_rands"/>
+                <ref bean="check_reqattr"/>
+                <ref bean="check_saml1"/>
+                <ref bean="check_saml2"/>
+                <ref bean="check_saml2_lang"/>
+                <ref bean="check_saml2int"/>
+                <ref bean="check_saml2meta"/>
+                <ref bean="check_saml2meta_urlattrs"/>
+                <ref bean="check_saml2meta_urls"/>
+                <ref bean="check_saml_strings"/>
+                <ref bean="check_shib_noregscope"/>
+                <ref bean="check_shibboleth"/>
+                <ref bean="check_sirtfi"/>
+                <ref bean="check_sp_tls"/>
+                <ref bean="check_uk_algorithms"/>
+                <ref bean="check_uk_trust"/>
+                <ref bean="check_namespaces"/>
+                <ref bean="check_standard_certificates"/>
+                <ref bean="check_edugain_scopes"/>
+                <ref bean="check_hasreginfo"/>
+                <!-- <ref bean="check_ukf_compromised"/> compromised-keys.txt is in ukf-data which would couple the two projects -->
+                <ref bean="check_aggregate"/>
+                <ref bean="check_filtered"/>
+                <ref bean="check_coco_v2_support"/>
+                <ref bean="check_sirtfi2"/>
+
+                <!-- UKFed specific stages -->
+                <ref bean="check_ukfedlabel"/>
+                <ref bean="check_uk_mdrps"/>
+                <ref bean="check_uk_rands"/>
+                <ref bean="check_uk_mdattr"/>
+            </util:list>
+        </property>
+    </bean>
 
 </beans>
