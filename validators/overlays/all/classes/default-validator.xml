@@ -37,7 +37,12 @@
         *********************************
     -->
     <bean id="pipeline" parent="mda.SimplePipeline">
-        <property name="stages" ref="default_validator_stages"/>
+        <property name="stages">
+            <util:list>
+                <ref bean="default_validator_stages"/>
+                <ref bean="development_stages"/>
+            </util:list>
+        </property>
     </bean>
 
     <!--
@@ -49,5 +54,6 @@
     -->
     <import resource="default-validator-stages.xml"/>
     <import resource="default-validator-beans-overrides.xml"/>
+    <import resource="development-stages.xml"/>
 
 </beans>
