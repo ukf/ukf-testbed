@@ -3,6 +3,8 @@
     default-lazy-init="true"
     xmlns:util="http://www.springframework.org/schema/util"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:p="http://www.springframework.org/schema/p"
     xsi:schemaLocation="
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
@@ -19,5 +21,11 @@
             </util:list>
         </property>
     </bean>
+
+    <!--
+        check_uk_mdattr override
+    -->
+    <bean id="check_uk_mdattr" parent="mda.XSLValidationStage"
+        p:XSLResource="check_uk_mdattr.xsl"/>
 
 </beans>
