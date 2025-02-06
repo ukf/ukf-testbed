@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_mdattr_ec_personalized
+    message: SP asserts personalized entity category but has no DisplayName element.
