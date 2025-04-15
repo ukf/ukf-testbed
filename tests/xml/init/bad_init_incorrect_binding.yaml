@@ -1,4 +1,4 @@
 expected:
 - status: error
   component_id: check_init
-  message: incorrect Binding value on RequestInitiator
+  message: incorrect Binding value on RequestInitiator, must be urn:oasis:names:tc:SAML:profiles:SSO:request-init
