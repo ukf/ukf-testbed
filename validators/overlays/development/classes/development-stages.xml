@@ -20,4 +20,30 @@
         </property>
     </bean>
 
+    <bean id="check_saml_strings" parent="mda.SAMLStringElementCheckingStage">
+        <property name="elementNames">
+            <set>
+                <ref bean="md-AttributeProfile" />
+                <ref bean="md-Company"/>
+                <ref bean="md-GivenName"/>
+                <ref bean="md-OrganizationDisplayName"/>
+                <ref bean="md-OrganizationName"/>
+                <ref bean="md-ServiceDescription"/>
+                <ref bean="md-ServiceName"/>
+                <ref bean="md-SurName"/>
+                <ref bean="md-TelephoneNumber"/>
+                <ref bean="md-NameIDFormat" />
+
+                <ref bean="mdui-Description"/>
+                <ref bean="mdui-DisplayName"/>
+                <ref bean="mdui-DomainHint"/>
+                <ref bean="mdui-GeolocationHint"/>
+                <ref bean="mdui-IPHint"/>
+                <ref bean="mdui-Keywords"/>
+
+                <ref bean="shibmd-Scope"/>
+            </set>
+        </property>
+    </bean>
+
 </beans>
