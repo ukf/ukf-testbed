@@ -1,0 +1,5 @@
+expected:
+- status: error
+  component_id: check_saml_strings
+  message: 'uk999999: element {urn:oasis:names:tc:SAML:2.0:metadata}AttributeProfile must
+    contain at least one non-whitespace character'
