@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_standard_certificates/compromised.4096
+  message: RSA modulus included in key list (784e7ba15f4e8f1e83e8)
