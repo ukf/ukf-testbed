@@ -3,5 +3,5 @@ expected:
     component_id: check_uk_mdui
     message: mdui has UIInfo without DisplayName
   - status: error
-    component_id: check_mdattr_ec_anonymous
-    message: SP asserts anonymous entity category but has no DisplayName element.
+    component_id: check_uk_mdui
+    message: mdui has UIInfo without DisplayName

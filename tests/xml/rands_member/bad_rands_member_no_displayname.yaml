@@ -1,4 +1,7 @@
 expected:
 - status: error
+  component_id: check_uk_mdui
+  message: mdui has UIInfo without DisplayName
+- status: error
   component_id: check_rands_member
   message: REFEDS R+S requires mdui:DisplayName
