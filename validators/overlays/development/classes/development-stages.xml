@@ -18,8 +18,13 @@
         <property name="stages">
             <util:list>
                 <!-- Under-development checks go here. -->
+                <ref bean="check_saml2_sp_signedrequests"/>
             </util:list>
         </property>
     </bean>
+
+    <bean id="check_saml2_sp_signedrequests" parent="mda.XSLValidationStage"
+          p:XSLResource="classpath:check_saml2_sp_signedrequests.xsl"/>
+
 
 </beans>
