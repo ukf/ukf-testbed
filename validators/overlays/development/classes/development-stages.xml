@@ -18,8 +18,15 @@
         <property name="stages">
             <util:list>
                 <!-- Under-development checks go here. -->
+                <ref bean="check_coco_v2_ec"/>
             </util:list>
         </property>
     </bean>
+
+    <bean id="check_coco_v2_ec" parent="mda.XSLValidationStage"
+          p:XSLResource="classpath:check_coco_v2_ec.xsl"/>
+
+    <bean id="check_uk_mdattr" parent="mda.XSLValidationStage"
+          p:XSLResource="classpath:check_uk_mdattr.xsl"/>
 
 </beans>

@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_coco_v2_ec
+    message: SP asserts CoCo V2 entity category but has no English language Description element.
