@@ -41,7 +41,7 @@
             </saml:Attribute>
             <saml:Attribute Name="urn:oasis:names:tc:SAML:profiles:subject-id:req"
                             NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-                <saml:AttributeValue>wrong</saml:AttributeValue>
+                <saml:AttributeValue>any</saml:AttributeValue>
             </saml:Attribute>
 
         </mdattr:EntityAttributes>

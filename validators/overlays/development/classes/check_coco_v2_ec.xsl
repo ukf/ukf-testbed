@@ -22,12 +22,16 @@
 
 
 
+
     <!--
         The Service Provider is responsible to define in metadata what user attributes are necessary for enabling access to the service.
         There are two different locations in metadata for requesting attributes;
         the subject-id:req entity attribute extension and RequestedAttribute elements.
 
         SPs with code-of-conduct/v2 must have EITHER the SAML subject identifier entity attribute OR an AttributeConsumingService (OR both)
+
+        To simplify, we just check whether either the entity attribute exists or an AttributeConsumingService exists.
+        We don't check the values within those elements.
     -->
     <xsl:template match="md:EntityDescriptor
 			[md:Extensions/mdattr:EntityAttributes/saml:Attribute[@Name='http://macedir.org/entity-category']
@@ -39,16 +43,6 @@
                 it MUST provide subject-id:req entity attribute extension to indicate
                 which one of the identifiers pairwise-id or subject-id is necessary.
             -->
-            <xsl:when test="md:Extensions/mdattr:EntityAttributes/saml:Attribute[@Name='urn:oasis:names:tc:SAML:profiles:subject-id:req']
-                /saml:AttributeValue
-                    [. != 'subject-id']
-                    [. != 'pairwise-id']">
-                <xsl:call-template name="error">
-                    <xsl:with-param name="m">
-                        <xsl:text>CoCo V2 entity unknown subject identifier requirement values </xsl:text>
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:when>
             <xsl:when test="md:Extensions/mdattr:EntityAttributes/saml:Attribute[@Name='urn:oasis:names:tc:SAML:profiles:subject-id:req']/saml:AttributeValue">
                 <!-- OK -->
             </xsl:when>
