@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_saml2_sp_signedrequests
+  message: SP asserts AuthnRequestsSigned but has no KeyDescriptor for signing.
