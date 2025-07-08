@@ -457,6 +457,7 @@
                 <ref bean="check_saml1"/>
                 <ref bean="check_saml2"/>
                 <ref bean="check_saml2_lang"/>
+                <ref bean="check_saml2_sp_signedrequests"/>
                 <ref bean="check_saml2int"/>
                 <ref bean="check_saml2meta"/>
                 <ref bean="check_saml2meta_urlattrs"/>
@@ -483,6 +484,7 @@
                 <ref bean="check_uk_mdui_dn_en_match"/>
                 <ref bean="check_uk_rands"/>
                 <ref bean="check_dup_display"/>
+                <ref bean="check_imported"/>
 
                 <bean id="checkCertificates" parent="mda.X509ValidationStage">
                     <property name="validators">
