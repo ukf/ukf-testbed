@@ -104,13 +104,6 @@
         <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:PAOS" Location="https://sp.example.org/Shibboleth.sso/SAML2/ECP" index="3"/>
         <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST" index="4"/>
         <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign" Location="https://sp.example.org/Shibboleth.sso/SAML2/POST-SimpleSign" index="5"/>
-        <AttributeConsumingService isDefault="true" index="1">
-            <ServiceName xml:lang="en">Example Service</ServiceName>
-            <!-- SAML 2, good subject-id Name-->
-            <RequestedAttribute FriendlyName="samlSubjectID" Name="urn:oasis:names:tc:SAML:attribute:subject-id" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
-            <!-- SAML 2, good pairewise-id Name-->
-            <RequestedAttribute FriendlyName="samlPairwiseID" Name="urn:oasis:names:tc:SAML:attribute:pairwise-id" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"/>
-        </AttributeConsumingService>
     </SPSSODescriptor>
     <Organization>
         <OrganizationName xml:lang="en">An Example Organization</OrganizationName>
