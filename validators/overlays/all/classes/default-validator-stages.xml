@@ -59,6 +59,7 @@
                 <ref bean="check_aggregate"/>
                 <ref bean="check_filtered"/>
                 <ref bean="check_coco_v2_support"/>
+                <ref bean="check_coco_v2_ec"/>
                 <ref bean="check_sirtfi2"/>
                 <ref bean="check_mdattr_ec_anonymous"/>
                 <ref bean="check_mdattr_ec_personalized"/>
