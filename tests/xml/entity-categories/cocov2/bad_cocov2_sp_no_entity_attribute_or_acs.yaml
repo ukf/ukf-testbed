@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_coco_v2_ec
+    message: SP asserts CoCo V2 entity category but does not contain any subject-id:req entity attribute extension or AttributeConsumingService (RequestedAttribute) elements
