@@ -1,7 +1,4 @@
 expected:
   - status: error
-    component_id: check_mdui_xslt
-    message: GeolocationHint must be RFC5870 URI starting with 'geo:'
-  - status: error
     component_id: check_mdui_geolocationhint/reject
     message: GeolocationHint must be RFC5870 URI starting with 'geo:'
