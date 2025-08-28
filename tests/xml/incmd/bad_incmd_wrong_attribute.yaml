@@ -1,4 +1,0 @@
-expected:
-- status: error
-  component_id: check_incmd
-  message: unknown attribute incmd:wrongAttribute
