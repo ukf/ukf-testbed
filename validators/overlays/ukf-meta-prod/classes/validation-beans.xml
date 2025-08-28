@@ -331,6 +331,24 @@
     </bean>
 
     <!--
+        check_mdui_geolocationhint
+
+        Check GeolocationHint format of mdui:GeolocationHint elements.
+    -->
+    <bean id="check_mdui_geolocationhint" parent="mda.StringElementValidationStage">
+        <property name="elementName" ref="mdui-GeolocationHint"/>
+        <property name="validators">
+            <list>
+                <bean parent="mda.AcceptStringRegexValidator"
+                      p:regex="^geo:-?\d+(\.\d+)?,-?\d+(\.\d+)?(,-?\d+(\.\d+)?)?(;u=\d+(\.\d+)?)?$" />
+                <!-- If none of the above validators succeed, then reject with the following -->
+                <bean id="reject" parent="mda.RejectAllValidator"
+                      p:message="GeolocationHint must be RFC5870 URI starting with 'geo:'"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--
         check_mdui
 
         Composite check for the MDUI specification.
@@ -343,25 +361,10 @@
                 <ref bean="check_mdui_logo_length"/>
                 <ref bean="check_mdui_logo_url"/>
                 <ref bean="check_mdui_urls"/>
+                <ref bean="check_mdui_geolocationhint"/>
             </list>
         </property>
     </bean>
-
-
-    <!--
-        *******************************************************************
-        ***                                                             ***
-        ***   I N C O M M O N   F E D E R A T I O N   M E T A D A T A   ***
-        ***                                                             ***
-        *******************************************************************
-    -->
-
-    <!--
-        check_incmd
-    -->
-    <bean id="check_incmd" parent="mda.XSLValidationStage"
-        p:XSLResource="classpath:_rules/check_incmd.xsl"/>
-
 
     <!--
         ***********************************************************
@@ -582,6 +585,14 @@
         p:keylistResource="classpath:net/shibboleth/metadata/keylists/rsa/compromised-2048.txt"/>
 
     <!--
+        List of known compromised 4096-bit keys, e.g., "dummy" keys shipped with
+        SAML products that are sometimes deployed by accident.
+    -->
+    <bean id="compromised.4096" parent="mda.X509RSAOpenSSLKeylistValidator"
+        p:keySize="4096"
+        p:keylistResource="classpath:net/shibboleth/metadata/keylists/rsa/compromised-4096.txt"/>
+
+    <!--
         check_standard_certificates
 
         Perform a group of standard checks on X.509 certificates.
@@ -614,6 +625,7 @@
                     Again, don't need to check for keys below our minimum key size.
                 -->
                 <ref bean="compromised.2048"/>
+                <ref bean="compromised.4096"/>
             </list>
         </property>
     </bean>
