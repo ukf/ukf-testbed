@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    default-lazy-init="true"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--
+        Set up the validator context.
+    -->
+    <import resource="context-beans.xml"/>
+
+    <!--
+        Beans to define this specific validator context.
+    -->
+    <bean id="id" parent="String" c:_="edugain"/>
+    <bean id="description" parent="String" c:_="eduGAIN Policy validator."/>
+
+    <!--
+        *********************************
+        ***                           ***
+        ***   Pipeline stages to run  ***
+        ***                           ***
+        *********************************
+    -->
+    <bean id="pipeline" parent="mda.SimplePipeline">
+        <property name="stages">
+            <util:list>
+                <ref bean="policy.edugain"/>
+                <ref bean="development_stages"/>
+            </util:list>
+        </property>
+    </bean>
+
+    <!--
+        ***********************************************************************
+        ***                                                                 ***
+        ***   Import policy stages to run and any validator bean overrides  ***
+        ***                                                                 ***
+        ***********************************************************************
+    -->
+    <import resource="policy-edugain.xml"/>
+    <import resource="default-validator-beans-overrides.xml"/>
+    <import resource="development-stages.xml"/>
+
+</beans>
