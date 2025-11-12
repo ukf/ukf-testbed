@@ -15,6 +15,11 @@
     <import resource="context-beans.xml"/>
 
     <!--
+        Pull in UK federation specific definitions.
+    -->
+    <import resource="ukf-beans.xml"/>
+
+    <!--
         Beans to define this specific validator context.
     -->
     <bean id="id" parent="String" c:_="registration"/>
