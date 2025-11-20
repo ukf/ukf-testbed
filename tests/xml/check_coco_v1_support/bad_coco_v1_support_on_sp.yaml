@@ -1,0 +1,4 @@
+expected:
+- status: error
+  component_id: check_coco_v1_support
+  message: "GEANT Data Protection Code of Conduct support only applies to identity provider entities"
