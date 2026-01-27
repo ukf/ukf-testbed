@@ -19,23 +19,20 @@
             <util:list>
                 <!-- Under-development checks go here. -->
                 <ref bean="check_mdui_logo_url_non_ascii"/>
-                <ref bean="strip_mdui_logo_non_ascii"/>
             </util:list>
         </property>
     </bean>
 
+    <!-- non-ascii belongs in check_mdui_logo_url-->
     <bean id="check_mdui_logo_url_non_ascii" parent="mda.StringElementValidationStage">
         <property name="elementName" ref="mdui-Logo"/>
         <property name="validators">
             <list>
                 <bean p:id="non-ascii" parent="mda.RejectStringRegexValidator"
-                    p:regex=".*[^\x00-\x7F].*"
+                    p:regex=".*[^\p{ASCII}].*"
                     p:message="mdui:Logo contains non-ascii characters" />
             </list>
         </property>
     </bean>
-
-    <bean id="strip_mdui_logo_non_ascii" parent="mda.XSLValidationStage"
-    p:XSLResource="classpath:strip_mdui_logo_non_ascii.xsl"/>
 
 </beans>

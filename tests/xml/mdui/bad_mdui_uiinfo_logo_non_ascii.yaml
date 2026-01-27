@@ -1,0 +1,4 @@
+expected:
+    - status: error
+      component_id: check_mdui_logo_url_non_ascii/non-ascii
+      message: mdui:Logo contains non-ascii characters
