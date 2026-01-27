@@ -18,13 +18,13 @@
         <property name="stages">
             <util:list>
                 <!-- Under-development checks go here. -->
-                <ref bean="check_mdui_logo_url_non_ascii"/>
+                <ref bean="check_mdui_logo_url"/>
             </util:list>
         </property>
     </bean>
 
-    <!-- non-ascii belongs in check_mdui_logo_url-->
-    <bean id="check_mdui_logo_url_non_ascii" parent="mda.StringElementValidationStage">
+    <!-- Add this back to the validation-beans.xml version when tested -->
+    <bean id="check_mdui_logo_url" parent="mda.StringElementValidationStage">
         <property name="elementName" ref="mdui-Logo"/>
         <property name="validators">
             <list>
