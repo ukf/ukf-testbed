@@ -29,7 +29,7 @@
         <property name="validators">
             <list>
                 <bean p:id="non-ascii" parent="mda.RejectStringRegexValidator"
-                    p:regex=".*[^\p{ASCII}].*"
+                    p:regex=".*[^A-Za-z0-9\-._~:/?#\[\]@!$&amp;'()*+,;=%].*"
                     p:message="mdui:Logo contains non-ascii characters" />
             </list>
         </property>

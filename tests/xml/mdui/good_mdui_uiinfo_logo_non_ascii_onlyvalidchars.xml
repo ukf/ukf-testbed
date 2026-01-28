@@ -44,7 +44,8 @@
                 <init:RequestInitiator xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Binding="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Location="https://sp.example.org/Shibboleth.sso/Login"/>
                 <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://sp.example.org/Shibboleth.sso/Login" index="1"/>
                 <mdui:UIInfo>
-                    <mdui:Logo height="68" width="240">https://sp.example.org/stri©-non-πscii.jpg</mdui:Logo>
+                    <!-- All these characters should be valid in URIs-->
+                    <mdui:Logo height="68" width="240">https://sp.example.org/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&amp;'()*+,;=%23</mdui:Logo>
                     <mdui:DisplayName xml:lang="en">Test SPSSODescriptor</mdui:DisplayName>
                 </mdui:UIInfo>                
             </Extensions>            
