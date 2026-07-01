@@ -11,7 +11,7 @@ jobs:
     name: Build driver and validator fleet images
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v7.0.0
     - name: Build the "prod" Docker image
       run: docker buildx build validators --file validators/Dockerfile.prod --tag ukf/testbed:prod --output type=docker
     - name: Build the "next" Docker image
