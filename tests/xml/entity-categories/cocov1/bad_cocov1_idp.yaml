@@ -1,0 +1,4 @@
+expected:
+  - status: error
+    component_id: check_coco_v1_ec
+    message: CoCo V1 entity category only applies to service provider entities
