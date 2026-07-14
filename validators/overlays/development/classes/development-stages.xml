@@ -18,7 +18,20 @@
         <property name="stages">
             <util:list>
                 <!-- Under-development checks go here. -->
+                <ref bean="check_mdui_logo_url"/>
             </util:list>
+        </property>
+    </bean>
+
+    <!-- Add this back to the validation-beans.xml version when tested -->
+    <bean id="check_mdui_logo_url" parent="mda.StringElementValidationStage">
+        <property name="elementName" ref="mdui-Logo"/>
+        <property name="validators">
+            <list>
+                <bean p:id="non-ascii" parent="mda.RejectStringRegexValidator"
+                    p:regex=".*[^A-Za-z0-9\-._~:/?#\[\]@!$&amp;'()*+,;=%].*"
+                    p:message="mdui:Logo contains non-ascii characters" />
+            </list>
         </property>
     </bean>
 
