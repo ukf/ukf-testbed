@@ -1,0 +1,111 @@
+#
+# This is a list of known-compromised RSA keys in OpenSSL format.
+#
+# Derive new values from a private key file as follows:
+#
+#   openssl rsa -noout -modulus -in /tmp/key.pem | sha1sum | \
+#       cut -d ' ' -f 1 | cut -c 21-
+#
+# You can also derive a new value from an X.509 certificate as follows:
+#
+#   openssl x509 -noout -modulus -in /tmp/cert.pem | sha1sum | \
+#       cut -d ' ' -f 1 | cut -c 21-
+#
+
+# Test: Ian Young's IdP's back-channel credential (comment out when not testing)
+# 8af49ced5584a5451878
+
+# Test: TERENA proxy SP (comment out when not testing)
+# 6d60a5db411d4dcac028
+# 14a63f5f44f553d7c67d
+
+# idp.londonmet.ac.uk 2020-03-23 https://crt.sh/?id=2615076583
+1a4e55157a644c8f91a2
+
+# Private key accidentally sent in SR00965242 - not used anywhere in UK federation
+ba7d3929e59541b2cb78
+
+# Unicon keys identified in https://repo.infr.ukfederation.org.uk/ukf/ukf-data/-/issues/429
+# Found from repository docker.io/unicon/shibboleth-sp
+89290f90bd7ad9c17b3e
+2784c60447576f4644dc
+28609d87ff4823882686
+06ac9dc0bba213e39fb3
+57f5519b4e2a9126e369
+bf105eddc96ac176c2a0
+ace0e26aca9b494507cb
+0d69dcdc3ba387b19df4
+fcf82cd186d4e5c84ff9
+2c78d1cd5f4ca441f598
+fa5a22927d720e6536f8
+5647bd76bf327fadef42
+da4ff99466acaca60985
+6e07155b24b965bbfcb2
+70acfdae0f8122ca9b04
+
+# Keys found in docker.io/i2incommon/shibboleth_sp
+38002219dbe1eda691a8
+3f61ddc9a349bed98a16
+08200d92d528c09cb7d6
+55972f124d6181986809
+bd5e217129359b267b48
+88bd6418e90620435997
+d469c7df0034c0f46826
+a204239a90efd1c463d2
+86cb05d82364bf7468c0
+96f4b4f5e35e31f12d2b
+2f55e940cf249090b064
+d4b565b399a190d1a6e3
+
+# subject=CN = a8b0642a33f5
+# sha256 Fingerprint=5D:00:71:9F:E6:68:35:68:E2:B3:D7:F2:0F:DF:9F:0A:4F:A3:80:E5:75:CD:F5:CD:82:33:00:0C:A8:57:07:48
+42ec4089c13702cbd483
+
+# subject=CN = a8b0642a33f5
+# sha256 Fingerprint=AC:A2:BB:3C:7B:EB:F9:04:1D:25:A8:67:13:0E:83:BF:99:C9:D0:FE:A7:B9:EE:E0:7D:BF:BF:80:C0:ED:4F:CB
+6c79eeb4081aacb415f9
+
+# Keys found in docker.io/tier/shibboleth_sp
+7a91595bb059aa06473d
+dc56580c840e897c54d7
+48b50f4db92d1f55d710
+b0a9f6ece89ffd81a1b6
+f0233636fb03955891c1
+1fbb91605d0d0da72c85
+c969b0f82b096aef537d
+2f3efca97da3dab86fe2
+7e0a5a5fb8d4628a677a
+9567773e3c9196e09579
+f443fd4b0faf4019655d
+0233cd3c5ad6143f837b
+dd601f7e329d7cd16530
+921e3c88430027ac04ed
+ad320c0e4d0f3a7f3c76
+43e693211f1f675dd17e
+0cdb51db99396e438de4
+3fb596255661a3911f53
+30d8e5890e26805b7001
+ad320c0e4d0f3a7f3c76
+9dd920f5dfdba4aae1a8
+800cda7fc48238a0fefb
+5bef79aab701c8100ec0
+bf3cbba0eb6e3fe3e21e
+6e78d36c3beb822249f2
+fa4031c8baa9c2725ef1
+22fd67c2315b8a2fbc1e
+57a833a830f07b058f50
+42519bc5591e17fa05e3
+f43550c3fbe89440ab4a
+52492565a00ebfc3b8ec
+a962c8619bc535fbf433
+6fb807272756e88d1762
+e23b7b963c9ce68cbf83
+98ef23f168cc4dc2e435
+
+# Keys found in docker.io/bigfleet/shibboleth_sp
+da8eed31cf62952dd05e
+93319964be56d25a9579
+da8eed31cf62952dd05e
+
+# Key reported in SR01466122
+8a5d6305e732d6b3b187

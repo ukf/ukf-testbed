@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:members="http://ukfederation.org.uk/2007/01/members"
+    targetNamespace="http://ukfederation.org.uk/2007/01/members"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.8.0">
+
+    <xs:simpleType name="dnsNameType">
+        <xs:restriction base="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+                    A DNS name is a string composed of a series of labels separated by periods.
+                    The maximum length of a DNS name is 255 characters.
+                    
+                    The definition here further restricts DNS names for our purposes to be host names,
+                    adding constraints on the syntax of each label.  In addition, for consistency
+                    we require all names to be expressed in lower case.
+                    
+                    The last label is the TLD name, which will be either a
+                    2-letter country code or a 3-or-more-letter gTLD name,
+                    thus: [a-z]{2,}
+                    
+                    The syntax for the other labels is taken from RFC1123
+                    section 2.1 on host names:
+
+                    * starts with a letter or digit
+                    
+                    * optionally continues with
+                    
+                       * any number of letter/digit/hyphen
+                       
+                       * but ending with a letter or digit
+                    
+                    There must be at least two labels in total, including the TLD,
+                    so that only registerable domains will be accepted.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:pattern value="([a-z0-9]([a-z0-9\-]*[a-z0-9])?\.)+[a-z]{2,}"/>
+            <xs:maxLength value="255"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="domainType">
+        <xs:restriction base="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+                    Domain elements can have a "type" attribute which indicates the reasoning
+                    behind the domain's association with a particular member.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:enumeration value="owned">
+                <xs:annotation>
+                    <xs:documentation>
+                        The domain is owned by the member.  Ownership is normally defined
+                        as being listed as owned by the member in a public DNS domain registry.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="synthetic">
+                <xs:annotation>
+                    <xs:documentation>
+                        The domain has been granted to the member by the UK federation operator
+                        as part of the synthetic scope scheme.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="la">
+                <xs:annotation>
+                    <xs:documentation>
+                        The member is the Local Authority responsible for the schools in the
+                        named part of the .sch.uk tree.  The domain in this case MUST end
+                        in ".sch.uk".
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:attributeGroup name="AuditAttributes">
+        <xs:annotation>
+            <xs:documentation>
+                This group of optional attributes can be used on an element to track manual operations.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="lastVerified" type="xs:date" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    The date on which this element was last verified.
+                    May be omitted if the verification date is not known.
+
+                    Example:    "2010-12-31"
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="verifiedBy" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    Name or user ID of the person or group who last verified
+                    the element.  May be omitted for automatically generated elements.
+
+                    Examples:    "iay", "JTAG"
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="source" type="xs:string" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    A human-readable description of the source of the element.
+
+                    Examples:    "Call 1234"
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="sourceURL" type="xs:anyURI" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    A URL providing more detailed information to go along with the
+                    @source attribute.  This need only be included when it adds
+                    information that would be hard to retrieve from other records.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <xs:element name="Domain">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+                    A single DNS domain known to be available for this member's
+                    use within the UK federation.
+                    
+                    The @type attribute indicates the reason that the domain
+                    is associated with the member.  In most cases this will be
+                    because the domain has been verified as owned by the member.
+                    
+                    Ownership is normally defined as being listed as owned
+                    by the member in a public DNS domain registry.  Only registerable
+                    domains should be included; sub-domains in particular should
+                    not be listed as Domain elements here.
+                    
+                    If a Domain is listed for a member, the member can make use
+                    of that domain or any sub-domain of the listed domain.
+                    Potential uses include:
+                    
+                    * as a domain within an entity ID
+                    
+                    * as a Scope
+                </xs:documentation>
+            </xs:annotation>
+            <xs:simpleContent>
+                <xs:extension base="members:dnsNameType">
+                    <xs:attribute name="type" type="members:domainType" use="optional">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Indicates the reason that the domain has been associated
+                                with the member.  May be omitted for legacy use of the
+                                Domain element.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attributeGroup ref="members:AuditAttributes"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="Domains">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+                    A list of DNS domains available for the member's use within the federation.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element ref="members:Domain" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="baseGrantType">
+        <xs:annotation>
+            <xs:documentation>
+                Base type for all kinds of domain grant.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="members:dnsNameType">
+                <xs:attribute name="to" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Name of the federation member the grant has been made to.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="orgID" type="members:orgIDREFType" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Organization ID of the federation member the grant has been made to.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+                <xs:attributeGroup ref="members:AuditAttributes"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    <xs:element name="Grant">
+        <xs:annotation>
+            <xs:documentation>
+                Records a grant of a fully qualified domain name to a federation member
+                for their use in a specific entity registration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="members:baseGrantType">
+                    <xs:attribute name="entityID" type="xs:anyURI" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+                                The entity ID of the entity that the grant has been made for.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="GrantAll">
+        <xs:annotation>
+            <xs:documentation>
+                Records a grant of a fully qualified domain name *and all subdomains*
+                to a federation member for their use in *any* entity registrations.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="members:baseGrantType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            This element is given its own complex content type simply for
+                            JAXB's benefit.  Its type is really just members:baseGrantType.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Grants">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+                    A list of domain grants to federation members.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:choice>
+                    <xs:element ref="members:Grant"/>
+                    <xs:element ref="members:GrantAll"/>
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="Scopes">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+                    Describes a list of scopes to be pushed to one or more named
+                    entities.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="Entity" type="xs:anyURI" minOccurs="1" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Each Entity element names an entity to which
+                            these scopes should be pushed.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="Scope" minOccurs="1" maxOccurs="unbounded" type="members:dnsNameType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            A single scope to be pushed to the named entity.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="EntityID">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+                    Describes an entity ID specifically permitted to this member.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:simpleContent>
+                <xs:extension base="xs:anyURI">
+                    <xs:attributeGroup ref="members:AuditAttributes"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="EntityIDs">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>
+                    Describes a list of entity IDs specifically permitted to this member.
+
+                    This is normally only used for exceptional cases, such as "urn:" scheme
+                    entity IDs.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="EntityID" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ApprovedEntityAttribute">
+        <xs:annotation>
+            <xs:documentation>
+                Describes an entity attribute specifically permitted to an
+                entity owned by this member.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="Name" use="required" type="xs:anyURI"/>
+            <xs:attribute name="NameFormat" use="required" type="xs:anyURI"/>
+            <xs:attribute name="Value" use="required" type="xs:anySimpleType"/>
+            <xs:attribute name="entityID" use="required" type="xs:anyURI"/>
+            <xs:attributeGroup ref="members:AuditAttributes"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ApprovedEntityAttributes">
+        <xs:annotation>
+            <xs:documentation>
+                Describes a list of entity attributes specifically permitted to entities
+                owned by this member.
+
+                This is normally only used for exceptional cases.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="members:ApprovedEntityAttribute" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="orgIDType">
+        <xs:restriction base="xs:ID">
+            <xs:annotation>
+                <xs:documentation>
+                    An organization ID is an XML ID constrained to be the string "ukforg"
+                    followed by a numeric code.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:pattern value="ukforg\d+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="orgIDREFType">
+        <xs:restriction base="xs:IDREF">
+            <xs:annotation>
+                <xs:documentation>
+                    An organization ID is an XML ID constrained to be the string "ukforg"
+                    followed by a numeric code.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:pattern value="ukforg\d+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="participantType" abstract="true">
+        <xs:annotation>
+            <xs:documentation>
+                Base type for the kinds of entity included at the top level in the
+                members.xml file.  Defines elements common to each such entity
+                and which occur at the start of each entity's content model.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            
+            <xs:element name="Name" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        The canonical name for this participant within the UK federation.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            
+            <xs:element name="NameComment" type="xs:string" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>
+                        An optional short comment which may be placed in parentheses after the
+                        Name string.  Example uses:
+                        
+                        "trading as Example Traders"
+                        
+                        "lead organization for the Example Consortium"
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            
+        </xs:sequence>
+        
+        <xs:attribute name="ID" use="required" type="members:orgIDType"/>
+
+    </xs:complexType>
+
+    <xs:element name="Member">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="members:participantType">
+                    <xs:sequence>
+
+                        <xs:element name="JoinDate" type="xs:date">
+                            <xs:annotation>
+                                <xs:documentation>
+                                    The date that the member joined the UK federation.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        
+                        <xs:element ref="members:Domains" minOccurs="0" maxOccurs="1"/>
+
+                        <xs:element ref="members:Grants" minOccurs="0" maxOccurs="1"/>
+                        
+                        <xs:element ref="members:Scopes" minOccurs="0" maxOccurs="unbounded"/>
+                        
+                        <xs:element ref="members:EntityIDs" minOccurs="0" maxOccurs="1"/>
+
+                        <xs:element ref="members:ApprovedEntityAttributes" minOccurs="0" maxOccurs="1"/>
+
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="DomainOwner">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="members:participantType">
+                    <xs:sequence>
+                        <xs:element ref="members:Domains" minOccurs="0" maxOccurs="1"/>
+                        <xs:element ref="members:Grants" minOccurs="0" maxOccurs="1"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Members">
+        <xs:annotation>
+            <xs:documentation>
+                Main document element, which includes one element for each participant.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="members:Member" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="members:DomainOwner" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

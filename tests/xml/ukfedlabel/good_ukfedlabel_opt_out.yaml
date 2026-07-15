@@ -1,0 +1,15 @@
+override:
+  - endpoint: ["next"]
+    validators: ["registered_entity"]
+    expected:
+      - status: error
+        component_id: check_owner
+        message: 'unknown owner name: An Example Organization'
+      - status: error
+        component_id: check_uk_mdui_dn_en_match
+        message: 'mismatched xml:lang=''en'' DisplayNames: ''An Example Entity'' in mdui
+          vs. ''An Example Organization'' in ODN'
+  - endpoint: ["next"]
+    validators: ["default", "edugain"]
+  - endpoint: ["prod"]
+    validators: ["default"]

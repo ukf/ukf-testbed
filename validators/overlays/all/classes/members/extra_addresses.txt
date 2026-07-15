@@ -1,0 +1,68 @@
+#
+# extra_addresses.txt
+#
+# This file lists addresses which should be sent federation
+# technical announcements even if they no longer have a role
+# as a contact on a registered entity.
+#
+# Blank lines, and lines starting with a '#', are ignored.
+#
+# Please add a '#'-style comment line in front of entries to
+# say when they were last verified as required.  We should
+# probably re-verify these once in a while.
+#
+# Updates:
+# 2022-05 - T&I first line support contacted all on the list
+#
+
+#
+# Current UK federation team get technical announcements whether or
+# not they currently have entities.
+#
+ian@iay.org.uk
+rdw@steadingsoftware.com
+steve.glover@jisc.ac.uk
+alex.stuart@jisc.ac.uk
+jon.agland@jisc.ac.uk
+matt.huckson@jisc.ac.uk
+sara.hopkins@jisc.ac.uk
+
+# Jisc
+Henry.Hughes@jisc.ac.uk
+
+## OpenAthens
+david.orrell@openathens.net
+simon.timms@openathens.net
+help@openathens.net
+neil.scully@openathens.net
+phil.leahy@openathens.net
+
+# Miscellaneous entries follow
+
+jspencer@eb.com
+
+
+# After Oct 2019 mailshot
+# Kieran Whitbread, Queen Mary University of London
+k.j.whitbread@qmul.ac.uk
+
+#Joanna Ziembicka | System Administrator | University of Kent
+j.i.ziembicka@kent.ac.uk 
+#Carmen Krenz | Manager Thieme Connect 
+carmen.krenz@thieme.de
+
+# After August 2021 mailshot
+# Marie Moore, Product Manager, ASTM - Call SR00970726
+mmoore@astm.org
+# Chantelle Wilcox, Library Digital Services Co-ordinator, Newman University
+c.wilcox@newman.ac.uk
+# Gary Archer, Library Specialist, Solihull MBC
+garcher@solihull.gov.uk
+
+# Add Arron Merrill, University of York to extra_addresses.txt - Call SR01152245
+arron.merrill@york.ac.uk
+
+# Added library support mailing list for C.A.B. International Limited - Call SR01358899
+cabidigitallibrary@cabi.org
+
+# END

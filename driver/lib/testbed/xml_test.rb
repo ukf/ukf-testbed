@@ -35,59 +35,76 @@ module Testbed
     end
 
     #
-    # Return the value of a named option.
+    # Find overrides for a given endpoint if they exist.
     #
-    # The value returned may be the value of that
-    # option in a matching override. Failing that,
-    # it may be the top-level value of the option.
+    def overrides_for(endpoint)
+      puts "looking for overrides for endpoint #{endpoint.name}"
+      (@options['override'] || []).select do |ovr|
+        Array(ovr['endpoint']).include?(endpoint.name)
+      end
+    end
+
     #
-    def option(optname, endpoint)
-      # Look for an override containing this option
-      overrides = @options['override'] || []
-      override = overrides.find { |override|
-        # Check to see if this endpoint matches the override
-        ep_names = override['endpoint']
-        if ep_names.is_a? String
-          ep_names = [ep_names]
+    # Returns the array of validators to execute for a given endpoint. The
+    # validators either come from the global (to all endpoints) set,
+    # the default set defined, or from any matching endpoint override.
+    #
+    # A single endpoint can have more than one override each with it's own
+    # set of validators and it's own set of expected statuses.
+    #
+    # The returned Array contains the names of validators to run for the given
+    # endpoint, and for each, its corresponding override block.
+    #
+    def validator_executions(endpoint)
+      
+      ovs = overrides_for(endpoint)
+      puts "Found overrides #{ovs}"
+      executions = []
+      # Add executions for each validator in the override(s) for the endpoint
+      ovs.each do |ovr|
+        Array(ovr['validators']).each do |v|
+          executions << { validator: v, override: ovr }
         end
-        # We want this one if it matches and contains the option
-        ep_names.find_index(endpoint.name) && override[optname]
-      }
-      if override
-        override[optname]
+      end
+      # If no overrides defined validators, fall back to the top‑level or default
+      if executions.empty?
+        default_vals = @options['validators'] ||
+                      ['default', 'edugain', 'publication', 'registered_entity']
+        default_vals.each do |v|
+          executions << { validator: v, override: nil }
+        end
+      end
+      puts "Found validators for overrides #{executions}"
+      executions
+    end
+
+    #
+    # Return the array of statuses that are expected by this test, either from
+    # the endpoint override configuration, or the top level (global to all endpoints) 
+    # configuration. The override input is expected to be about the correct endpoint.
+    #
+    # The default is none.
+    #
+    def expected_option(override)
+      if override && override.key?('expected')
+        override['expected']
       else
-        @options[optname]
+        @options['expected'] || []
       end
     end
 
     #
-    # Returns the array of validators specified in the options file,
-    # or a default.
+    # Check the override indicating whether this test should be skipped.
+    # If not in the endpoint override options, check for a top level override.
     #
-    def validators_option(endpoint)
-      vals = option('validators', endpoint) || ['default']
-      if vals.is_a? Array
-        vals
+    def skip_option(override)
+      if override && override.key?('skip')
+        override['skip']
       else
-        [vals]
+        @options['skip'] || false
       end
     end
 
-    #
-    # Returns the array of statuses that are expected by this test.
-    # By default, none.
-    #
-    def expected_option(endpoint)
-      option('expected', endpoint) || []
-    end
-
-    #
-    # Returns the option indicating whether this test should be
-    # skipped.
-    #
-    def skip_option(endpoint)
-      option('skip', endpoint) || false
-    end
 
     def test_file(extension)
       "tests/xml/#{@name}.#{extension}"
@@ -119,10 +136,18 @@ module Testbed
       end
     end
 
-    def execute_validator(endpoint, validator, metadata, &handler)
+    #
+    # Execute the validator inside the execution array. Each validator
+    # is accopmanied by its override config for the given endpoint. 
+    #
+    def execute_validator(endpoint, execution, metadata, &handler)
+      puts "Running execution #{execution}"
+      # Validators and overrides should be for the given endpoint already
+      validator = execution[:validator]
+      override  = execution[:override]
 
       # Silently skip this execution if the skip option is present
-      return if skip_option(endpoint)
+      return if skip_option(override)
 
       puts "Running #{@name} through #{validator} on #{endpoint.name}..."
       begin
@@ -132,15 +157,23 @@ module Testbed
               endpoint: endpoint.name, validator: validator, test: @name
         return
       end
-      process_results actual, expected_option(endpoint),
+
+      process_results actual, expected_option(override),
                       endpoint: endpoint.name, validator: validator, test: @name, &handler
     end
 
+    #
+    # Execute each of the validators defined for the endpoint. Validators are
+    # taken either from the top level set of global (to all endpoint) validators, 
+    # the default set of global (to all endpoint) validators, or those in overrides 
+    # defined per endpoint.
+    #
     def execute_one(endpoint, &handler)
       metadata = IO.read @xml_file
-      validators_option(endpoint).each { |validator| execute_validator(endpoint, validator, metadata, &handler) }
+      validator_executions(endpoint).each { |execution| execute_validator(endpoint, execution, metadata, &handler) }
     end
 
+    # Execute each of the defined endpoints.
     def execute(endpoints, &handler)
       endpoints.each { |endpoint| execute_one(endpoint, &handler) }
     end
